@@ -850,13 +850,11 @@ function ChipChoices({
 function AreaParkSelector({
   areas,
   parks,
-  onAreasChange,
-  onParksChange,
+  onChange,
 }: {
   areas: string[];
   parks: string[];
-  onAreasChange: (areas: string[]) => void;
-  onParksChange: (parks: string[]) => void;
+  onChange: (areas: string[], parks: string[]) => void;
 }) {
   const availableParks = Array.from(
     new Set(
@@ -869,22 +867,23 @@ function AreaParkSelector({
       ? areas.filter((item) => item !== area)
       : [...areas, area];
 
-    const nextAvailable = new Set(
+    const nextAvailableParks = new Set(
       nextAreas.flatMap((item) => PARKS_BY_AREA[item] || [])
     );
 
-    onAreasChange(nextAreas);
-    onParksChange(
-      parks.filter((park) => nextAvailable.has(park))
+    const nextParks = parks.filter((park) =>
+      nextAvailableParks.has(park)
     );
+
+    onChange(nextAreas, nextParks);
   };
 
   const togglePark = (park: string) => {
-    onParksChange(
-      parks.includes(park)
-        ? parks.filter((item) => item !== park)
-        : [...parks, park]
-    );
+    const nextParks = parks.includes(park)
+      ? parks.filter((item) => item !== park)
+      : [...parks, park];
+
+    onChange(areas, nextParks);
   };
 
   return (
@@ -903,7 +902,7 @@ function AreaParkSelector({
           </small>
         </div>
 
-        <div className="ut-area-grid">
+        <div className="ut-choice-grid area-park">
           {BANGKOK_DISTRICTS.map((area) => {
             const selected = areas.includes(area);
 
@@ -913,13 +912,13 @@ function AreaParkSelector({
                 key={area}
                 className={
                   selected
-                    ? "ut-area-card selected"
-                    : "ut-area-card"
+                    ? "ut-choice-card area-park-choice selected"
+                    : "ut-choice-card area-park-choice"
                 }
                 onClick={() => toggleArea(area)}
               >
-                <span>{area}</span>
-                {selected && <b>✓</b>}
+                <strong>{area}</strong>
+                {selected && <span>✓</span>}
               </button>
             );
           })}
@@ -930,7 +929,7 @@ function AreaParkSelector({
         <div className="ut-subcategory-heading">
           <div>
             <span>PARK</span>
-            <strong>Choose parks you like</strong>
+            <strong>Choose your preferred parks</strong>
           </div>
 
           <small>
@@ -942,10 +941,10 @@ function AreaParkSelector({
 
         {areas.length === 0 ? (
           <div className="ut-park-empty">
-            Select an Area first to see park choices.
+            Select at least one Area first to see park choices.
           </div>
         ) : (
-          <div className="ut-park-list">
+          <div className="ut-choice-grid area-park park-choices">
             {availableParks.map((park) => {
               const selected = parks.includes(park);
 
@@ -955,21 +954,13 @@ function AreaParkSelector({
                   key={park}
                   className={
                     selected
-                      ? "ut-park-card selected"
-                      : "ut-park-card"
+                      ? "ut-choice-card area-park-choice park-choice selected"
+                      : "ut-choice-card area-park-choice park-choice"
                   }
                   onClick={() => togglePark(park)}
                 >
-                  <div>
-                    <strong>{park}</strong>
-                    <span>
-                      {areas.find((area) =>
-                        (PARKS_BY_AREA[area] || []).includes(park)
-                      )}
-                    </span>
-                  </div>
-
-                  <b>{selected ? "✓" : "+"}</b>
+                  <strong>{park}</strong>
+                  {selected && <span>✓</span>}
                 </button>
               );
             })}
@@ -2116,15 +2107,10 @@ function RunnerOnboarding({
               <AreaParkSelector
                 areas={profile.location}
                 parks={profile.parks}
-                onAreasChange={(location) =>
+                onChange={(location, parks) =>
                   setProfile({
                     ...profile,
                     location,
-                  })
-                }
-                onParksChange={(parks) =>
-                  setProfile({
-                    ...profile,
                     parks,
                   })
                 }
@@ -3507,15 +3493,10 @@ function RunnerProfile({
             <AreaParkSelector
               areas={draft.location}
               parks={draft.parks}
-              onAreasChange={(location) =>
+              onChange={(location, parks) =>
                 setDraft({
                   ...draft,
                   location,
-                })
-              }
-              onParksChange={(parks) =>
-                setDraft({
-                  ...draft,
                   parks,
                 })
               }
