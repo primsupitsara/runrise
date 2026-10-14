@@ -3,8 +3,16 @@ import founderClubCover from "./assets/6am-run-club-bkk.png";
 
 type Role = "runner" | "founder";
 
+type UserAccount = {
+  name: string;
+  email: string;
+  password: string;
+};
+
 type Page =
   | "welcome"
+  | "login"
+  | "register"
   | "role"
   | "runner-onboarding"
   | "runner-home"
@@ -79,7 +87,7 @@ type NotificationItem = {
 };
 
 const defaultProfile: RunnerProfile = {
-  name: "Mona",
+  name: "",
   level: "",
   pace: "",
   distance: "",
@@ -101,7 +109,7 @@ const initialClubs: Club[] = [
     vibe: ["Social", "Beginner Friendly"],
     description:
       "An early-morning social running community for runners who enjoy starting the day together.",
-    members: 0,
+    members: 248,
     founder: "6am Run Club BKK",
     promoted: true,
   },
@@ -296,6 +304,66 @@ function readStorage<T>(key: string, fallback: T): T {
   }
 }
 
+const RUNRISE_STORAGE_KEYS = [
+  "runrise-user",
+  "runrise-profile",
+  "runrise-clubs",
+  "runrise-events",
+  "runrise-saved",
+  "runrise-joined",
+];
+
+function isRunnerProfileComplete(profile: RunnerProfile) {
+  return [
+    profile.level,
+    profile.pace,
+    profile.distance,
+    profile.location,
+    profile.time,
+    profile.goal,
+    profile.vibe,
+  ].every((value) => value.trim() !== "");
+}
+
+function paceToMinutes(value: string) {
+  const match = value.match(/(\d{1,2}):(\d{2})/);
+
+  if (!match) return null;
+
+  return Number(match[1]) + Number(match[2]) / 60;
+}
+
+function paceMatches(runnerPace: string, clubPace: string) {
+  const normalizedClub = clubPace.toLowerCase();
+
+  if (
+    normalizedClub.includes("flexible") ||
+    normalizedClub.includes("any pace") ||
+    normalizedClub.includes("social pace") ||
+    normalizedClub.includes("easy")
+  ) {
+    return true;
+  }
+
+  const runner = paceToMinutes(runnerPace);
+  const clubTimes = [...clubPace.matchAll(/(\d{1,2}):(\d{2})/g)].map(
+    (match) => Number(match[1]) + Number(match[2]) / 60
+  );
+
+  if (runner === null || clubTimes.length === 0) {
+    return runnerPace.trim().toLowerCase() === normalizedClub.trim();
+  }
+
+  if (clubTimes.length === 1) {
+    return Math.abs(runner - clubTimes[0]) <= 0.5;
+  }
+
+  const min = Math.min(...clubTimes);
+  const max = Math.max(...clubTimes);
+
+  return runner >= min && runner <= max;
+}
+
 function distanceMatches(
   runnerDistance: string,
   clubDistance: string
@@ -324,9 +392,15 @@ function App() {
   const [page, setPage] = useState<Page>("welcome");
   const [role, setRole] = useState<Role>("runner");
 
-  const [profile, setProfile] = useState<RunnerProfile>({
-    ...defaultProfile,
-  });
+  const [user, setUser] = useState<UserAccount | null>(() =>
+    readStorage<UserAccount | null>("runrise-user", null)
+  );
+
+  const [profile, setProfile] = useState<RunnerProfile>(() =>
+    readStorage("runrise-profile", {
+      ...defaultProfile,
+    })
+  );
 
   const [clubs, setClubs] = useState<Club[]>(() =>
     readStorage("runrise-clubs", initialClubs)
@@ -365,7 +439,20 @@ function App() {
   const [distanceFilter, setDistanceFilter] = useState(
     profile.distance || "All"
   );
-useEffect(() => {
+
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("runrise-user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("runrise-user");
+    }
+  }, [user]);
+
+  useEffect(() => {
+    localStorage.setItem("runrise-profile", JSON.stringify(profile));
+  }, [profile]);
+
+  useEffect(() => {
     localStorage.setItem("runrise-clubs", JSON.stringify(clubs));
   }, [clubs]);
 
@@ -396,26 +483,22 @@ useEffect(() => {
   const calculateMatch = (club: Club) => {
     let score = 0;
 
-    if (profile.location && club.location === profile.location) {
-      score += 25;
-    }
-
-    if (profile.pace && club.pace === profile.pace) {
-      score += 25;
-    }
-
-    const preferredSchedule =
-      profile.time === "Morning"
-        ? "Morning"
-        : profile.time === "Evening"
-        ? "Evening"
-        : "";
-
     if (
-      preferredSchedule &&
-      club.schedule
-        .toLowerCase()
-        .includes(preferredSchedule.toLowerCase())
+      profile.location &&
+      club.location.toLowerCase() === profile.location.toLowerCase()
+    ) {
+      score += 25;
+    }
+
+    if (profile.pace && paceMatches(profile.pace, club.pace)) {
+      score += 25;
+    }
+
+    if (profile.time === "Flexible") {
+      score += 20;
+    } else if (
+      profile.time &&
+      club.schedule.toLowerCase().includes(profile.time.toLowerCase())
     ) {
       score += 20;
     }
@@ -443,11 +526,7 @@ useEffect(() => {
       score += 5;
     }
 
-    if (!profile.level && !profile.location && !profile.distance) {
-      return 70 + ((club.id * 7) % 25);
-    }
-
-    return Math.max(score, 20);
+    return score;
   };
 
   const matchedClubs = useMemo(() => {
@@ -496,7 +575,7 @@ useEffect(() => {
       }
 
       if (previous.length >= 3) {
-        alert("Compare ได้สูงสุด 3 Run Clubs");
+        alert("Compareได้สูงสุด 3 Run Clubs");
         return previous;
       }
 
@@ -529,7 +608,11 @@ useEffect(() => {
     setPage("myruns");
   };
 
-  const cancelEvent = (eventId: number) => {
+  const cancelJoinedEvent = (eventId: number) => {
+    if (!joinedEvents.includes(eventId)) {
+      return;
+    }
+
     setJoinedEvents((previous) =>
       previous.filter((id) => id !== eventId)
     );
@@ -551,36 +634,112 @@ useEffect(() => {
 
   const switchRole = () => {
     const nextRole: Role =
-      role === "runner"
-        ? "founder"
-        : "runner";
+      role === "runner" ? "founder" : "runner";
 
     setRole(nextRole);
 
-    setPage(
-      nextRole === "runner"
-        ? "runner-home"
-        : "founder-dashboard"
+    if (nextRole === "runner") {
+      setPage(
+        isRunnerProfileComplete(profile)
+          ? "runner-home"
+          : "runner-onboarding"
+      );
+      return;
+    }
+
+    setPage("founder-dashboard");
+  };
+
+  const resetPrototype = () => {
+    RUNRISE_STORAGE_KEYS.forEach((key) =>
+      localStorage.removeItem(key)
     );
+
+    setUser(null);
+    setRole("runner");
+    setProfile({
+      ...defaultProfile,
+    });
+    setClubs(initialClubs);
+    setEvents(initialEvents);
+    setSavedClubs([]);
+    setJoinedEvents([]);
+    setCompareClubs([]);
+    setNotifications([
+      {
+        id: 1,
+        title: "New club recommendation",
+        detail: "We found running communities that match your profile.",
+        read: false,
+      },
+    ]);
+    setSelectedClubId(1);
+    setSelectedEventId(101);
+    setSearch("");
+    setLocationFilter("All");
+    setVibeFilter("All");
+    setDistanceFilter("All");
+    setPage("welcome");
+  };
+
+  const registerUser = (account: UserAccount) => {
+    setUser(account);
+    setProfile({
+      ...defaultProfile,
+      name: account.name,
+    });
+    setDistanceFilter("All");
+    setPage("role");
+  };
+
+  const loginUser = (account: UserAccount) => {
+    setUser(account);
+
+    setProfile((previous) => ({
+      ...previous,
+      name: account.name,
+    }));
+
+    setPage("role");
   };
 
   return (
     <div className="app-shell">
       <div className="phone">
-
         {page === "welcome" && (
-          <Welcome onStart={() => setPage("role")} />
+          <Welcome
+            onStart={() => setPage("login")}
+            onRegister={() => setPage("register")}
+          />
+        )}
+
+        {page === "login" && (
+          <Login
+            storedUser={user}
+            onLogin={loginUser}
+            onRegister={() => setPage("register")}
+            onBack={() => setPage("welcome")}
+          />
+        )}
+
+        {page === "register" && (
+          <Register
+            onRegister={registerUser}
+            onLogin={() => setPage("login")}
+            onBack={() => setPage("welcome")}
+          />
         )}
 
         {page === "role" && (
           <RoleSelect
+            onBack={() => setPage("login")}
             onRunner={() => {
               setRole("runner");
-              setProfile({
-                ...defaultProfile,
-              });
-              setDistanceFilter("All");
-              setPage("runner-onboarding");
+              setPage(
+                isRunnerProfileComplete(profile)
+                  ? "runner-home"
+                  : "runner-onboarding"
+              );
             }}
             onFounder={() => {
               setRole("founder");
@@ -593,13 +752,7 @@ useEffect(() => {
           <RunnerOnboarding
             profile={profile}
             setProfile={setProfile}
-            onBack={() => {
-              setProfile({
-                ...defaultProfile,
-              });
-              setDistanceFilter("All");
-              setPage("role");
-            }}
+            onBack={() => setPage("role")}
             onFinish={() => {
               setDistanceFilter(profile.distance || "All");
               setPage("runner-home");
@@ -680,19 +833,18 @@ useEffect(() => {
           />
         )}
 
-        {page === "event" && (
+        {page === "event" && selectedEvent && (
           <EventDetail
             event={selectedEvent}
             club={
               clubs.find(
-                (club) =>
-                  club.id === selectedEvent.clubId
+                (club) => club.id === selectedEvent.clubId
               ) || selectedClub
             }
             joined={joinedEvents.includes(selectedEvent.id)}
             onBack={() => setPage("club")}
             onJoin={() => joinEvent(selectedEvent.id)}
-            onCancel={() => cancelEvent(selectedEvent.id)}
+            onCancel={() => cancelJoinedEvent(selectedEvent.id)}
           />
         )}
 
@@ -706,7 +858,7 @@ useEffect(() => {
               savedClubs.includes(club.id)
             )}
             onDiscover={() => setPage("discover")}
-            onCancel={cancelEvent}
+            onCancel={cancelJoinedEvent}
             onEvent={(event: RunEvent) => {
               setSelectedEventId(event.id);
               setSelectedClubId(event.clubId);
@@ -725,6 +877,7 @@ useEffect(() => {
             profile={profile}
             setProfile={setProfile}
             onSwitchRole={switchRole}
+            onReset={resetPrototype}
             onNav={setPage}
           />
         )}
@@ -762,9 +915,7 @@ useEffect(() => {
             setClub={(updated: Club) =>
               setClubs((previous) =>
                 previous.map((club) =>
-                  club.id === updated.id
-                    ? updated
-                    : club
+                  club.id === updated.id ? updated : club
                 )
               )
             }
@@ -785,17 +936,31 @@ useEffect(() => {
         {page === "founder-members" && (
           <FounderMembers
             members={initialMembers}
+            totalMembers={clubs[0]?.members || 0}
+            newMembers={28}
+            totalRunJoins={events
+              .filter((event) => event.clubId === 1)
+              .reduce(
+                (total, event) => total + event.participants,
+                0
+              )}
             onNav={setPage}
           />
         )}
 
         {page === "founder-profile" && (
           <FounderProfile
+            founderName={user?.name || "Founder"}
+            club={clubs[0]}
+            runsHosted={
+              events.filter((event) => event.clubId === 1).length
+            }
+            newMembers={28}
             onSwitchRole={switchRole}
+            onReset={resetPrototype}
             onNav={setPage}
           />
         )}
-
       </div>
     </div>
   );
@@ -803,8 +968,10 @@ useEffect(() => {
 
 function Welcome({
   onStart,
+  onRegister,
 }: {
   onStart: () => void;
+  onRegister: () => void;
 }) {
   return (
     <main className="screen welcome">
@@ -824,12 +991,310 @@ function Welcome({
         </p>
       </div>
 
+      <div className="welcome-actions">
+        <button
+          className="primary"
+          onClick={onStart}
+        >
+          Get Started
+        </button>
+
+        <button
+          className="welcome-register-link"
+          onClick={onRegister}
+        >
+          New to Runrise? <strong>Create account</strong>
+        </button>
+      </div>
+    </main>
+  );
+}
+
+function Login({
+  storedUser,
+  onLogin,
+  onRegister,
+  onBack,
+}: {
+  storedUser: UserAccount | null;
+  onLogin: (account: UserAccount) => void;
+  onRegister: () => void;
+  onBack: () => void;
+}) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const canSubmit =
+    email.trim() !== "" &&
+    password.trim() !== "";
+
+  const submit = () => {
+    setError("");
+
+    if (!storedUser) {
+      setError("No Runrise account found yet. Please create an account first.");
+      return;
+    }
+
+    if (
+      storedUser.email.trim().toLowerCase() !== email.trim().toLowerCase() ||
+      storedUser.password !== password
+    ) {
+      setError("Email or password is incorrect. Please try again.");
+      return;
+    }
+
+    onLogin(storedUser);
+  };
+
+  return (
+    <main className="screen auth-screen">
       <button
-        className="primary"
-        onClick={onStart}
+        type="button"
+        className="auth-back"
+        onClick={onBack}
       >
-        Get Started
+        ← Back
       </button>
+
+      <div className="auth-brand-mark">R</div>
+
+      <div className="auth-heading">
+        <p className="eyebrow">WELCOME BACK</p>
+        <h1>Log in to Runrise</h1>
+        <p>
+          Pick up where you left off and keep moving with your community.
+        </p>
+      </div>
+
+      <div className="auth-card">
+        <label className="auth-field">
+          <span>Email</span>
+          <input
+            type="email"
+            autoComplete="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(event) => {
+              setEmail(event.target.value);
+              setError("");
+            }}
+          />
+        </label>
+
+        <label className="auth-field">
+          <span>Password</span>
+          <input
+            type="password"
+            autoComplete="current-password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value);
+              setError("");
+            }}
+          />
+        </label>
+
+        {error && (
+          <p className="auth-error" role="alert">
+            {error}
+          </p>
+        )}
+
+        <button
+          type="button"
+          className="auth-primary"
+          disabled={!canSubmit}
+          onClick={submit}
+        >
+          Log In
+        </button>
+
+        <p className="auth-switch">
+          Don&apos;t have an account?{" "}
+          <button type="button" onClick={onRegister}>
+            Create one
+          </button>
+        </p>
+      </div>
+    </main>
+  );
+}
+
+function Register({
+  onRegister,
+  onLogin,
+  onBack,
+}: {
+  onRegister: (account: UserAccount) => void;
+  onLogin: () => void;
+  onBack: () => void;
+}) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [agreed, setAgreed] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const emailValid =
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+
+  const errors = {
+    name:
+      name.trim() === ""
+        ? "Please enter your full name."
+        : "",
+    email:
+      email.trim() === ""
+        ? "Please enter your email."
+        : !emailValid
+        ? "Please enter a valid email address."
+        : "",
+    password:
+      password === ""
+        ? "Please enter a password."
+        : "",
+    confirmPassword:
+      confirmPassword === ""
+        ? "Please confirm your password."
+        : confirmPassword !== password
+        ? "Passwords do not match."
+        : "",
+    agreed:
+      !agreed
+        ? "Please agree to the Terms & Privacy Policy."
+        : "",
+  };
+
+  const canSubmit =
+    !errors.name &&
+    !errors.email &&
+    !errors.password &&
+    !errors.confirmPassword &&
+    !errors.agreed;
+
+  const submit = () => {
+    setSubmitted(true);
+
+    if (!canSubmit) return;
+
+    onRegister({
+      name: name.trim(),
+      email: email.trim(),
+      password,
+    });
+  };
+
+  return (
+    <main className="screen auth-screen auth-register-screen">
+      <button
+        type="button"
+        className="auth-back"
+        onClick={onBack}
+      >
+        ← Back
+      </button>
+
+      <div className="auth-heading">
+        <p className="eyebrow">JOIN RUNRISE</p>
+        <h1>Create your account</h1>
+        <p>
+          Start with the basics. Your running preferences come next.
+        </p>
+      </div>
+
+      <div className="auth-card">
+        <label className="auth-field">
+          <span>Full Name</span>
+          <input
+            autoComplete="name"
+            placeholder="Your full name"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
+          {submitted && errors.name && (
+            <small className="auth-inline-error">{errors.name}</small>
+          )}
+        </label>
+
+        <label className="auth-field">
+          <span>Email</span>
+          <input
+            type="email"
+            autoComplete="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          {submitted && errors.email && (
+            <small className="auth-inline-error">{errors.email}</small>
+          )}
+        </label>
+
+        <label className="auth-field">
+          <span>Password</span>
+          <input
+            type="password"
+            autoComplete="new-password"
+            placeholder="Create a password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          {submitted && errors.password && (
+            <small className="auth-inline-error">{errors.password}</small>
+          )}
+        </label>
+
+        <label className="auth-field">
+          <span>Confirm Password</span>
+          <input
+            type="password"
+            autoComplete="new-password"
+            placeholder="Re-enter your password"
+            value={confirmPassword}
+            onChange={(event) => setConfirmPassword(event.target.value)}
+          />
+          {submitted && errors.confirmPassword && (
+            <small className="auth-inline-error">
+              {errors.confirmPassword}
+            </small>
+          )}
+        </label>
+
+        <label className="auth-check-row">
+          <input
+            type="checkbox"
+            checked={agreed}
+            onChange={(event) => setAgreed(event.target.checked)}
+          />
+          <span>I agree to the Terms &amp; Privacy Policy</span>
+        </label>
+
+        {submitted && errors.agreed && (
+          <small className="auth-inline-error auth-terms-error">
+            {errors.agreed}
+          </small>
+        )}
+
+        <button
+          type="button"
+          className="auth-primary"
+          disabled={!canSubmit}
+          onClick={submit}
+        >
+          Create Account
+        </button>
+
+        <p className="auth-switch">
+          Already have an account?{" "}
+          <button type="button" onClick={onLogin}>
+            Log in
+          </button>
+        </p>
+      </div>
     </main>
   );
 }
@@ -837,12 +1302,22 @@ function Welcome({
 function RoleSelect({
   onRunner,
   onFounder,
+  onBack,
 }: {
   onRunner: () => void;
   onFounder: () => void;
+  onBack: () => void;
 }) {
   return (
-    <main className="screen">
+    <main className="screen role-screen">
+      <button
+        type="button"
+        className="auth-back"
+        onClick={onBack}
+      >
+        ← Back
+      </button>
+
       <Header
         eyebrow="WELCOME"
         title="How will you use Runrise?"
@@ -850,10 +1325,17 @@ function RoleSelect({
       />
 
       <button
-        className="large-card"
+        className="large-card role-card"
         onClick={onRunner}
       >
-        <div className="big-icon">🏃</div>
+        <div className="role-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="14" cy="5" r="2.2" />
+            <path d="m12.5 8-2.2 4.1 3.2 2.2 1.4 4.7" />
+            <path d="m11 11-4 2.2M13.4 14.3l-4 4M15 9l3.5 2.5" />
+          </svg>
+        </div>
+
         <h2>Runner</h2>
         <p>
           Discover, compare and join running communities.
@@ -861,10 +1343,18 @@ function RoleSelect({
       </button>
 
       <button
-        className="large-card"
+        className="large-card role-card"
         onClick={onFounder}
       >
-        <div className="big-icon">◎</div>
+        <div className="role-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="9" cy="7" r="3" />
+            <circle cx="17" cy="8" r="2.2" />
+            <path d="M3.5 19c.5-4 2.6-6 5.5-6s5 2 5.5 6" />
+            <path d="M14.5 14c2.8-.4 5 1.3 5.5 4.5" />
+          </svg>
+        </div>
+
         <h2>Founder / Organizer</h2>
         <p>
           Create, manage and grow your running community.
@@ -941,6 +1431,14 @@ function RunnerOnboarding({
     "Just Getting Started",
   ];
 
+  const vibeOptions = [
+    "Social",
+    "Beginner Friendly",
+    "Training Focused",
+    "Relaxed",
+    "Networking",
+  ];
+
   const updateProfile = (
     key: keyof RunnerProfile,
     value: string
@@ -958,9 +1456,10 @@ function RunnerOnboarding({
     profile.location,
     profile.time,
     profile.goal,
+    profile.vibe,
   ].filter((value) => value.trim() !== "").length;
 
-  const isComplete = completedCount === 6;
+  const isComplete = completedCount === 7;
 
   return (
     <>
@@ -1627,14 +2126,14 @@ function RunnerOnboarding({
           <div className="rr-progress-wrap">
             <div className="rr-progress-head">
               <span>Your running profile</span>
-              <span>{completedCount}/6</span>
+              <span>{completedCount}/7</span>
             </div>
 
             <div className="rr-progress">
               <div
                 className="rr-progress-fill"
                 style={{
-                  width: `${(completedCount / 6) * 100}%`,
+                  width: `${(completedCount / 7) * 100}%`,
                 }}
               />
             </div>
@@ -1959,6 +2458,43 @@ function RunnerOnboarding({
               ))}
             </div>
           </section>
+          <section className="rr-card">
+            <div className="rr-question-head">
+              <div className="rr-number">07</div>
+
+              <div className="rr-question-copy">
+                <h2>Community Style</h2>
+                <p>
+                  What kind of running community feels right for you?
+                </p>
+              </div>
+            </div>
+
+            <div className="rr-chips">
+              {vibeOptions.map((vibe) => (
+                <button
+                  type="button"
+                  key={vibe}
+                  className={
+                    profile.vibe === vibe
+                      ? "rr-chip selected"
+                      : "rr-chip"
+                  }
+                  onClick={() =>
+                    updateProfile("vibe", vibe)
+                  }
+                >
+                  {vibe}
+
+                  {profile.vibe === vibe && (
+                    <span className="rr-check">
+                      ✓
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </section>
         </div>
 
         <div className="rr-footer">
@@ -1973,12 +2509,12 @@ function RunnerOnboarding({
               <span>
                 {isComplete
                   ? "Your Smart Match profile is complete."
-                  : `${completedCount} of 6 preferences completed.`}
+                  : `${completedCount} of 7 preferences completed.`}
               </span>
             </div>
 
             <span className="rr-count">
-              {completedCount}/6
+              {completedCount}/7
             </span>
           </div>
 
@@ -3119,40 +3655,37 @@ function RunnerProfile({
   profile,
   setProfile,
   onSwitchRole,
+  onReset,
   onNav,
 }: any) {
-  const [
-    editing,
-    setEditing,
-  ] = useState(false);
+  const [editing, setEditing] = useState(false);
+
+  const requestReset = () => {
+    if (
+      confirm(
+        "Reset Runrise for the next tester? This clears your account, preferences, saved clubs and joined runs."
+      )
+    ) {
+      onReset();
+    }
+  };
 
   return (
     <main className="screen with-nav">
       <div className="profile-head">
         <div className="profile-avatar">
-          {profile.name?.[0] ||
-            "R"}
+          {profile.name?.[0] || "R"}
         </div>
 
-        <h1>
-          {profile.name}
-        </h1>
+        <h1>{profile.name || "Runner"}</h1>
 
-        <p className="muted">
-          Runner
-        </p>
+        <p className="muted">Runner</p>
 
         <button
           className="link"
-          onClick={() =>
-            setEditing(
-              !editing
-            )
-          }
+          onClick={() => setEditing(!editing)}
         >
-          {editing
-            ? "Done"
-            : "Edit Preferences"}
+          {editing ? "Done" : "Edit Preferences"}
         </button>
       </div>
 
@@ -3162,33 +3695,18 @@ function RunnerProfile({
             Usual Running Distance
 
             <select
-              value={
-                profile.distance
-              }
+              value={profile.distance}
               onChange={(event) =>
                 setProfile({
                   ...profile,
-                  distance:
-                    event.target.value,
+                  distance: event.target.value,
                 })
               }
             >
-              {[
-                "3K",
-                "5K",
-                "8K",
-                "10K",
-                "15K+",
-              ].map(
+              {["3K", "5K", "8K", "10K", "15K+"].map(
                 (distance) => (
-                  <option
-                    key={
-                      distance
-                    }
-                  >
-                    {
-                      distance
-                    }
+                  <option key={distance}>
+                    {distance}
                   </option>
                 )
               )}
@@ -3197,55 +3715,24 @@ function RunnerProfile({
         </div>
       ) : (
         <div className="stat-grid">
-          <Stat
-            label="LEVEL"
-            value={
-              profile.level ||
-              "-"
-            }
-          />
-
-          <Stat
-            label="PACE"
-            value={
-              profile.pace ||
-              "-"
-            }
-          />
-
-          <Stat
-            label="DISTANCE"
-            value={
-              profile.distance ||
-              "-"
-            }
-          />
+          <Stat label="LEVEL" value={profile.level || "-"} />
+          <Stat label="PACE" value={profile.pace || "-"} />
+          <Stat label="DISTANCE" value={profile.distance || "-"} />
         </div>
       )}
 
       <div className="settings-card">
         <button
           className="settings-row"
-          onClick={
-            onSwitchRole
-          }
+          onClick={onSwitchRole}
         >
           Switch to Founder
           <span>›</span>
         </button>
 
         <button
-          className="settings-row"
-          onClick={() => {
-            if (
-              confirm(
-                "Reset prototype data?"
-              )
-            ) {
-              localStorage.clear();
-              location.reload();
-            }
-          }}
+          className="settings-row reset-row"
+          onClick={requestReset}
         >
           Reset Prototype
           <span>↻</span>
@@ -3643,13 +4130,6 @@ function FounderClub({
           alt={`${draft.name} cover`}
           className="fcm-cover-image"
         />
-
-        <button
-          type="button"
-          className="fcm-change-cover"
-        >
-          Change Cover
-        </button>
       </section>
 
       <section className="fcm-main-card">
@@ -4520,42 +5000,31 @@ function FounderEvents({
 
 function FounderMembers({
   members,
+  totalMembers,
+  newMembers,
+  totalRunJoins,
   onNav,
 }: any) {
-  const [search, setSearch] =
-    useState("");
+  const [search, setSearch] = useState("");
 
-  const [filter, setFilter] =
-    useState<
-      "All" | "New" | "Active"
-    >("All");
+  const [filter, setFilter] = useState<
+    "All" | "New" | "Active"
+  >("All");
 
-  const filteredMembers =
-    members.filter(
-      (member: Member) => {
-        const matchesSearch =
-          member.name
-            .toLowerCase()
-            .includes(
-              search.toLowerCase()
-            );
+  const filteredMembers = members.filter(
+    (member: Member) => {
+      const matchesSearch =
+        member.name
+          .toLowerCase()
+          .includes(search.toLowerCase());
 
-        const matchesFilter =
-          filter === "All" ||
-          member.status === filter;
+      const matchesFilter =
+        filter === "All" ||
+        member.status === filter;
 
-        return (
-          matchesSearch &&
-          matchesFilter
-        );
-      }
-    );
-
-  const newMembers =
-    members.filter(
-      (member: Member) =>
-        member.status === "New"
-    ).length;
+      return matchesSearch && matchesFilter;
+    }
+  );
 
   return (
     <main className="screen with-nav founder-screen">
@@ -4567,41 +5036,18 @@ function FounderMembers({
 
       <div className="member-summary">
         <div>
-          <strong>
-            {members.length}
-          </strong>
-
-          <span>
-            Total Members
-          </span>
+          <strong>{totalMembers}</strong>
+          <span>Total Members</span>
         </div>
 
         <div>
-          <strong>
-            {newMembers}
-          </strong>
-
-          <span>
-            New Members
-          </span>
+          <strong>{newMembers}</strong>
+          <span>New Members</span>
         </div>
 
         <div>
-          <strong>
-            {members.reduce(
-              (
-                total: number,
-                member: Member
-              ) =>
-                total +
-                member.events,
-              0
-            )}
-          </strong>
-
-          <span>
-            Run Joins
-          </span>
+          <strong>{totalRunJoins}</strong>
+          <span>Run Joins</span>
         </div>
       </div>
 
@@ -4609,32 +5055,17 @@ function FounderMembers({
         className="search"
         placeholder="Search member"
         value={search}
-        onChange={(e) =>
-          setSearch(
-            e.target.value
-          )
-        }
+        onChange={(e) => setSearch(e.target.value)}
       />
 
       <div className="member-filter-tabs">
-        {[
-          "All",
-          "New",
-          "Active",
-        ].map((item) => (
+        {["All", "New", "Active"].map((item) => (
           <button
             key={item}
-            className={
-              filter === item
-                ? "active"
-                : ""
-            }
+            className={filter === item ? "active" : ""}
             onClick={() =>
               setFilter(
-                item as
-                  | "All"
-                  | "New"
-                  | "Active"
+                item as "All" | "New" | "Active"
               )
             }
           >
@@ -4644,54 +5075,43 @@ function FounderMembers({
       </div>
 
       <p className="small-label">
-        {filteredMembers.length} MEMBERS
+        RECENT MEMBER RECORDS
       </p>
 
       <div className="founder-member-list">
-        {filteredMembers.map(
-          (member: Member) => (
-            <article
-              className="founder-member-card"
-              key={member.id}
-            >
-              <div className="member-avatar large">
-                {member.name[0]}
+        {filteredMembers.map((member: Member) => (
+          <article
+            className="founder-member-card"
+            key={member.id}
+          >
+            <div className="member-avatar large">
+              {member.name[0]}
+            </div>
+
+            <div className="grow">
+              <div className="member-name-row">
+                <strong>{member.name}</strong>
+
+                <span
+                  className={`member-badge ${
+                    member.status === "New" ? "new" : ""
+                  }`}
+                >
+                  {member.status}
+                </span>
               </div>
 
-              <div className="grow">
-                <div className="member-name-row">
-                  <strong>
-                    {member.name}
-                  </strong>
+              <p>Joined {member.joined}</p>
 
-                  <span
-                    className={`member-badge ${
-                      member.status ===
-                      "New"
-                        ? "new"
-                        : ""
-                    }`}
-                  >
-                    {member.status}
-                  </span>
-                </div>
-
-                <p>
-                  Joined{" "}
-                  {member.joined}
-                </p>
-
-                <small>
-                  🏃 {member.events} runs joined
-                </small>
-              </div>
-            </article>
-          )
-        )}
+              <small>
+                {member.events} runs joined
+              </small>
+            </div>
+          </article>
+        ))}
       </div>
 
-      {filteredMembers.length ===
-        0 && (
+      {filteredMembers.length === 0 && (
         <Empty
           icon="⌕"
           title="No members found"
@@ -4707,13 +5127,13 @@ function FounderMembers({
   );
 }
 
-
-/* =========================================================
-   FOUNDER PROFILE
-========================================================= */
-
 function FounderProfile({
+  founderName,
+  club,
+  runsHosted,
+  newMembers,
   onSwitchRole,
+  onReset,
   onNav,
 }: any) {
   const [
@@ -4721,22 +5141,28 @@ function FounderProfile({
     setNotificationsEnabled,
   ] = useState(true);
 
+  const requestReset = () => {
+    if (
+      confirm(
+        "Reset Runrise for the next tester? This clears your account, preferences, club edits, events, saved clubs and joined runs."
+      )
+    ) {
+      onReset();
+    }
+  };
+
   return (
     <main className="screen with-nav founder-screen">
       <div className="founder-profile-header">
         <div className="founder-profile-avatar">
-          A
+          {founderName?.[0] || "F"}
         </div>
 
-        <h1>Alex</h1>
+        <h1>{founderName || "Founder"}</h1>
 
         <p className="muted">
-          Founder · 6am Run Club BKK
+          Founder · {club?.name || "Run Club"}
         </p>
-
-        <button className="founder-edit-profile">
-          Edit Profile
-        </button>
       </div>
 
       <div className="founder-profile-stats">
@@ -4746,39 +5172,15 @@ function FounderProfile({
         </div>
 
         <div>
-          <strong>28</strong>
+          <strong>{newMembers}</strong>
           <span>New Members</span>
         </div>
 
         <div>
-          <strong>12</strong>
+          <strong>{runsHosted}</strong>
           <span>Runs Hosted</span>
         </div>
       </div>
-
-      <section className="founder-profile-section">
-        <p className="small-label">
-          ACCOUNT
-        </p>
-
-        <div className="settings-card">
-          <button className="settings-row">
-            <span>
-              👤 Founder Information
-            </span>
-
-            <span>›</span>
-          </button>
-
-          <button className="settings-row">
-            <span>
-              ◉ Club Settings
-            </span>
-
-            <span>›</span>
-          </button>
-        </div>
-      </section>
 
       <section className="founder-profile-section">
         <p className="small-label">
@@ -4787,9 +5189,7 @@ function FounderProfile({
 
         <div className="settings-card">
           <div className="settings-row">
-            <span>
-              🔔 Notifications
-            </span>
+            <span>Notifications</span>
 
             <button
               className={
@@ -4802,6 +5202,7 @@ function FounderProfile({
                   !notificationsEnabled
                 )
               }
+              aria-label="Toggle notifications"
             >
               <span />
             </button>
@@ -4819,11 +5220,16 @@ function FounderProfile({
             className="settings-row"
             onClick={onSwitchRole}
           >
-            <span>
-              🏃 Switch to Runner
-            </span>
-
+            <span>Switch to Runner</span>
             <span>›</span>
+          </button>
+
+          <button
+            className="settings-row reset-row"
+            onClick={requestReset}
+          >
+            <span>Reset Prototype</span>
+            <span>↻</span>
           </button>
         </div>
       </section>
@@ -4835,11 +5241,6 @@ function FounderProfile({
     </main>
   );
 }
-
-
-/* =========================================================
-   FOUNDER NAV
-========================================================= */
 
 function FounderMetric({
   type,
