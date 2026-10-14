@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import founderClubCover from "./assets/6am-run-club-bkk.png";
 
 type Role = "runner" | "founder";
@@ -36,7 +36,7 @@ type RunnerProfile = {
   distance: string;
   location: string;
   time: string;
-  goal: string;
+  goal: string[];
   vibe: string;
 };
 
@@ -89,11 +89,11 @@ type NotificationItem = {
 const defaultProfile: RunnerProfile = {
   name: "",
   level: "",
-  pace: "",
+  pace: "06:30",
   distance: "",
   location: "",
   time: "",
-  goal: "",
+  goal: [],
   vibe: "",
 };
 
@@ -101,7 +101,7 @@ const initialClubs: Club[] = [
   {
     id: 1,
     name: "6am Run Club BKK",
-    location: "Lumpini",
+    location: "Pathum Wan",
     pace: "6:00–8:00",
     distance: "3K",
     schedule: "Sat / Sun · Morning",
@@ -116,7 +116,7 @@ const initialClubs: Club[] = [
   {
     id: 2,
     name: "Lumpini Running Club Bangkok",
-    location: "Lumpini",
+    location: "Pathum Wan",
     pace: "Flexible",
     distance: "5–7K",
     schedule: "Tue / Thu · Evening",
@@ -130,7 +130,7 @@ const initialClubs: Club[] = [
   {
     id: 3,
     name: "Bangkok Runners",
-    location: "Benjakitti",
+    location: "Khlong Toei",
     pace: "6:30–8:00",
     distance: "5–7K",
     schedule: "Tue · Morning",
@@ -144,7 +144,7 @@ const initialClubs: Club[] = [
   {
     id: 4,
     name: "Anti Run Club Bangkok",
-    location: "Benjakitti",
+    location: "Khlong Toei",
     pace: "Easy / No Pressure",
     distance: "5K",
     schedule: "Sun · Evening",
@@ -158,7 +158,7 @@ const initialClubs: Club[] = [
   {
     id: 5,
     name: "Sabai Run Club Bangkok",
-    location: "Benjakitti",
+    location: "Khlong Toei",
     pace: "Social Pace",
     distance: "3–5K",
     schedule: "Fri / Sun",
@@ -172,7 +172,7 @@ const initialClubs: Club[] = [
   {
     id: 6,
     name: "Founders Run Club Bangkok",
-    location: "Sukhumvit",
+    location: "Watthana",
     pace: "Any Pace",
     distance: "3K",
     schedule: "Weekly · Morning",
@@ -192,7 +192,7 @@ const initialEvents: RunEvent[] = [
     name: "Weekend Morning Run",
     date: "17 Oct",
     time: "06:00",
-    location: "Lumpini",
+    location: "Pathum Wan",
     distance: "3K",
     pace: "6:00–8:00",
     capacity: 50,
@@ -207,7 +207,7 @@ const initialEvents: RunEvent[] = [
     name: "Evening Community Run",
     date: "21 Oct",
     time: "18:00",
-    location: "Lumpini",
+    location: "Pathum Wan",
     distance: "5K",
     pace: "Flexible",
     capacity: 60,
@@ -222,7 +222,7 @@ const initialEvents: RunEvent[] = [
     name: "Bangkok Morning Run",
     date: "25 Oct",
     time: "06:30",
-    location: "Benjakitti",
+    location: "Khlong Toei",
     distance: "5K",
     pace: "6:30–8:00",
     capacity: 50,
@@ -237,7 +237,7 @@ const initialEvents: RunEvent[] = [
     name: "Sunday Easy 5K",
     date: "25 Oct",
     time: "17:30",
-    location: "Benjakitti",
+    location: "Khlong Toei",
     distance: "5K",
     pace: "Easy / No Pressure",
     capacity: 40,
@@ -252,7 +252,7 @@ const initialEvents: RunEvent[] = [
     name: "Sabai Social Run",
     date: "30 Oct",
     time: "20:00",
-    location: "Benjakitti",
+    location: "Khlong Toei",
     distance: "5K",
     pace: "Social Pace",
     capacity: 60,
@@ -267,7 +267,7 @@ const initialEvents: RunEvent[] = [
     name: "Founders Morning 3K",
     date: "1 Nov",
     time: "08:00",
-    location: "Sukhumvit",
+    location: "Watthana",
     distance: "3K",
     pace: "Any Pace",
     capacity: 40,
@@ -313,24 +313,167 @@ const RUNRISE_STORAGE_KEYS = [
   "runrise-joined",
 ];
 
-function isRunnerProfileComplete(profile: RunnerProfile) {
-  return [
-    profile.level,
-    profile.pace,
-    profile.distance,
-    profile.location,
-    profile.time,
-    profile.goal,
-    profile.vibe,
-  ].every((value) => value.trim() !== "");
+const DISTANCE_PREFERENCES = [
+  { label: "1–9 km", value: "1-9km" },
+  { label: "10–20 km", value: "10-20km" },
+  { label: "21–41 km", value: "21-41km" },
+  { label: "42 km+", value: "42km+" },
+];
+
+const BANGKOK_DISTRICTS = [
+  "Khlong Toei",
+  "Watthana",
+  "Pathum Wan",
+  "Bang Rak",
+  "Chatuchak",
+  "Phra Nakhon",
+  "Thon Buri",
+  "Sathon",
+];
+
+const RUNNING_GOALS = [
+  "Health & Fitness",
+  "Social / Meet People",
+  "Improve Pace",
+  "Race Training",
+  "Build Endurance",
+  "Just Getting Started",
+];
+
+const COMMUNITY_STYLES = [
+  "Social",
+  "Beginner Friendly",
+  "Training Focused",
+  "Relaxed",
+  "Networking",
+];
+
+const RUNNING_TIMES = [
+  "Morning",
+  "Evening",
+  "Flexible",
+];
+
+const LEVEL_OPTIONS = [
+  {
+    value: "Beginner",
+    label: "Beginner",
+    description: "Just getting started",
+  },
+  {
+    value: "Casual",
+    label: "Casual",
+    description: "Run for fun",
+  },
+  {
+    value: "Intermediate",
+    label: "Intermediate",
+    description: "Run regularly",
+  },
+  {
+    value: "Advanced",
+    label: "Advanced",
+    description: "Train seriously",
+  },
+];
+
+function normalizeGoal(goal: unknown): string[] {
+  const source = Array.isArray(goal)
+    ? goal.filter((item): item is string => typeof item === "string")
+    : typeof goal === "string" && goal.trim()
+      ? [goal]
+      : [];
+
+  const rename: Record<string, string> = {
+    Health: "Health & Fitness",
+    "Community / Social": "Social / Meet People",
+  };
+
+  return Array.from(
+    new Set(source.map((item) => rename[item] || item))
+  );
 }
 
-function paceToMinutes(value: string) {
+function normalizeDistancePreference(value: unknown) {
+  if (typeof value !== "string") return "";
+
+  const normalized = value.trim().toLowerCase();
+
+  if (["1-9km", "10-20km", "21-41km", "42km+"].includes(normalized)) {
+    return normalized;
+  }
+
+  const first = Number(value.match(/\d+/)?.[0]);
+
+  if (!Number.isFinite(first)) return "";
+
+  if (first >= 42) return "42km+";
+  if (first >= 21) return "21-41km";
+  if (first >= 10) return "10-20km";
+  return "1-9km";
+}
+
+function normalizeDistrict(value: unknown) {
+  if (typeof value !== "string") return "";
+
+  const mapping: Record<string, string> = {
+    Lumpini: "Pathum Wan",
+    Benjakitti: "Khlong Toei",
+    Sukhumvit: "Watthana",
+    Ari: "Chatuchak",
+    Sathorn: "Sathon",
+  };
+
+  return mapping[value] || value;
+}
+
+function normalizePace(value: unknown) {
+  if (typeof value !== "string") return "06:30";
+
+  const match = value.match(/(\d{1,2}):(\d{2})/);
+
+  if (!match) return "06:30";
+
+  const minutes = Math.min(20, Math.max(1, Number(match[1])));
+  const seconds = Math.min(59, Math.max(0, Number(match[2])));
+
+  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+}
+
+function normalizeProfile(value: unknown): RunnerProfile {
+  const raw =
+    value && typeof value === "object"
+      ? (value as Partial<RunnerProfile> & { goal?: unknown })
+      : {};
+
+  return {
+    ...defaultProfile,
+    ...raw,
+    pace: normalizePace(raw.pace),
+    distance: normalizeDistancePreference(raw.distance),
+    location: normalizeDistrict(raw.location),
+    goal: normalizeGoal(raw.goal),
+  };
+}
+
+function isRunnerProfileComplete(profile: RunnerProfile) {
+  return Boolean(
+    profile.level.trim() &&
+      profile.pace.trim() &&
+      profile.distance.trim() &&
+      profile.location.trim() &&
+      profile.time.trim() &&
+      profile.goal.length > 0 &&
+      profile.vibe.trim()
+  );
+}
+
+function paceToSeconds(value: string) {
   const match = value.match(/(\d{1,2}):(\d{2})/);
 
   if (!match) return null;
 
-  return Number(match[1]) + Number(match[2]) / 60;
+  return Number(match[1]) * 60 + Number(match[2]);
 }
 
 function paceMatches(runnerPace: string, clubPace: string) {
@@ -340,52 +483,276 @@ function paceMatches(runnerPace: string, clubPace: string) {
     normalizedClub.includes("flexible") ||
     normalizedClub.includes("any pace") ||
     normalizedClub.includes("social pace") ||
-    normalizedClub.includes("easy")
+    normalizedClub.includes("easy") ||
+    normalizedClub.includes("no pressure")
   ) {
     return true;
   }
 
-  const runner = paceToMinutes(runnerPace);
-  const clubTimes = [...clubPace.matchAll(/(\d{1,2}):(\d{2})/g)].map(
-    (match) => Number(match[1]) + Number(match[2]) / 60
+  const runnerSeconds = paceToSeconds(runnerPace);
+  const clubTimes = [
+    ...clubPace.matchAll(/(\d{1,2}):(\d{2})/g),
+  ].map(
+    (match) =>
+      Number(match[1]) * 60 + Number(match[2])
   );
 
-  if (runner === null || clubTimes.length === 0) {
+  if (runnerSeconds === null || clubTimes.length === 0) {
     return runnerPace.trim().toLowerCase() === normalizedClub.trim();
   }
 
   if (clubTimes.length === 1) {
-    return Math.abs(runner - clubTimes[0]) <= 0.5;
+    return Math.abs(runnerSeconds - clubTimes[0]) <= 30;
   }
 
   const min = Math.min(...clubTimes);
   const max = Math.max(...clubTimes);
 
-  return runner >= min && runner <= max;
+  return runnerSeconds >= min && runnerSeconds <= max;
+}
+
+function preferredDistanceBounds(value: string): [number, number] | null {
+  switch (normalizeDistancePreference(value)) {
+    case "1-9km":
+      return [1, 9];
+    case "10-20km":
+      return [10, 20];
+    case "21-41km":
+      return [21, 41];
+    case "42km+":
+      return [42, Infinity];
+    default:
+      return null;
+  }
+}
+
+function clubDistanceBounds(value: string): [number, number] | null {
+  const numbers = value.match(/\d+/g)?.map(Number);
+
+  if (!numbers?.length) return null;
+
+  if (numbers.length === 1) {
+    return [numbers[0], numbers[0]];
+  }
+
+  return [Math.min(...numbers), Math.max(...numbers)];
 }
 
 function distanceMatches(
   runnerDistance: string,
   clubDistance: string
 ) {
-  const runner = parseInt(runnerDistance);
+  const preferred = preferredDistanceBounds(runnerDistance);
+  const club = clubDistanceBounds(clubDistance);
 
-  if (isNaN(runner)) return false;
+  if (!preferred || !club) return false;
 
-  const numbers = clubDistance.match(/\d+/g)?.map(Number);
+  return club[1] >= preferred[0] && club[0] <= preferred[1];
+}
 
-  if (!numbers || numbers.length === 0) {
-    return false;
-  }
+function PaceWheelColumn({
+  values,
+  value,
+  onChange,
+  ariaLabel,
+}: {
+  values: string[];
+  value: string;
+  onChange: (value: string) => void;
+  ariaLabel: string;
+}) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const itemHeight = 46;
 
-  if (numbers.length === 1) {
-    return runner === numbers[0];
-  }
+  useEffect(() => {
+    const index = Math.max(0, values.indexOf(value));
+    const node = ref.current;
 
-  const min = Math.min(...numbers);
-  const max = Math.max(...numbers);
+    if (!node) return;
 
-  return runner >= min && runner <= max;
+    node.scrollTo({
+      top: index * itemHeight,
+      behavior: "smooth",
+    });
+  }, [value, values]);
+
+  const handleScroll = () => {
+    const node = ref.current;
+
+    if (!node) return;
+
+    const index = Math.max(
+      0,
+      Math.min(
+        values.length - 1,
+        Math.round(node.scrollTop / itemHeight)
+      )
+    );
+
+    const next = values[index];
+
+    if (next !== value) {
+      onChange(next);
+    }
+  };
+
+  return (
+    <div
+      ref={ref}
+      className="ut-wheel-column"
+      onScroll={handleScroll}
+      aria-label={ariaLabel}
+      role="listbox"
+      tabIndex={0}
+    >
+      <div className="ut-wheel-spacer" />
+
+      {values.map((item) => (
+        <button
+          type="button"
+          key={item}
+          role="option"
+          aria-selected={item === value}
+          className={
+            item === value
+              ? "ut-wheel-item selected"
+              : "ut-wheel-item"
+          }
+          onClick={() => onChange(item)}
+        >
+          {item}
+        </button>
+      ))}
+
+      <div className="ut-wheel-spacer" />
+    </div>
+  );
+}
+
+function PaceWheelPicker({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const safeValue = normalizePace(value);
+  const [minute, second] = safeValue.split(":");
+
+  const minutes = Array.from(
+    { length: 20 },
+    (_, index) => String(index + 1).padStart(2, "0")
+  );
+
+  const seconds = Array.from(
+    { length: 60 },
+    (_, index) => String(index).padStart(2, "0")
+  );
+
+  return (
+    <div className="ut-pace-picker">
+      <div className="ut-picker-selection" />
+
+      <PaceWheelColumn
+        values={minutes}
+        value={minute}
+        ariaLabel="Pace minutes"
+        onChange={(nextMinute) =>
+          onChange(`${nextMinute}:${second}`)
+        }
+      />
+
+      <span className="ut-picker-colon">:</span>
+
+      <PaceWheelColumn
+        values={seconds}
+        value={second}
+        ariaLabel="Pace seconds"
+        onChange={(nextSecond) =>
+          onChange(`${minute}:${nextSecond}`)
+        }
+      />
+
+      <span className="ut-picker-unit">/ km</span>
+    </div>
+  );
+}
+
+function DistanceChoices({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div className="ut-choice-grid distance">
+      {DISTANCE_PREFERENCES.map((option) => (
+        <button
+          type="button"
+          key={option.value}
+          className={
+            value === option.value
+              ? "ut-choice-card selected"
+              : "ut-choice-card"
+          }
+          onClick={() => onChange(option.value)}
+        >
+          <strong>{option.label}</strong>
+          {value === option.value && <span>✓</span>}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function ChipChoices({
+  options,
+  value,
+  onChange,
+  multi = false,
+}: {
+  options: string[];
+  value: string | string[];
+  onChange: (value: string | string[]) => void;
+  multi?: boolean;
+}) {
+  const selectedValues = Array.isArray(value) ? value : [value];
+
+  return (
+    <div className="ut-chip-wrap">
+      {options.map((option) => {
+        const selected = selectedValues.includes(option);
+
+        return (
+          <button
+            type="button"
+            key={option}
+            className={
+              selected
+                ? "ut-chip selected"
+                : "ut-chip"
+            }
+            onClick={() => {
+              if (!multi) {
+                onChange(option);
+                return;
+              }
+
+              onChange(
+                selected
+                  ? selectedValues.filter((item) => item !== option)
+                  : [...selectedValues, option]
+              );
+            }}
+          >
+            {option}
+            {selected && <span className="ut-chip-check">✓</span>}
+          </button>
+        );
+      })}
+    </div>
+  );
 }
 
 function App() {
@@ -397,17 +764,25 @@ function App() {
   );
 
   const [profile, setProfile] = useState<RunnerProfile>(() =>
-    readStorage("runrise-profile", {
-      ...defaultProfile,
-    })
+    normalizeProfile(
+      readStorage("runrise-profile", {
+        ...defaultProfile,
+      })
+    )
   );
 
   const [clubs, setClubs] = useState<Club[]>(() =>
-    readStorage("runrise-clubs", initialClubs)
+    readStorage<Club[]>("runrise-clubs", initialClubs).map((club) => ({
+      ...club,
+      location: normalizeDistrict(club.location),
+    }))
   );
 
   const [events, setEvents] = useState<RunEvent[]>(() =>
-    readStorage("runrise-events", initialEvents)
+    readStorage<RunEvent[]>("runrise-events", initialEvents).map((event) => ({
+      ...event,
+      location: normalizeDistrict(event.location),
+    }))
   );
 
   const [savedClubs, setSavedClubs] = useState<number[]>(() =>
@@ -1375,1162 +1750,197 @@ function RunnerOnboarding({
   onBack: () => void;
   onFinish: () => void;
 }) {
-  const [areaOpen, setAreaOpen] = useState(false);
+  const [step, setStep] = useState(0);
 
-  const areas = [
-    "Lumpini",
-    "Benjakitti",
-    "Sukhumvit",
-    "Ari",
-    "Sathorn",
-    "Chatuchak",
+  const questions = [
+    { title: "Running Level", subtitle: "Where are you in your running journey?" },
+    { title: "Usual Pace", subtitle: "What’s your average running pace?" },
+    { title: "Preferred Distance", subtitle: "How far do you usually run?" },
+    { title: "Preferred Area", subtitle: "Which area do you prefer to run in?" },
+    { title: "Running Time", subtitle: "When do you normally prefer to run?" },
+    { title: "Running Goal", subtitle: "What are you hoping to get from running?" },
+    { title: "Community Style", subtitle: "What kind of running community feels right for you?" },
   ];
 
-  const levelOptions = [
-    {
-      value: "Beginner",
-      label: "Beginner",
-      description: "Just getting started",
-    },
-    {
-      value: "Casual",
-      label: "Casual",
-      description: "Run for fun",
-    },
-    {
-      value: "Intermediate",
-      label: "Intermediate",
-      description: "Run regularly",
-    },
-    {
-      value: "Advanced",
-      label: "Advanced",
-      description: "Train seriously",
-    },
-  ];
-
-  const distanceOptions = [
-    "3K",
-    "5K",
-    "8K",
-    "10K",
-    "15K+",
-  ];
-
-  const timeOptions = [
-    "Morning",
-    "Evening",
-    "Flexible",
-  ];
-
-  const goalOptions = [
-    "Health",
-    "Community / Social",
-    "Race Training",
-    "Improve Pace",
-    "Just Getting Started",
-  ];
-
-  const vibeOptions = [
-    "Social",
-    "Beginner Friendly",
-    "Training Focused",
-    "Relaxed",
-    "Networking",
-  ];
+  const currentComplete = [
+    Boolean(profile.level),
+    Boolean(profile.pace),
+    Boolean(profile.distance),
+    Boolean(profile.location),
+    Boolean(profile.time),
+    profile.goal.length > 0,
+    Boolean(profile.vibe),
+  ][step];
 
   const updateProfile = (
     key: keyof RunnerProfile,
-    value: string
+    value: string | string[]
   ) => {
     setProfile({
       ...profile,
       [key]: value,
-    });
+    } as RunnerProfile);
   };
 
-  const completedCount = [
-    profile.level,
-    profile.pace,
-    profile.distance,
-    profile.location,
-    profile.time,
-    profile.goal,
-    profile.vibe,
-  ].filter((value) => value.trim() !== "").length;
+  const goBack = () => {
+    if (step === 0) {
+      onBack();
+      return;
+    }
+    setStep((previous) => previous - 1);
+  };
 
-  const isComplete = completedCount === 7;
+  const goNext = () => {
+    if (!currentComplete) return;
+
+    if (step === questions.length - 1) {
+      onFinish();
+      return;
+    }
+
+    setStep((previous) => previous + 1);
+  };
 
   return (
-    <>
-      <style>{`
-        .rr-onboarding {
-          --rr-orange: #f36b32;
-          --rr-orange-dark: #e95a22;
-          --rr-peach: #fff0e8;
-          --rr-text: #19191b;
-          --rr-muted: #929298;
-          --rr-border: rgba(45, 45, 50, 0.08);
-
-          width: 100%;
-          height: 100%;
-          overflow-y: auto;
-          overflow-x: hidden;
-          padding: 22px 18px 125px;
-
-          background:
-            radial-gradient(
-              circle at 100% 0%,
-              rgba(255, 183, 145, 0.28),
-              transparent 30%
-            ),
-            radial-gradient(
-              circle at 0% 40%,
-              rgba(239, 133, 132, 0.12),
-              transparent 28%
-            ),
-            #f7f7fa;
-
-          scrollbar-width: none;
-        }
-
-        .rr-onboarding::-webkit-scrollbar {
-          display: none;
-        }
-
-        .rr-back {
-          min-height: 38px;
-          display: inline-flex;
-          align-items: center;
-          gap: 7px;
-          margin-bottom: 22px;
-          padding: 0 13px;
-          border: 1px solid rgba(243, 107, 50, 0.08);
-          border-radius: 999px;
-          background: rgba(255, 240, 233, 0.92);
-          color: var(--rr-orange);
-          font-size: 13px;
-          font-weight: 800;
-          cursor: pointer;
-        }
-
-        .rr-back-arrow {
-          font-size: 18px;
-          line-height: 1;
-        }
-
-        .rr-hero {
-          position: relative;
-          overflow: hidden;
-          margin-bottom: 18px;
-          padding: 22px;
-          border: 1px solid rgba(255, 255, 255, 0.9);
-          border-radius: 28px;
-
-          background:
-            linear-gradient(
-              145deg,
-              rgba(255,255,255,0.96),
-              rgba(255,248,244,0.95)
-            );
-
-          box-shadow:
-            0 14px 40px rgba(35, 35, 40, 0.055);
-        }
-
-        .rr-hero::after {
-          content: "";
-          position: absolute;
-          width: 120px;
-          height: 120px;
-          top: -45px;
-          right: -35px;
-          border-radius: 50%;
-
-          background:
-            linear-gradient(
-              145deg,
-              rgba(239, 133, 132, 0.22),
-              rgba(243, 107, 50, 0.14)
-            );
-        }
-
-        .rr-eyebrow {
-          position: relative;
-          z-index: 1;
-          margin: 0 0 9px;
-          color: var(--rr-orange);
-          font-size: 9px;
-          font-weight: 900;
-          letter-spacing: 2px;
-        }
-
-        .rr-hero h1 {
-          position: relative;
-          z-index: 1;
-          margin: 0 0 11px;
-          color: var(--rr-text);
-          font-size: 29px;
-          line-height: 1.06;
-          letter-spacing: -1.25px;
-        }
-
-        .rr-hero-description {
-          position: relative;
-          z-index: 1;
-          margin: 0;
-          max-width: 95%;
-          color: var(--rr-muted);
-          font-size: 12px;
-          line-height: 1.55;
-        }
-
-        .rr-progress-wrap {
-          margin-top: 18px;
-        }
-
-        .rr-progress-head {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin-bottom: 7px;
-          color: #77777e;
-          font-size: 10px;
-          font-weight: 750;
-        }
-
-        .rr-progress {
-          height: 6px;
-          overflow: hidden;
-          border-radius: 999px;
-          background: #ececf0;
-        }
-
-        .rr-progress-fill {
-          height: 100%;
-          border-radius: inherit;
-
-          background:
-            linear-gradient(
-              90deg,
-              #ef8584,
-              #f36b32
-            );
-
-          transition: width 0.25s ease;
-        }
-
-        .rr-form {
-          display: grid;
-          gap: 13px;
-        }
-
-        .rr-card {
-          padding: 17px;
-          border: 1px solid rgba(255,255,255,0.85);
-          border-radius: 24px;
-          background: rgba(255, 255, 255, 0.92);
-
-          box-shadow:
-            0 8px 28px rgba(40, 40, 45, 0.045);
-
-          backdrop-filter: blur(16px);
-        }
-
-        .rr-question-head {
-          display: flex;
-          align-items: flex-start;
-          gap: 11px;
-          margin-bottom: 13px;
-        }
-
-        .rr-number {
-          width: 29px;
-          height: 29px;
-          flex-shrink: 0;
-          display: grid;
-          place-items: center;
-          border-radius: 10px;
-
-          background:
-            linear-gradient(
-              145deg,
-              #fff1ea,
-              #ffe4d6
-            );
-
-          color: var(--rr-orange);
-          font-size: 11px;
-          font-weight: 900;
-        }
-
-        .rr-question-copy {
-          flex: 1;
-        }
-
-        .rr-question-copy h2 {
-          margin: 0 0 3px;
-          color: var(--rr-text);
-          font-size: 16px;
-          line-height: 1.2;
-          letter-spacing: -0.3px;
-        }
-
-        .rr-question-copy p {
-          margin: 0;
-          color: var(--rr-muted);
-          font-size: 10px;
-          line-height: 1.4;
-        }
-
-        .rr-level-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 8px;
-        }
-
-        .rr-level-card {
-          min-height: 67px;
-          padding: 11px;
-          border: 1px solid transparent;
-          border-radius: 16px;
-          background: #f6f6f8;
-          color: var(--rr-text);
-          text-align: left;
-          cursor: pointer;
-
-          transition:
-            transform 0.16s ease,
-            border-color 0.16s ease,
-            background 0.16s ease;
-        }
-
-        .rr-level-card:hover {
-          transform: translateY(-1px);
-        }
-
-        .rr-level-card.selected {
-          border-color: rgba(243, 107, 50, 0.24);
-
-          background:
-            linear-gradient(
-              145deg,
-              #fff1ea,
-              #fff8f4
-            );
-        }
-
-        .rr-level-top {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 6px;
-        }
-
-        .rr-level-label {
-          font-size: 12px;
-          font-weight: 800;
-        }
-
-        .rr-level-check {
-          width: 20px;
-          height: 20px;
-          display: grid;
-          place-items: center;
-          border-radius: 50%;
-          background: var(--rr-orange);
-          color: white;
-          font-size: 10px;
-          font-weight: 900;
-        }
-
-        .rr-level-description {
-          display: block;
-          margin-top: 5px;
-          color: var(--rr-muted);
-          font-size: 9px;
-        }
-
-        .rr-input-wrap {
-          position: relative;
-        }
-
-        .rr-pace-input {
-          width: 100%;
-          height: 52px;
-          padding: 0 78px 0 15px;
-          border: 1px solid var(--rr-border);
-          border-radius: 16px;
-          outline: none;
-          background: #f6f6f8;
-          color: var(--rr-text);
-          font-size: 16px;
-          font-weight: 800;
-
-          transition:
-            border-color 0.18s ease,
-            background 0.18s ease,
-            box-shadow 0.18s ease;
-        }
-
-        .rr-pace-input::placeholder {
-          color: #b0b0b6;
-        }
-
-        .rr-pace-input:focus {
-          border-color: rgba(243, 107, 50, 0.4);
-          background: white;
-
-          box-shadow:
-            0 0 0 4px rgba(243, 107, 50, 0.07);
-        }
-
-        .rr-unit {
-          position: absolute;
-          top: 50%;
-          right: 14px;
-          transform: translateY(-50%);
-          padding: 5px 8px;
-          border-radius: 999px;
-          background: #ececf0;
-          color: #77777e;
-          font-size: 9px;
-          font-weight: 800;
-          pointer-events: none;
-        }
-
-        .rr-helper {
-          margin: 7px 0 0;
-          color: #aaaab0;
-          font-size: 9px;
-        }
-
-        .rr-chips {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 7px;
-        }
-
-        .rr-chip {
-          position: relative;
-          min-height: 39px;
-          padding: 0 13px;
-          border: 1px solid transparent;
-          border-radius: 999px;
-          background: #f4f4f7;
-          color: #66666c;
-          font-size: 11px;
-          font-weight: 750;
-          cursor: pointer;
-
-          transition:
-            transform 0.16s ease,
-            background 0.16s ease,
-            color 0.16s ease,
-            border-color 0.16s ease;
-        }
-
-        .rr-chip:hover {
-          transform: translateY(-1px);
-        }
-
-        .rr-chip.selected {
-          border-color: rgba(243, 107, 50, 0.22);
-
-          background:
-            linear-gradient(
-              145deg,
-              #fff1ea,
-              #ffe8dc
-            );
-
-          color: var(--rr-orange-dark);
-        }
-
-        .rr-check {
-          margin-left: 5px;
-          font-weight: 900;
-        }
-
-        .rr-dropdown {
-          position: relative;
-        }
-
-        .rr-dropdown-trigger {
-          width: 100%;
-          min-height: 54px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 10px;
-          padding: 0 13px;
-          border: 1px solid var(--rr-border);
-          border-radius: 16px;
-          background: #f6f6f8;
-          color: var(--rr-text);
-          text-align: left;
-          cursor: pointer;
-
-          transition:
-            border-color 0.18s ease,
-            background 0.18s ease,
-            box-shadow 0.18s ease;
-        }
-
-        .rr-dropdown-trigger.open {
-          border-color: rgba(243,107,50,0.38);
-          background: white;
-
-          box-shadow:
-            0 0 0 4px rgba(243,107,50,0.07);
-        }
-
-        .rr-dropdown-value {
-          min-width: 0;
-          display: flex;
-          align-items: center;
-          gap: 9px;
-        }
-
-        .rr-location-icon {
-          width: 31px;
-          height: 31px;
-          flex-shrink: 0;
-          display: grid;
-          place-items: center;
-          border-radius: 10px;
-
-          background:
-            linear-gradient(
-              145deg,
-              #fff0e9,
-              #ffe4d6
-            );
-
-          color: var(--rr-orange);
-        }
-
-        .rr-dropdown-text {
-          overflow: hidden;
-          color: var(--rr-text);
-          font-size: 12px;
-          font-weight: 800;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-
-        .rr-dropdown-text.placeholder {
-          color: #77777e;
-        }
-
-        .rr-chevron {
-          display: grid;
-          place-items: center;
-          flex-shrink: 0;
-          color: var(--rr-orange);
-          transition: transform 0.18s ease;
-        }
-
-        .rr-chevron.open {
-          transform: rotate(180deg);
-        }
-
-        .rr-dropdown-menu {
-          position: relative;
-          z-index: 10;
-
-          margin-top: 8px;
-          padding: 6px;
-
-          border: 1px solid rgba(60,60,67,0.08);
-          border-radius: 17px;
-
-          background: rgba(255,255,255,0.99);
-
-          box-shadow:
-            0 12px 32px rgba(0,0,0,0.10);
-
-          backdrop-filter: blur(20px);
-          animation: rrDrop 0.16s ease;
-        }
-
-        @keyframes rrDrop {
-          from {
-            opacity: 0;
-            transform: translateY(-5px);
-          }
-
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .rr-dropdown-item {
-          width: 100%;
-          min-height: 43px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 0 12px;
-          border: none;
-          border-radius: 11px;
-          background: transparent;
-          color: var(--rr-text);
-          font-size: 12px;
-          font-weight: 700;
-          text-align: left;
-          cursor: pointer;
-        }
-
-        .rr-dropdown-item:hover {
-          background: #f6f6f8;
-        }
-
-        .rr-dropdown-item.selected {
-          background: #fff0e9;
-          color: var(--rr-orange);
-        }
-
-        .rr-dropdown-check {
-          width: 22px;
-          height: 22px;
-          display: grid;
-          place-items: center;
-          border-radius: 50%;
-          background: #ffdccc;
-          color: var(--rr-orange);
-          font-size: 10px;
-          font-weight: 900;
-        }
-
-        .rr-footer {
-          position: sticky;
-          bottom: -1px;
-          z-index: 50;
-          margin-top: 17px;
-          padding: 13px;
-          border: 1px solid rgba(255,255,255,0.9);
-          border-radius: 22px;
-          background: rgba(255,255,255,0.94);
-
-          box-shadow:
-            0 -8px 28px rgba(30,30,35,0.08);
-
-          backdrop-filter: blur(22px);
-        }
-
-        .rr-footer-top {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 10px;
-          margin-bottom: 10px;
-        }
-
-        .rr-footer-copy strong {
-          display: block;
-          margin-bottom: 2px;
-          font-size: 12px;
-        }
-
-        .rr-footer-copy span {
-          color: var(--rr-muted);
-          font-size: 9px;
-        }
-
-        .rr-count {
-          flex-shrink: 0;
-          padding: 6px 9px;
-          border-radius: 999px;
-          background: #f1f1f4;
-          color: #73737a;
-          font-size: 9px;
-          font-weight: 900;
-        }
-
-        .rr-find-button {
-          width: 100%;
-          height: 52px;
-          border: none;
-          border-radius: 16px;
-
-          background:
-            linear-gradient(
-              135deg,
-              #ef8584,
-              #f36b32
-            );
-
-          color: white;
-          font-size: 14px;
-          font-weight: 850;
-
-          box-shadow:
-            0 9px 22px rgba(243,107,50,0.2);
-
-          cursor: pointer;
-
-          transition:
-            transform 0.15s ease,
-            opacity 0.15s ease;
-        }
-
-        .rr-find-button:not(:disabled):active {
-          transform: scale(0.99);
-        }
-
-        .rr-find-button:disabled {
-          background: #f5c1ad;
-          box-shadow: none;
-          opacity: 0.72;
-          cursor: not-allowed;
-        }
-      `}</style>
-
-      <main
-        className="rr-onboarding"
-        onClick={() => {
-          if (areaOpen) {
-            setAreaOpen(false);
-          }
-        }}
-      >
-        <button
-          type="button"
-          className="rr-back"
-          onClick={onBack}
-        >
-          <span className="rr-back-arrow">
-            ←
+    <main className="ut-onboarding">
+      <div className="ut-onboarding-scroll">
+        <div className="ut-onboarding-top">
+          <button type="button" className="ut-back" onClick={goBack}>
+            ← Back
+          </button>
+          <span className="ut-step-counter">
+            {step + 1} / {questions.length}
           </span>
-          Back
-        </button>
+        </div>
 
-        <section className="rr-hero">
-          <p className="rr-eyebrow">
-            PERSONALIZE YOUR RUN
+        <div className="ut-progress">
+          <div
+            className="ut-progress-fill"
+            style={{
+              width: `${((step + 1) / questions.length) * 100}%`,
+            }}
+          />
+        </div>
+
+        <section className="ut-question-card">
+          <p className="ut-question-number">
+            {String(step + 1).padStart(2, "0")}
           </p>
 
-          <h1>
-            Find a run that
-            <br />
-            feels like you.
-          </h1>
+          <h1>{questions[step].title}</h1>
+          <p>{questions[step].subtitle}</p>
 
-          <p className="rr-hero-description">
-            Tell us how you like to run and we'll match you with
-            communities that fit your pace, place and goals.
-          </p>
-
-          <div className="rr-progress-wrap">
-            <div className="rr-progress-head">
-              <span>Your running profile</span>
-              <span>{completedCount}/7</span>
-            </div>
-
-            <div className="rr-progress">
-              <div
-                className="rr-progress-fill"
-                style={{
-                  width: `${(completedCount / 7) * 100}%`,
-                }}
-              />
-            </div>
-          </div>
-        </section>
-
-        <div className="rr-form">
-          <section className="rr-card">
-            <div className="rr-question-head">
-              <div className="rr-number">01</div>
-
-              <div className="rr-question-copy">
-                <h2>Running Level</h2>
-                <p>
-                  Where are you in your running journey?
-                </p>
-              </div>
-            </div>
-
-            <div className="rr-level-grid">
-              {levelOptions.map((option) => {
-                const selected =
-                  profile.level === option.value;
-
-                return (
+          <div className="ut-answer-area">
+            {step === 0 && (
+              <div className="ut-level-grid">
+                {LEVEL_OPTIONS.map((option) => (
                   <button
                     type="button"
                     key={option.value}
                     className={
-                      selected
-                        ? "rr-level-card selected"
-                        : "rr-level-card"
+                      profile.level === option.value
+                        ? "ut-level-card selected"
+                        : "ut-level-card"
                     }
                     onClick={() =>
                       updateProfile("level", option.value)
                     }
                   >
-                    <div className="rr-level-top">
-                      <span className="rr-level-label">
-                        {option.label}
-                      </span>
-
-                      {selected && (
-                        <span className="rr-level-check">
-                          ✓
-                        </span>
-                      )}
+                    <div>
+                      <strong>{option.label}</strong>
+                      <span>{option.description}</span>
                     </div>
-
-                    <span className="rr-level-description">
-                      {option.description}
-                    </span>
+                    {profile.level === option.value && <b>✓</b>}
                   </button>
-                );
-              })}
-            </div>
-          </section>
-
-          <section className="rr-card">
-            <div className="rr-question-head">
-              <div className="rr-number">02</div>
-
-              <div className="rr-question-copy">
-                <h2>Usual Pace</h2>
-                <p>
-                  What's your average running pace?
-                </p>
+                ))}
               </div>
-            </div>
+            )}
 
-            <div className="rr-input-wrap">
-              <input
-                className="rr-pace-input"
-                type="text"
-                inputMode="decimal"
-                placeholder="6:30"
-                value={profile.pace}
-                onChange={(event) =>
-                  updateProfile("pace", event.target.value)
+            {step === 1 && (
+              <>
+                <PaceWheelPicker
+                  value={profile.pace}
+                  onChange={(value) =>
+                    updateProfile("pace", value)
+                  }
+                />
+                <p className="ut-helper">
+                  Swipe minutes and seconds separately. Selected pace:{" "}
+                  <strong>{profile.pace} / km</strong>
+                </p>
+              </>
+            )}
+
+            {step === 2 && (
+              <DistanceChoices
+                value={profile.distance}
+                onChange={(value) =>
+                  updateProfile("distance", value)
                 }
               />
+            )}
 
-              <span className="rr-unit">
-                MIN / KM
-              </span>
-            </div>
-
-            <p className="rr-helper">
-              Example: 6:30 means 6 minutes 30 seconds per kilometer.
-            </p>
-          </section>
-
-          <section className="rr-card">
-            <div className="rr-question-head">
-              <div className="rr-number">03</div>
-
-              <div className="rr-question-copy">
-                <h2>Preferred Distance</h2>
-                <p>
-                  How far do you usually enjoy running?
-                </p>
-              </div>
-            </div>
-
-            <div className="rr-chips">
-              {distanceOptions.map((distance) => (
-                <button
-                  type="button"
-                  key={distance}
-                  className={
-                    profile.distance === distance
-                      ? "rr-chip selected"
-                      : "rr-chip"
-                  }
-                  onClick={() =>
-                    updateProfile("distance", distance)
-                  }
-                >
-                  {distance}
-
-                  {profile.distance === distance && (
-                    <span className="rr-check">
-                      ✓
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
-          </section>
-
-          <section
-            className="rr-card"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
-          >
-            <div className="rr-question-head">
-              <div className="rr-number">04</div>
-
-              <div className="rr-question-copy">
-                <h2>Preferred Area</h2>
-                <p>
-                  Where would you like to run most often?
-                </p>
-              </div>
-            </div>
-
-            <div className="rr-dropdown">
-              <button
-                type="button"
-                className={
-                  areaOpen
-                    ? "rr-dropdown-trigger open"
-                    : "rr-dropdown-trigger"
+            {step === 3 && (
+              <ChipChoices
+                options={BANGKOK_DISTRICTS}
+                value={profile.location}
+                onChange={(value) =>
+                  updateProfile("location", value as string)
                 }
-                onClick={() =>
-                  setAreaOpen(
-                    (previous) => !previous
-                  )
+              />
+            )}
+
+            {step === 4 && (
+              <ChipChoices
+                options={RUNNING_TIMES}
+                value={profile.time}
+                onChange={(value) =>
+                  updateProfile("time", value as string)
                 }
-              >
-                <span className="rr-dropdown-value">
-                  <span className="rr-location-icon">
-                    <svg
-                      viewBox="0 0 24 24"
-                      width="16"
-                      height="16"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.9"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
-                      <circle
-                        cx="12"
-                        cy="10"
-                        r="2.5"
-                      />
-                    </svg>
-                  </span>
+              />
+            )}
 
-                  <span
-                    className={
-                      profile.location
-                        ? "rr-dropdown-text"
-                        : "rr-dropdown-text placeholder"
-                    }
-                  >
-                    {profile.location ||
-                      "Select your preferred area"}
-                  </span>
-                </span>
-
-                <span
-                  className={
-                    areaOpen
-                      ? "rr-chevron open"
-                      : "rr-chevron"
+            {step === 5 && (
+              <>
+                <ChipChoices
+                  options={RUNNING_GOALS}
+                  value={profile.goal}
+                  multi
+                  onChange={(value) =>
+                    updateProfile("goal", value as string[])
                   }
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    width="17"
-                    height="17"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="m6 9 6 6 6-6" />
-                  </svg>
-                </span>
-              </button>
-
-              {areaOpen && (
-                <div className="rr-dropdown-menu">
-                  {areas.map((area) => (
-                    <button
-                      type="button"
-                      key={area}
-                      className={
-                        profile.location === area
-                          ? "rr-dropdown-item selected"
-                          : "rr-dropdown-item"
-                      }
-                      onClick={() => {
-                        updateProfile(
-                          "location",
-                          area
-                        );
-                        setAreaOpen(false);
-                      }}
-                    >
-                      <span>{area}</span>
-
-                      {profile.location === area && (
-                        <span className="rr-dropdown-check">
-                          ✓
-                        </span>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </section>
-
-          <section className="rr-card">
-            <div className="rr-question-head">
-              <div className="rr-number">05</div>
-
-              <div className="rr-question-copy">
-                <h2>Running Time</h2>
-                <p>
-                  When do you normally prefer to run?
+                />
+                <p className="ut-helper">
+                  You can choose more than one goal.
                 </p>
-              </div>
-            </div>
+              </>
+            )}
 
-            <div className="rr-chips">
-              {timeOptions.map((time) => (
-                <button
-                  type="button"
-                  key={time}
-                  className={
-                    profile.time === time
-                      ? "rr-chip selected"
-                      : "rr-chip"
-                  }
-                  onClick={() =>
-                    updateProfile("time", time)
-                  }
-                >
-                  {time}
-
-                  {profile.time === time && (
-                    <span className="rr-check">
-                      ✓
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
-          </section>
-
-          <section className="rr-card">
-            <div className="rr-question-head">
-              <div className="rr-number">06</div>
-
-              <div className="rr-question-copy">
-                <h2>Running Goal</h2>
-                <p>
-                  What are you hoping to get from running?
-                </p>
-              </div>
-            </div>
-
-            <div className="rr-chips">
-              {goalOptions.map((goal) => (
-                <button
-                  type="button"
-                  key={goal}
-                  className={
-                    profile.goal === goal
-                      ? "rr-chip selected"
-                      : "rr-chip"
-                  }
-                  onClick={() =>
-                    updateProfile("goal", goal)
-                  }
-                >
-                  {goal}
-
-                  {profile.goal === goal && (
-                    <span className="rr-check">
-                      ✓
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
-          </section>
-          <section className="rr-card">
-            <div className="rr-question-head">
-              <div className="rr-number">07</div>
-
-              <div className="rr-question-copy">
-                <h2>Community Style</h2>
-                <p>
-                  What kind of running community feels right for you?
-                </p>
-              </div>
-            </div>
-
-            <div className="rr-chips">
-              {vibeOptions.map((vibe) => (
-                <button
-                  type="button"
-                  key={vibe}
-                  className={
-                    profile.vibe === vibe
-                      ? "rr-chip selected"
-                      : "rr-chip"
-                  }
-                  onClick={() =>
-                    updateProfile("vibe", vibe)
-                  }
-                >
-                  {vibe}
-
-                  {profile.vibe === vibe && (
-                    <span className="rr-check">
-                      ✓
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
-          </section>
-        </div>
-
-        <div className="rr-footer">
-          <div className="rr-footer-top">
-            <div className="rr-footer-copy">
-              <strong>
-                {isComplete
-                  ? "You're ready!"
-                  : "Almost there"}
-              </strong>
-
-              <span>
-                {isComplete
-                  ? "Your Smart Match profile is complete."
-                  : `${completedCount} of 7 preferences completed.`}
-              </span>
-            </div>
-
-            <span className="rr-count">
-              {completedCount}/7
-            </span>
+            {step === 6 && (
+              <ChipChoices
+                options={COMMUNITY_STYLES}
+                value={profile.vibe}
+                onChange={(value) =>
+                  updateProfile("vibe", value as string)
+                }
+              />
+            )}
           </div>
+        </section>
+      </div>
 
-          <button
-            type="button"
-            className="rr-find-button"
-            disabled={!isComplete}
-            onClick={onFinish}
-          >
-            {isComplete
-              ? "Find My Clubs →"
-              : "Complete Your Profile"}
-          </button>
-        </div>
-      </main>
-    </>
+      <div className="ut-fixed-cta">
+        <button
+          type="button"
+          disabled={!currentComplete}
+          onClick={goNext}
+        >
+          {step === questions.length - 1
+            ? "Complete Your Profile"
+            : "Continue"}
+        </button>
+      </div>
+    </main>
   );
 }
 
@@ -2546,76 +1956,65 @@ function RunnerHome({
 }: any) {
   return (
     <main className="screen with-nav">
-      <div className="home-top">
-        <div>
-          <p className="eyebrow">
-            RUNRISE
-          </p>
+      <div className="ut-home-header">
+        <div className="ut-home-brand-row">
+          <p className="eyebrow">RUNRISE</p>
 
-          <h1>
-            Good morning,{" "}
-            {profile.name ||
-              "Runner"}{" "}
-            👋
-          </h1>
+          <button
+            className="ut-notification"
+            onClick={onNotifications}
+            aria-label="Notifications"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+              <path d="M10 21h4" />
+            </svg>
 
-          <p className="muted">
-            Ready to find your next run?
-          </p>
+            {unread > 0 && <span>{unread}</span>}
+          </button>
         </div>
 
-        <button
-          className="notification"
-          onClick={onNotifications}
-        >
-          🔔
+        <h1 className="ut-home-greeting">
+          Good morning, <strong>{profile.name || "Runner"}</strong>{" "}
+          <span className="ut-wave">👋</span>
+        </h1>
 
-          {unread > 0 && (
-            <span>{unread}</span>
-          )}
-        </button>
+        <p className="ut-home-subtitle">
+          Ready to find your next run?
+        </p>
       </div>
 
       <div className="section-row">
         <div>
-          <p className="eyebrow">
-            SMART MATCHING
-          </p>
-
-          <h2>
-            Recommended for you
-          </h2>
+          <p className="eyebrow">SMART MATCHING</p>
+          <h2>Recommended for you</h2>
         </div>
 
-        <button
-          className="link"
-          onClick={onDiscover}
-        >
+        <button className="link" onClick={onDiscover}>
           See all
         </button>
       </div>
 
       <div className="cards">
-        {clubs.map(
-          (club: Club) => (
-            <ClubCard
-              key={club.id}
-              club={club}
-              score={calculateMatch(
-                club
-              )}
-              onOpen={() =>
-                onClub(club.id)
-              }
-            />
-          )
-        )}
+        {clubs.map((club: Club) => (
+          <ClubCard
+            key={club.id}
+            club={club}
+            score={calculateMatch(club)}
+            onOpen={() => onClub(club.id)}
+          />
+        ))}
       </div>
 
-      <RunnerNav
-        active="home"
-        onNav={onNav}
-      />
+      <RunnerNav active="home" onNav={onNav} />
     </main>
   );
 }
@@ -2707,21 +2106,12 @@ function Discover({
 }: any) {
   const locations = [
     "All",
-    "Lumpini",
-    "Benjakitti",
-    "Sukhumvit",
-    "Ari",
-    "Sathorn",
-    "Chatuchak",
+    ...BANGKOK_DISTRICTS,
   ];
 
   const distances = [
     "All",
-    "3K",
-    "5K",
-    "8K",
-    "10K",
-    "15K+",
+    ...DISTANCE_PREFERENCES.map((item) => item.value),
   ];
 
   const vibes = [
@@ -2791,7 +2181,11 @@ function Discover({
                 )
               }
             >
-              {distance}
+              {distance === "All"
+                ? "All"
+                : DISTANCE_PREFERENCES.find(
+                    (item) => item.value === distance
+                  )?.label || distance}
             </button>
           )
         )}
@@ -3659,6 +3053,19 @@ function RunnerProfile({
   onNav,
 }: any) {
   const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState<RunnerProfile>({
+    ...profile,
+    goal: [...profile.goal],
+  });
+
+  useEffect(() => {
+    if (!editing) {
+      setDraft({
+        ...profile,
+        goal: [...profile.goal],
+      });
+    }
+  }, [profile, editing]);
 
   const requestReset = () => {
     if (
@@ -3670,80 +3077,255 @@ function RunnerProfile({
     }
   };
 
+  const savePreferences = () => {
+    setProfile(draft);
+    setEditing(false);
+  };
+
+  const cancelEdit = () => {
+    setDraft({
+      ...profile,
+      goal: [...profile.goal],
+    });
+    setEditing(false);
+  };
+
   return (
-    <main className="screen with-nav">
-      <div className="profile-head">
+    <main className="screen with-nav ut-profile-page">
+      <section className="ut-profile-header">
         <div className="profile-avatar">
           {profile.name?.[0] || "R"}
         </div>
 
-        <h1>{profile.name || "Runner"}</h1>
-
-        <p className="muted">Runner</p>
+        <div className="ut-profile-identity">
+          <h1>{profile.name || "Runner"}</h1>
+          <p>Runner</p>
+        </div>
 
         <button
-          className="link"
-          onClick={() => setEditing(!editing)}
+          className="ut-edit-profile"
+          onClick={() => {
+            if (editing) {
+              cancelEdit();
+            } else {
+              setDraft({
+                ...profile,
+                goal: [...profile.goal],
+              });
+              setEditing(true);
+            }
+          }}
         >
-          {editing ? "Done" : "Edit Preferences"}
+          {editing ? "Cancel" : "Edit Preferences"}
         </button>
-      </div>
+      </section>
 
       {editing ? (
-        <div className="settings-card">
-          <label>
-            Usual Running Distance
+        <section className="ut-edit-preferences">
+          <div className="ut-profile-section-head">
+            <p className="eyebrow">EDIT PREFERENCES</p>
+            <h2>Your running profile</h2>
+          </div>
 
-            <select
-              value={profile.distance}
-              onChange={(event) =>
-                setProfile({
-                  ...profile,
-                  distance: event.target.value,
+          <div className="ut-edit-block">
+            <h3>Running Level</h3>
+            <div className="ut-level-grid compact">
+              {LEVEL_OPTIONS.map((option) => (
+                <button
+                  type="button"
+                  key={option.value}
+                  className={
+                    draft.level === option.value
+                      ? "ut-level-card selected"
+                      : "ut-level-card"
+                  }
+                  onClick={() =>
+                    setDraft({ ...draft, level: option.value })
+                  }
+                >
+                  <div>
+                    <strong>{option.label}</strong>
+                    <span>{option.description}</span>
+                  </div>
+                  {draft.level === option.value && <b>✓</b>}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="ut-edit-block">
+            <h3>Usual Pace</h3>
+            <PaceWheelPicker
+              value={draft.pace}
+              onChange={(pace) => setDraft({ ...draft, pace })}
+            />
+          </div>
+
+          <div className="ut-edit-block">
+            <h3>Preferred Distance</h3>
+            <DistanceChoices
+              value={draft.distance}
+              onChange={(distance) =>
+                setDraft({ ...draft, distance })
+              }
+            />
+          </div>
+
+          <div className="ut-edit-block">
+            <h3>Preferred Area</h3>
+            <ChipChoices
+              options={BANGKOK_DISTRICTS}
+              value={draft.location}
+              onChange={(location) =>
+                setDraft({
+                  ...draft,
+                  location: location as string,
                 })
               }
-            >
-              {["3K", "5K", "8K", "10K", "15K+"].map(
-                (distance) => (
-                  <option key={distance}>
-                    {distance}
-                  </option>
-                )
-              )}
-            </select>
-          </label>
-        </div>
+            />
+          </div>
+
+          <div className="ut-edit-block">
+            <h3>Preferred Running Time</h3>
+            <ChipChoices
+              options={RUNNING_TIMES}
+              value={draft.time}
+              onChange={(time) =>
+                setDraft({
+                  ...draft,
+                  time: time as string,
+                })
+              }
+            />
+          </div>
+
+          <div className="ut-edit-block">
+            <h3>Running Goals</h3>
+            <ChipChoices
+              options={RUNNING_GOALS}
+              value={draft.goal}
+              multi
+              onChange={(goal) =>
+                setDraft({
+                  ...draft,
+                  goal: goal as string[],
+                })
+              }
+            />
+          </div>
+
+          <div className="ut-edit-block">
+            <h3>Community Style</h3>
+            <ChipChoices
+              options={COMMUNITY_STYLES}
+              value={draft.vibe}
+              onChange={(vibe) =>
+                setDraft({
+                  ...draft,
+                  vibe: vibe as string,
+                })
+              }
+            />
+          </div>
+
+          <button
+            type="button"
+            className="ut-save-preferences"
+            disabled={!isRunnerProfileComplete(draft)}
+            onClick={savePreferences}
+          >
+            Save Preferences
+          </button>
+        </section>
       ) : (
-        <div className="stat-grid">
-          <Stat label="LEVEL" value={profile.level || "-"} />
-          <Stat label="PACE" value={profile.pace || "-"} />
-          <Stat label="DISTANCE" value={profile.distance || "-"} />
-        </div>
+        <>
+          <section className="ut-profile-section">
+            <div className="ut-profile-section-head">
+              <p className="eyebrow">RUNNING PROFILE</p>
+              <h2>Your preferences</h2>
+            </div>
+
+            <div className="ut-profile-row-grid">
+              <ProfileInfo label="Running Level" value={profile.level || "—"} />
+              <ProfileInfo label="Usual Pace" value={`${profile.pace} / km`} />
+              <ProfileInfo
+                label="Preferred Distance"
+                value={
+                  DISTANCE_PREFERENCES.find(
+                    (item) => item.value === profile.distance
+                  )?.label || profile.distance || "—"
+                }
+              />
+              <ProfileInfo label="Preferred Area" value={profile.location || "—"} />
+              <ProfileInfo
+                label="Preferred Running Time"
+                value={profile.time || "—"}
+              />
+            </div>
+          </section>
+
+          <section className="ut-profile-section">
+            <div className="ut-profile-section-head">
+              <p className="eyebrow">RUNNING GOALS</p>
+              <h2>What you’re running for</h2>
+            </div>
+
+            <div className="ut-display-chips">
+              {profile.goal.map((goal: string) => (
+                <span key={goal}>{goal}</span>
+              ))}
+            </div>
+          </section>
+
+          <section className="ut-profile-section">
+            <div className="ut-profile-section-head">
+              <p className="eyebrow">COMMUNITY PREFERENCE</p>
+              <h2>Your preferred vibe</h2>
+            </div>
+
+            <div className="ut-display-chips">
+              <span>{profile.vibe || "Not selected"}</span>
+            </div>
+          </section>
+        </>
       )}
 
-      <div className="settings-card">
-        <button
-          className="settings-row"
-          onClick={onSwitchRole}
-        >
-          Switch to Founder
-          <span>›</span>
-        </button>
+      <section className="ut-profile-section">
+        <div className="ut-profile-section-head">
+          <p className="eyebrow">ACCOUNT & SETTINGS</p>
+          <h2>Runrise settings</h2>
+        </div>
 
-        <button
-          className="settings-row reset-row"
-          onClick={requestReset}
-        >
-          Reset Prototype
-          <span>↻</span>
-        </button>
-      </div>
+        <div className="settings-card">
+          <button className="settings-row" onClick={onSwitchRole}>
+            Switch to Founder
+            <span>›</span>
+          </button>
 
-      <RunnerNav
-        active="profile"
-        onNav={onNav}
-      />
+          <button className="settings-row reset-row" onClick={requestReset}>
+            Reset Prototype
+            <span>↻</span>
+          </button>
+        </div>
+      </section>
+
+      <RunnerNav active="profile" onNav={onNav} />
     </main>
+  );
+}
+
+function ProfileInfo({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="ut-profile-info">
+      <span>{label}</span>
+      <strong>{value}</strong>
+    </div>
   );
 }
 
@@ -4425,7 +4007,7 @@ function FounderEvents({
     name: "",
     date: "",
     time: "06:00",
-    location: "Lumpini",
+    location: "Pathum Wan",
     distance: "5K",
     pace: "6:00–7:00",
     capacity: 50,
