@@ -37,7 +37,7 @@ type RunnerProfile = {
   location: string;
   time: string;
   goal: string[];
-  vibe: string;
+  vibe: string[];
 };
 
 type RunEvent = {
@@ -94,7 +94,7 @@ const defaultProfile: RunnerProfile = {
   location: "",
   time: "",
   goal: [],
-  vibe: "",
+  vibe: [],
 };
 
 const initialClubs: Club[] = [
@@ -394,6 +394,25 @@ function normalizeGoal(goal: unknown): string[] {
   );
 }
 
+function normalizeVibe(vibe: unknown): string[] {
+  if (Array.isArray(vibe)) {
+    return Array.from(
+      new Set(
+        vibe.filter(
+          (item): item is string =>
+            typeof item === "string" && item.trim().length > 0
+        )
+      )
+    );
+  }
+
+  if (typeof vibe === "string" && vibe.trim()) {
+    return [vibe.trim()];
+  }
+
+  return [];
+}
+
 function normalizeDistancePreference(value: unknown) {
   if (typeof value !== "string") return "";
 
@@ -453,6 +472,7 @@ function normalizeProfile(value: unknown): RunnerProfile {
     distance: normalizeDistancePreference(raw.distance),
     location: normalizeDistrict(raw.location),
     goal: normalizeGoal(raw.goal),
+    vibe: normalizeVibe(raw.vibe),
   };
 }
 
@@ -464,7 +484,7 @@ function isRunnerProfileComplete(profile: RunnerProfile) {
       profile.location.trim() &&
       profile.time.trim() &&
       profile.goal.length > 0 &&
-      profile.vibe.trim()
+      profile.vibe.length > 0
   );
 }
 
@@ -893,9 +913,12 @@ function App() {
     }
 
     if (
-      profile.vibe &&
-      club.vibe.some((vibe) =>
-        vibe.toLowerCase().includes(profile.vibe.toLowerCase())
+      profile.vibe.length > 0 &&
+      club.vibe.some((clubVibe) =>
+        profile.vibe.some(
+          (runnerVibe) =>
+            clubVibe.toLowerCase() === runnerVibe.toLowerCase()
+        )
       )
     ) {
       score += 5;
@@ -1203,6 +1226,7 @@ function App() {
             clubs={clubs.filter((club) =>
               compareClubs.includes(club.id)
             )}
+            profile={profile}
             calculateMatch={calculateMatch}
             onBack={() => setPage("discover")}
           />
@@ -1769,7 +1793,7 @@ function RunnerOnboarding({
     Boolean(profile.location),
     Boolean(profile.time),
     profile.goal.length > 0,
-    Boolean(profile.vibe),
+    profile.vibe.length > 0,
   ][step];
 
   const updateProfile = (
@@ -1917,13 +1941,20 @@ function RunnerOnboarding({
             )}
 
             {step === 6 && (
-              <ChipChoices
-                options={COMMUNITY_STYLES}
-                value={profile.vibe}
-                onChange={(value) =>
-                  updateProfile("vibe", value as string)
-                }
-              />
+              <>
+                <ChipChoices
+                  options={COMMUNITY_STYLES}
+                  value={profile.vibe}
+                  multi
+                  onChange={(value) =>
+                    updateProfile("vibe", value as string[])
+                  }
+                />
+
+                <p className="ut-helper">
+                  Choose all styles that feel right for you.
+                </p>
+              </>
             )}
           </div>
         </section>
@@ -2485,13 +2516,13 @@ function ClubDetail({
 
 function Compare({
   clubs,
+  profile,
   calculateMatch,
   onBack,
 }: {
   clubs: Club[];
-  calculateMatch: (
-    club: Club
-  ) => number;
+  profile: RunnerProfile;
+  calculateMatch: (club: Club) => number;
   onBack: () => void;
 }) {
   if (clubs.length < 2) {
@@ -2518,16 +2549,98 @@ function Compare({
     );
   }
 
-  const bestClub = [
-    ...clubs,
-  ].sort(
-    (a, b) =>
-      calculateMatch(b) -
-      calculateMatch(a)
-  )[0];
+  const sorted = [...clubs].sort(
+    (a, b) => calculateMatch(b) - calculateMatch(a)
+  );
+
+  const bestClub = sorted[0];
+  const bestClubIndex = clubs.findIndex(
+    (club) => club.id === bestClub.id
+  );
+
+  const scheduleMatches = (club: Club) => {
+    if (!profile.time) return false;
+
+    return (
+      profile.time === "Flexible" ||
+      club.schedule
+        .toLowerCase()
+        .includes(profile.time.toLowerCase())
+    );
+  };
+
+  const levelMatches = (club: Club) => {
+    if (!profile.level) return false;
+
+    return (
+      club.level === profile.level ||
+      club.level === "All Levels"
+    );
+  };
+
+  const communityMatches = (club: Club) => {
+    if (profile.vibe.length === 0) return false;
+
+    return club.vibe.some((clubVibe) =>
+      profile.vibe.some(
+        (runnerVibe) =>
+          clubVibe.toLowerCase() === runnerVibe.toLowerCase()
+      )
+    );
+  };
+
+  const criteria = [
+    {
+      label: "LOCATION",
+      subtitle: "Preferred area",
+      values: clubs.map((club) => club.location),
+      matches: clubs.map(
+        (club) =>
+          Boolean(profile.location) &&
+          club.location.toLowerCase() ===
+            profile.location.toLowerCase()
+      ),
+    },
+    {
+      label: "DISTANCE",
+      subtitle: "Your preferred range",
+      values: clubs.map((club) => club.distance),
+      matches: clubs.map((club) =>
+        Boolean(profile.distance) &&
+        distanceMatches(profile.distance, club.distance)
+      ),
+    },
+    {
+      label: "PACE",
+      subtitle: "Comfortable running pace",
+      values: clubs.map((club) => club.pace),
+      matches: clubs.map((club) =>
+        Boolean(profile.pace) &&
+        paceMatches(profile.pace, club.pace)
+      ),
+    },
+    {
+      label: "SCHEDULE",
+      subtitle: "When you prefer to run",
+      values: clubs.map((club) => club.schedule),
+      matches: clubs.map(scheduleMatches),
+    },
+    {
+      label: "LEVEL",
+      subtitle: "Running experience",
+      values: clubs.map((club) => club.level),
+      matches: clubs.map(levelMatches),
+    },
+    {
+      label: "COMMUNITY",
+      subtitle: "Community style",
+      values: clubs.map((club) => club.vibe.join(" · ")),
+      matches: clubs.map(communityMatches),
+    },
+  ];
 
   return (
-    <main className="screen">
+    <main className="screen compare-page">
       <button
         className="circle-button"
         onClick={onBack}
@@ -2538,145 +2651,140 @@ function Compare({
       <Header
         eyebrow="COMPARE"
         title="Which club fits you?"
-        subtitle="Compare the things that matter most."
+        subtitle="See the differences at a glance."
       />
 
-      <div
-        className="compare-club-heads"
-        style={{
-          gridTemplateColumns:
-            `repeat(${clubs.length}, 1fr)`,
-        }}
-      >
-        {clubs.map(
-          (club) => (
-            <div
-              key={club.id}
-              className="compare-club-head"
-            >
-              <div
-                className={`compare-cover cover-${club.id}`}
-              />
-
-              <strong>
-                {club.name}
-              </strong>
-
-              <span>
-                {calculateMatch(
-                  club
-                )}
-                % Match
-              </span>
-            </div>
-          )
-        )}
-      </div>
-
-      <div className="easy-compare">
-        <EasyCompareRow
-          label="LOCATION"
-          values={clubs.map(
-            (club) =>
-              club.location
-          )}
-        />
-
-        <EasyCompareRow
-          label="DISTANCE"
-          values={clubs.map(
-            (club) =>
-              club.distance
-          )}
-        />
-
-        <EasyCompareRow
-          label="PACE"
-          values={clubs.map(
-            (club) =>
-              club.pace
-          )}
-        />
-
-        <EasyCompareRow
-          label="SCHEDULE"
-          values={clubs.map(
-            (club) =>
-              club.schedule
-          )}
-        />
-
-        <EasyCompareRow
-          label="LEVEL"
-          values={clubs.map(
-            (club) =>
-              club.level
-          )}
-        />
-
-        <EasyCompareRow
-          label="COMMUNITY"
-          values={clubs.map(
-            (club) =>
-              club.vibe[0]
-          )}
-        />
-      </div>
-
-      <div className="best-match-card">
-        <div className="best-match-icon">
-          ✓
+      <section className="compare-winner">
+        <div className="compare-winner-label">
+          BEST FIT
         </div>
 
         <div>
-          <small>
-            BEST MATCH FOR YOU
-          </small>
-
-          <h3>
-            {bestClub.name}
-          </h3>
-
+          <span className="compare-winner-score">
+            {calculateMatch(bestClub)}%
+          </span>
+          <h2>{bestClub.name}</h2>
           <p>
-            {calculateMatch(
-              bestClub
-            )}
-            % match based on your
-            current running profile.
+            This club matches more of your current running
+            preferences.
           </p>
         </div>
+      </section>
+
+      <div
+        className="compare-club-heads compare-club-heads-v2"
+        style={{
+          gridTemplateColumns: `repeat(${clubs.length}, minmax(0, 1fr))`,
+        }}
+      >
+        {clubs.map((club, index) => {
+          const isBest = index === bestClubIndex;
+
+          return (
+            <div
+              key={club.id}
+              className={
+                isBest
+                  ? "compare-club-head-v2 best"
+                  : "compare-club-head-v2"
+              }
+            >
+              {isBest && (
+                <span className="compare-best-pill">
+                  Best Fit
+                </span>
+              )}
+
+              <div
+                className={`compare-cover compare-cover-v2 cover-${club.id}`}
+              />
+
+              <div className="compare-head-content">
+                <strong>{club.name}</strong>
+
+                <div className="compare-score-row">
+                  <b>{calculateMatch(club)}%</b>
+                  <span>Match</span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
+
+      <section className="compare-breakdown">
+        <div className="compare-breakdown-title">
+          <div>
+            <p className="eyebrow">MATCH BREAKDOWN</p>
+            <h2>What’s different?</h2>
+          </div>
+
+          <span className="compare-match-key">
+            <i /> Matches you
+          </span>
+        </div>
+
+        {criteria.map((criterion) => (
+          <CompareCriterionRow
+            key={criterion.label}
+            label={criterion.label}
+            subtitle={criterion.subtitle}
+            values={criterion.values}
+            matches={criterion.matches}
+            bestClubIndex={bestClubIndex}
+          />
+        ))}
+      </section>
     </main>
   );
 }
 
-function EasyCompareRow({
+function CompareCriterionRow({
   label,
+  subtitle,
   values,
+  matches,
+  bestClubIndex,
 }: {
   label: string;
+  subtitle: string;
   values: string[];
+  matches: boolean[];
+  bestClubIndex: number;
 }) {
   return (
-    <div className="easy-compare-row">
-      <small>{label}</small>
+    <div className="compare-criterion-row">
+      <div className="compare-criterion-label">
+        <strong>{label}</strong>
+        <span>{subtitle}</span>
+      </div>
 
       <div
-        className="easy-compare-values"
+        className="compare-criterion-values"
         style={{
-          gridTemplateColumns:
-            `repeat(${values.length}, 1fr)`,
+          gridTemplateColumns: `repeat(${values.length}, minmax(0, 1fr))`,
         }}
       >
-        {values.map(
-          (value, index) => (
-            <div
-              key={`${value}-${index}`}
-            >
-              {value}
-            </div>
-          )
-        )}
+        {values.map((value, index) => (
+          <div
+            key={`${label}-${index}`}
+            className={[
+              "compare-value-card",
+              matches[index] ? "matches" : "",
+              index === bestClubIndex ? "best-column" : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          >
+            <span>{value}</span>
+
+            {matches[index] && (
+              <b className="compare-match-check">
+                ✓
+              </b>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -3056,6 +3164,7 @@ function RunnerProfile({
   const [draft, setDraft] = useState<RunnerProfile>({
     ...profile,
     goal: [...profile.goal],
+    vibe: [...profile.vibe],
   });
 
   useEffect(() => {
@@ -3063,6 +3172,7 @@ function RunnerProfile({
       setDraft({
         ...profile,
         goal: [...profile.goal],
+        vibe: [...profile.vibe],
       });
     }
   }, [profile, editing]);
@@ -3111,6 +3221,7 @@ function RunnerProfile({
               setDraft({
                 ...profile,
                 goal: [...profile.goal],
+                vibe: [...profile.vibe],
               });
               setEditing(true);
             }
@@ -3219,10 +3330,11 @@ function RunnerProfile({
             <ChipChoices
               options={COMMUNITY_STYLES}
               value={draft.vibe}
+              multi
               onChange={(vibe) =>
                 setDraft({
                   ...draft,
-                  vibe: vibe as string,
+                  vibe: vibe as string[],
                 })
               }
             />
@@ -3284,7 +3396,13 @@ function RunnerProfile({
             </div>
 
             <div className="ut-display-chips">
-              <span>{profile.vibe || "Not selected"}</span>
+              {profile.vibe.length > 0 ? (
+                profile.vibe.map((vibe: string) => (
+                  <span key={vibe}>{vibe}</span>
+                ))
+              ) : (
+                <span>Not selected</span>
+              )}
             </div>
           </section>
         </>
