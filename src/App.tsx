@@ -34,7 +34,8 @@ type RunnerProfile = {
   level: string;
   pace: string;
   distance: string;
-  location: string;
+  location: string[];
+  parks: string[];
   time: string;
   goal: string[];
   vibe: string[];
@@ -91,7 +92,8 @@ const defaultProfile: RunnerProfile = {
   level: "",
   pace: "06:30",
   distance: "",
-  location: "",
+  location: [],
+  parks: [],
   time: "",
   goal: [],
   vibe: [],
@@ -331,6 +333,39 @@ const BANGKOK_DISTRICTS = [
   "Sathon",
 ];
 
+const PARKS_BY_AREA: Record<string, string[]> = {
+  "Khlong Toei": [
+    "Benjakitti Park",
+    "Benchasiri Park",
+  ],
+  Watthana: [
+    "Benchasiri Park (Phrom Phong)",
+  ],
+  "Pathum Wan": [
+    "Lumphini Park",
+  ],
+  "Bang Rak": [
+    "Lumphini Park (Silom side)",
+  ],
+  Chatuchak: [
+    "Chatuchak Park",
+    "Wachirabenchathat Park (Rod Fai Park)",
+    "Queen Sirikit Park",
+  ],
+  "Phra Nakhon": [
+    "Saranrom Park",
+    "Santichaiprakarn Park",
+    "Sanam Luang",
+  ],
+  "Thon Buri": [
+    "Thonburirom Park (nearby)",
+  ],
+  Sathon: [
+    "80th Birthday Anniversary Park (Sathon)",
+    "Lumphini Park (nearby)",
+  ],
+};
+
 const RUNNING_GOALS = [
   "Health & Fitness",
   "Social / Meet People",
@@ -446,6 +481,40 @@ function normalizeDistrict(value: unknown) {
   return mapping[value] || value;
 }
 
+function normalizeAreas(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return Array.from(
+      new Set(
+        value
+          .filter(
+            (item): item is string =>
+              typeof item === "string" && item.trim().length > 0
+          )
+          .map(normalizeDistrict)
+      )
+    );
+  }
+
+  if (typeof value === "string" && value.trim()) {
+    return [normalizeDistrict(value)];
+  }
+
+  return [];
+}
+
+function normalizeParks(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+
+  return Array.from(
+    new Set(
+      value.filter(
+        (item): item is string =>
+          typeof item === "string" && item.trim().length > 0
+      )
+    )
+  );
+}
+
 function normalizePace(value: unknown) {
   if (typeof value !== "string") return "06:30";
 
@@ -470,7 +539,8 @@ function normalizeProfile(value: unknown): RunnerProfile {
     ...raw,
     pace: normalizePace(raw.pace),
     distance: normalizeDistancePreference(raw.distance),
-    location: normalizeDistrict(raw.location),
+    location: normalizeAreas(raw.location),
+    parks: normalizeParks((raw as { parks?: unknown }).parks),
     goal: normalizeGoal(raw.goal),
     vibe: normalizeVibe(raw.vibe),
   };
@@ -481,7 +551,8 @@ function isRunnerProfileComplete(profile: RunnerProfile) {
     profile.level.trim() &&
       profile.pace.trim() &&
       profile.distance.trim() &&
-      profile.location.trim() &&
+      profile.location.length > 0 &&
+      profile.parks.length > 0 &&
       profile.time.trim() &&
       profile.goal.length > 0 &&
       profile.vibe.length > 0
@@ -775,6 +846,140 @@ function ChipChoices({
   );
 }
 
+
+function AreaParkSelector({
+  areas,
+  parks,
+  onAreasChange,
+  onParksChange,
+}: {
+  areas: string[];
+  parks: string[];
+  onAreasChange: (areas: string[]) => void;
+  onParksChange: (parks: string[]) => void;
+}) {
+  const availableParks = Array.from(
+    new Set(
+      areas.flatMap((area) => PARKS_BY_AREA[area] || [])
+    )
+  );
+
+  const toggleArea = (area: string) => {
+    const nextAreas = areas.includes(area)
+      ? areas.filter((item) => item !== area)
+      : [...areas, area];
+
+    const nextAvailable = new Set(
+      nextAreas.flatMap((item) => PARKS_BY_AREA[item] || [])
+    );
+
+    onAreasChange(nextAreas);
+    onParksChange(
+      parks.filter((park) => nextAvailable.has(park))
+    );
+  };
+
+  const togglePark = (park: string) => {
+    onParksChange(
+      parks.includes(park)
+        ? parks.filter((item) => item !== park)
+        : [...parks, park]
+    );
+  };
+
+  return (
+    <div className="ut-area-park-selector">
+      <section className="ut-area-park-group">
+        <div className="ut-subcategory-heading">
+          <div>
+            <span>AREA</span>
+            <strong>Choose your running areas</strong>
+          </div>
+
+          <small>
+            {areas.length > 0
+              ? `${areas.length} selected`
+              : "Select one or more"}
+          </small>
+        </div>
+
+        <div className="ut-area-grid">
+          {BANGKOK_DISTRICTS.map((area) => {
+            const selected = areas.includes(area);
+
+            return (
+              <button
+                type="button"
+                key={area}
+                className={
+                  selected
+                    ? "ut-area-card selected"
+                    : "ut-area-card"
+                }
+                onClick={() => toggleArea(area)}
+              >
+                <span>{area}</span>
+                {selected && <b>✓</b>}
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="ut-area-park-group park-group">
+        <div className="ut-subcategory-heading">
+          <div>
+            <span>PARK</span>
+            <strong>Choose parks you like</strong>
+          </div>
+
+          <small>
+            {parks.length > 0
+              ? `${parks.length} selected`
+              : "Select one or more"}
+          </small>
+        </div>
+
+        {areas.length === 0 ? (
+          <div className="ut-park-empty">
+            Select an Area first to see park choices.
+          </div>
+        ) : (
+          <div className="ut-park-list">
+            {availableParks.map((park) => {
+              const selected = parks.includes(park);
+
+              return (
+                <button
+                  type="button"
+                  key={park}
+                  className={
+                    selected
+                      ? "ut-park-card selected"
+                      : "ut-park-card"
+                  }
+                  onClick={() => togglePark(park)}
+                >
+                  <div>
+                    <strong>{park}</strong>
+                    <span>
+                      {areas.find((area) =>
+                        (PARKS_BY_AREA[area] || []).includes(park)
+                      )}
+                    </span>
+                  </div>
+
+                  <b>{selected ? "✓" : "+"}</b>
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}
+
 function App() {
   const [page, setPage] = useState<Page>("welcome");
   const [role, setRole] = useState<Role>("runner");
@@ -879,8 +1084,11 @@ function App() {
     let score = 0;
 
     if (
-      profile.location &&
-      club.location.toLowerCase() === profile.location.toLowerCase()
+      profile.location.length > 0 &&
+      profile.location.some(
+        (area) =>
+          area.toLowerCase() === club.location.toLowerCase()
+      )
     ) {
       score += 25;
     }
@@ -1790,7 +1998,7 @@ function RunnerOnboarding({
     Boolean(profile.level),
     Boolean(profile.pace),
     Boolean(profile.distance),
-    Boolean(profile.location),
+    profile.location.length > 0 && profile.parks.length > 0,
     Boolean(profile.time),
     profile.goal.length > 0,
     profile.vibe.length > 0,
@@ -1905,11 +2113,20 @@ function RunnerOnboarding({
             )}
 
             {step === 3 && (
-              <ChipChoices
-                options={BANGKOK_DISTRICTS}
-                value={profile.location}
-                onChange={(value) =>
-                  updateProfile("location", value as string)
+              <AreaParkSelector
+                areas={profile.location}
+                parks={profile.parks}
+                onAreasChange={(location) =>
+                  setProfile({
+                    ...profile,
+                    location,
+                  })
+                }
+                onParksChange={(parks) =>
+                  setProfile({
+                    ...profile,
+                    parks,
+                  })
                 }
               />
             )}
@@ -2594,11 +2811,11 @@ function Compare({
       label: "LOCATION",
       subtitle: "Preferred area",
       values: clubs.map((club) => club.location),
-      matches: clubs.map(
-        (club) =>
-          Boolean(profile.location) &&
-          club.location.toLowerCase() ===
-            profile.location.toLowerCase()
+      matches: clubs.map((club) =>
+        profile.location.some(
+          (area) =>
+            area.toLowerCase() === club.location.toLowerCase()
+        )
       ),
     },
     {
@@ -3165,6 +3382,8 @@ function RunnerProfile({
     ...profile,
     goal: [...profile.goal],
     vibe: [...profile.vibe],
+    location: [...profile.location],
+    parks: [...profile.parks],
   });
 
   useEffect(() => {
@@ -3283,14 +3502,21 @@ function RunnerProfile({
           </div>
 
           <div className="ut-edit-block">
-            <h3>Preferred Area</h3>
-            <ChipChoices
-              options={BANGKOK_DISTRICTS}
-              value={draft.location}
-              onChange={(location) =>
+            <h3>Preferred Area & Park</h3>
+
+            <AreaParkSelector
+              areas={draft.location}
+              parks={draft.parks}
+              onAreasChange={(location) =>
                 setDraft({
                   ...draft,
-                  location: location as string,
+                  location,
+                })
+              }
+              onParksChange={(parks) =>
+                setDraft({
+                  ...draft,
+                  parks,
                 })
               }
             />
@@ -3368,7 +3594,24 @@ function RunnerProfile({
                   )?.label || profile.distance || "—"
                 }
               />
-              <ProfileInfo label="Preferred Area" value={profile.location || "—"} />
+              <ProfileInfo
+                label="Preferred Area"
+                value={
+                  profile.location.length > 0
+                    ? profile.location.join(", ")
+                    : "—"
+                }
+              />
+
+              <ProfileInfo
+                label="Preferred Park"
+                value={
+                  profile.parks.length > 0
+                    ? profile.parks.join(", ")
+                    : "—"
+                }
+              />
+
               <ProfileInfo
                 label="Preferred Running Time"
                 value={profile.time || "—"}
