@@ -1,7 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import founderClubCover from "./assets/6am-run-club-bkk.png";
+
+import club6amImage from "./assets/6am.jpg";
+import lumpiniRunningImage from "./assets/Lumpini Running.png";
+import bangkokRunnersImage from "./assets/Runner Bangkok.jpg";
+import antiRunClubImage from "./assets/Anti Run.png";
+import sabaiRunClubImage from "./assets/Sabai.jpg";
 
 type Role = "runner" | "founder";
+
+type AppLanguage = "en" | "th";
 
 type UserAccount = {
   name: string;
@@ -186,6 +193,19 @@ const initialClubs: Club[] = [
     founder: "Founders Run Club Bangkok",
   },
 ];
+
+
+const CLUB_IMAGES: Record<number, string> = {
+  1: club6amImage,
+  2: lumpiniRunningImage,
+  3: bangkokRunnersImage,
+  4: antiRunClubImage,
+  5: sabaiRunClubImage,
+};
+
+function getClubImage(clubId: number) {
+  return CLUB_IMAGES[clubId];
+}
 
 const initialEvents: RunEvent[] = [
   {
@@ -971,7 +991,917 @@ function AreaParkSelector({
   );
 }
 
+
+const RUNRISE_LANGUAGE_KEY = "runrise-language";
+
+/*
+  Translation strategy
+  --------------------
+  - Club names, member names and text entered by users are NOT translated.
+  - System UI, Bangkok areas, park names, preset tags, preset pace values,
+    day / time labels and seeded system descriptions can be translated.
+  - Dynamic text such as "55% Match", "6 communities found",
+    "248 members" and "32 of 50 joined" is translated too.
+*/
+
+const THAI_TEXT: Record<string, string> = {
+  // General / navigation
+  "RUNRISE": "RUNRISE",
+  "Back": "ย้อนกลับ",
+  "← Back": "← ย้อนกลับ",
+  "Save": "บันทึก",
+  "Saved": "บันทึกแล้ว",
+  "Continue": "ดำเนินการต่อ",
+  "Cancel": "ยกเลิก",
+  "Close": "ปิด",
+  "See all": "ดูทั้งหมด",
+  "Manage": "จัดการ",
+  "Edit": "แก้ไข",
+  "Search": "ค้นหา",
+  "All": "ทั้งหมด",
+  "Active": "ใช้งานอยู่",
+  "New": "ใหม่",
+  "Home": "หน้าหลัก",
+  "Discover": "ค้นหา",
+  "DISCOVER": "ค้นหา",
+  "My Runs": "การวิ่งของฉัน",
+  "Profile": "โปรไฟล์",
+  "Dashboard": "แดชบอร์ด",
+  "Club": "คลับ",
+  "Events": "กิจกรรม",
+  "Members": "สมาชิก",
+  "Featured": "แนะนำ",
+  "Match": "ตรงกับคุณ",
+  "View Club": "ดูคลับ",
+  "Compare Club": "เปรียบเทียบคลับ",
+  "+ Compare Club": "+ เปรียบเทียบคลับ",
+  "✓ Selected for comparison": "✓ เลือกเพื่อเปรียบเทียบแล้ว",
+  "Changes Saved": "บันทึกการเปลี่ยนแปลงแล้ว",
+
+  // Welcome / auth / role
+  "WELCOME": "ยินดีต้อนรับ",
+  "WELCOME BACK": "ยินดีต้อนรับกลับ",
+  "JOIN RUNRISE": "เข้าร่วม RUNRISE",
+  "Find your run.": "ค้นหาการวิ่งที่ใช่",
+  "Find your community.": "ค้นหาคอมมูนิตี้ที่ใช่",
+  "Discover running communities that fit your pace, place and lifestyle.": "ค้นหาคอมมูนิตี้การวิ่งที่เข้ากับเพซ พื้นที่ และไลฟ์สไตล์ของคุณ",
+  "Get Started": "เริ่มใช้งาน",
+  "New to Runrise?": "ยังไม่มีบัญชี Runrise?",
+  "Log in": "เข้าสู่ระบบ",
+  "Log In": "เข้าสู่ระบบ",
+  "Login": "เข้าสู่ระบบ",
+  "Log in to Runrise": "เข้าสู่ระบบ Runrise",
+  "Create account": "สร้างบัญชี",
+  "Create Account": "สร้างบัญชี",
+  "Create your account": "สร้างบัญชีของคุณ",
+  "Create one": "สร้างบัญชี",
+  "Register": "สมัครสมาชิก",
+  "Email": "อีเมล",
+  "Password": "รหัสผ่าน",
+  "Confirm Password": "ยืนยันรหัสผ่าน",
+  "Full Name": "ชื่อ-นามสกุล",
+  "Name": "ชื่อ",
+  "Remember me": "จดจำฉันไว้",
+  "Forgot password?": "ลืมรหัสผ่าน?",
+  "Continue with Apple": "ดำเนินการต่อด้วย Apple",
+  "Continue with Google": "ดำเนินการต่อด้วย Google",
+  "Continue with Facebook": "ดำเนินการต่อด้วย Facebook",
+  "Pick up where you left off and keep moving with your community.": "กลับมาใช้งานต่อและก้าวไปพร้อมกับคอมมูนิตี้ของคุณ",
+  "Don't have an account?": "ยังไม่มีบัญชี?",
+  "Already have an account?": "มีบัญชีอยู่แล้ว?",
+  "Start with the basics. Your running preferences come next.": "เริ่มจากข้อมูลพื้นฐาน แล้วค่อยตั้งค่าความต้องการในการวิ่ง",
+  "I agree to the Terms & Privacy Policy": "ฉันยอมรับข้อกำหนดและนโยบายความเป็นส่วนตัว",
+  "How will you use Runrise?": "คุณต้องการใช้ Runrise แบบไหน?",
+  "You can switch roles later.": "คุณสามารถสลับบทบาทได้ภายหลัง",
+  "Runner": "นักวิ่ง",
+  "Founder": "ผู้จัดคลับ",
+  "Founder / Organizer": "ผู้ก่อตั้ง / ผู้จัดกิจกรรม",
+  "Discover, compare and join running communities.": "ค้นหา เปรียบเทียบ และเข้าร่วมคอมมูนิตี้นักวิ่ง",
+  "Create, manage and grow your running community.": "สร้าง จัดการ และพัฒนาคอมมูนิตี้การวิ่งของคุณ",
+
+  // Onboarding
+  "Running Level": "ระดับการวิ่ง",
+  "Where are you in your running journey?": "ตอนนี้คุณอยู่ในระดับใดของการวิ่ง?",
+  "Usual Pace": "เพซปกติ",
+  "What’s your average running pace?": "เพซเฉลี่ยที่คุณวิ่งเป็นประจำอยู่ที่เท่าไร?",
+  "Preferred Distance": "ระยะทางที่ต้องการ",
+  "How far do you usually run?": "ปกติคุณชอบวิ่งระยะทางเท่าไร?",
+  "Preferred Area": "พื้นที่ที่ต้องการวิ่ง",
+  "Preferred Area & Park": "พื้นที่และสวนที่ต้องการวิ่ง",
+  "Which area do you prefer to run in?": "คุณต้องการวิ่งในพื้นที่ใด?",
+  "Running Time": "ช่วงเวลาที่ต้องการวิ่ง",
+  "When do you normally prefer to run?": "ปกติคุณสะดวกวิ่งช่วงเวลาใด?",
+  "Running Goal": "เป้าหมายการวิ่ง",
+  "What are you hoping to get from running?": "คุณต้องการอะไรจากการวิ่ง?",
+  "Community Style": "สไตล์คอมมูนิตี้",
+  "What kind of running community feels right for you?": "คอมมูนิตี้แบบไหนที่เหมาะกับคุณ?",
+  "Complete Your Profile": "บันทึกโปรไฟล์",
+  "Choose all styles that feel right for you.": "เลือกได้มากกว่า 1 รูปแบบ",
+  "You can choose more than one goal.": "เลือกได้มากกว่า 1 เป้าหมาย",
+  "Choose your running areas": "เลือกพื้นที่ที่ต้องการวิ่ง",
+  "Choose your preferred parks": "เลือกสวนที่ต้องการวิ่ง",
+  "Select one or more": "เลือกได้มากกว่า 1 ข้อ",
+  "Select at least one Area first to see park choices.": "เลือกพื้นที่อย่างน้อย 1 แห่งเพื่อดูตัวเลือกสวน",
+  "AREA": "พื้นที่",
+  "PARK": "สวนสาธารณะ",
+  "Beginner": "มือใหม่",
+  "Casual": "วิ่งสบาย ๆ",
+  "Intermediate": "ระดับกลาง",
+  "Advanced": "ระดับสูง",
+  "Just getting started": "เพิ่งเริ่มวิ่ง",
+  "Run for fun": "วิ่งเพื่อความสนุก",
+  "Run regularly": "วิ่งเป็นประจำ",
+  "Train seriously": "ฝึกซ้อมอย่างจริงจัง",
+  "Morning": "ช่วงเช้า",
+  "Afternoon": "ช่วงบ่าย",
+  "Evening": "ช่วงเย็น",
+  "Night": "ช่วงค่ำ",
+  "Flexible": "ยืดหยุ่น",
+  "Weekly": "ทุกสัปดาห์",
+  "Health & Fitness": "สุขภาพและความฟิต",
+  "Social / Meet People": "พบปะและทำความรู้จักผู้คน",
+  "Improve Pace": "พัฒนาเพซ",
+  "Race Training": "ฝึกซ้อมเพื่อการแข่งขัน",
+  "Build Endurance": "เพิ่มความอึด",
+  "Just Getting Started": "เพิ่งเริ่มต้น",
+  "Social": "เน้นสังคม",
+  "Beginner Friendly": "เหมาะสำหรับมือใหม่",
+  "Training Focused": "เน้นการฝึกซ้อม",
+  "Relaxed": "สบาย ๆ",
+  "Networking": "สร้างเครือข่าย",
+  "Community": "คอมมูนิตี้",
+  "All Levels": "ทุกระดับ",
+  "Any Pace": "ทุกเพซ",
+  "Social Pace": "เพซสบาย ๆ",
+  "Easy / No Pressure": "สบาย ๆ ไม่กดดัน",
+  "Swipe minutes and seconds separately. Selected pace:": "เลื่อนนาทีและวินาทีแยกกัน เพซที่เลือก:",
+  "/ km": "/ กม.",
+  "1–9 km": "1–9 กม.",
+  "10–20 km": "10–20 กม.",
+  "21–41 km": "21–41 กม.",
+  "42 km+": "42 กม. ขึ้นไป",
+  "1-9km": "1–9 กม.",
+  "10-20km": "10–20 กม.",
+  "21-41km": "21–41 กม.",
+  "42km+": "42 กม. ขึ้นไป",
+
+  // Bangkok areas
+  "Khlong Toei": "คลองเตย",
+  "Watthana": "วัฒนา",
+  "Pathum Wan": "ปทุมวัน",
+  "Bang Rak": "บางรัก",
+  "Chatuchak": "จตุจักร",
+  "Phra Nakhon": "พระนคร",
+  "Thon Buri": "ธนบุรี",
+  "Sathon": "สาทร",
+
+  // Parks
+  "Benjakitti Park": "สวนเบญจกิติ",
+  "Benchasiri Park": "สวนเบญจสิริ",
+  "Benchasiri Park (Phrom Phong)": "สวนเบญจสิริ (พร้อมพงษ์)",
+  "Lumphini Park": "สวนลุมพินี",
+  "Lumphini Park (Silom side)": "สวนลุมพินี (ฝั่งสีลม)",
+  "Chatuchak Park": "สวนจตุจักร",
+  "Wachirabenchathat Park (Rod Fai Park)": "สวนวชิรเบญจทัศ (สวนรถไฟ)",
+  "Queen Sirikit Park": "สวนสมเด็จพระนางเจ้าสิริกิติ์ฯ",
+  "Saranrom Park": "สวนสราญรมย์",
+  "Santichaiprakarn Park": "สวนสันติชัยปราการ",
+  "Sanam Luang": "สนามหลวง",
+  "Thonburirom Park (nearby)": "สวนธนบุรีรมย์ (บริเวณใกล้เคียง)",
+  "80th Birthday Anniversary Park (Sathon)": "สวนเฉลิมพระเกียรติ 80 พรรษา (สาทร)",
+  "Lumphini Park (nearby)": "สวนลุมพินี (บริเวณใกล้เคียง)",
+
+  // Days / months
+  "Mon": "จ.",
+  "Tue": "อ.",
+  "Wed": "พ.",
+  "Thu": "พฤ.",
+  "Fri": "ศ.",
+  "Sat": "ส.",
+  "Sun": "อา.",
+  "Jan": "ม.ค.",
+  "Feb": "ก.พ.",
+  "Mar": "มี.ค.",
+  "Apr": "เม.ย.",
+  "May": "พ.ค.",
+  "Jun": "มิ.ย.",
+  "Jul": "ก.ค.",
+  "Aug": "ส.ค.",
+  "Sep": "ก.ย.",
+  "Oct": "ต.ค.",
+  "Nov": "พ.ย.",
+  "Dec": "ธ.ค.",
+
+  // Runner home / discovery
+  "Good morning,": "สวัสดีตอนเช้า",
+  "Ready to find your next run?": "พร้อมค้นหาการวิ่งครั้งต่อไปหรือยัง?",
+  "SMART MATCHING": "จับคู่คลับที่เหมาะกับคุณ",
+  "Recommended for you": "แนะนำสำหรับคุณ",
+  "Find your club": "ค้นหาคลับที่ใช่",
+  "Find your community": "ค้นหาคอมมูนิตี้ที่ใช่",
+  "Explore all clubs, ranked by how well they fit you.": "สำรวจคลับทั้งหมด เรียงตามความเหมาะสมกับคุณ",
+  "Find running communities that match your pace, place and lifestyle.": "ค้นหาคอมมูนิตี้การวิ่งที่เหมาะกับเพซ พื้นที่ และไลฟ์สไตล์ของคุณ",
+  "Search clubs": "ค้นหาคลับ",
+  "Search club or location": "ค้นหาคลับหรือพื้นที่",
+  "YOUR USUAL DISTANCE": "ระยะวิ่งปกติของคุณ",
+  "Used for Smart Matching,": "ใช้สำหรับการจับคู่คลับ",
+  "not to hide other clubs.": "ไม่ได้ใช้เพื่อซ่อนคลับอื่น",
+  "Used for Smart Matching, not to hide other clubs.": "ใช้สำหรับการจับคู่คลับ ไม่ได้ใช้เพื่อซ่อนคลับอื่น",
+  "DISTANCE PREFERENCE": "ระยะทางที่ต้องการ",
+  "Distance Preference": "ระยะทางที่ต้องการ",
+  "LOCATION": "พื้นที่",
+  "Location": "พื้นที่",
+  "Distance": "ระยะทาง",
+  "Pace": "เพซ",
+  "Level": "ระดับ",
+  "Schedule": "ตารางวิ่ง",
+  "communities found": "คอมมูนิตี้ที่พบ",
+  "Compare": "เปรียบเทียบ",
+  "Run Clubs": "คลับวิ่ง",
+
+  // Club detail
+  "About": "เกี่ยวกับคลับ",
+  "Community vibe": "บรรยากาศคอมมูนิตี้",
+  "Upcoming Runs": "กิจกรรมวิ่งที่กำลังจะมาถึง",
+  "JOIN A RUN": "เข้าร่วมกิจกรรมวิ่ง",
+  "Join Run": "เข้าร่วมการวิ่ง",
+  "Joined": "เข้าร่วมแล้ว",
+  "Meeting Point": "จุดนัดพบ",
+  "Route": "เส้นทาง",
+  "What to Bring": "สิ่งที่ควรเตรียม",
+  "What to bring": "สิ่งที่ควรเตรียม",
+  "Capacity": "จำนวนที่รับ",
+  "Save Club": "บันทึกคลับ",
+  "No upcoming runs yet.": "ยังไม่มีกิจกรรมวิ่งที่กำลังจะมาถึง",
+  "NOT SURE YET?": "ยังตัดสินใจไม่ได้?",
+  "Compare with another club": "เปรียบเทียบกับคลับอื่น",
+  "See pace, distance, schedule and community side by side.": "เปรียบเทียบเพซ ระยะทาง ตารางวิ่ง และคอมมูนิตี้แบบเทียบกันได้ทันที",
+  "✓ Added to Compare": "✓ เพิ่มเพื่อเปรียบเทียบแล้ว",
+  "⇆ Compare Club": "⇆ เปรียบเทียบคลับ",
+  "PACE": "เพซ",
+  "DISTANCE": "ระยะทาง",
+  "LEVEL": "ระดับ",
+  "RUNNERS": "นักวิ่ง",
+  "UPCOMING RUN": "กิจกรรมวิ่งที่กำลังจะมาถึง",
+  "spots left": "ที่ว่าง",
+  "Join This Run": "เข้าร่วมกิจกรรมนี้",
+  "Run Full": "เต็มแล้ว",
+  "✓ Joined · Cancel Run": "✓ เข้าร่วมแล้ว · ยกเลิก",
+  "members": "สมาชิก",
+
+  // Seeded system descriptions
+  "An early-morning social running community for runners who enjoy starting the day together.": "คอมมูนิตี้วิ่งยามเช้าที่เน้นการพบปะ เหมาะกับคนที่อยากเริ่มต้นวันใหม่ไปพร้อมกัน",
+  "An evening running community welcoming runners of different levels.": "คอมมูนิตี้วิ่งช่วงเย็นที่ต้อนรับนักวิ่งทุกระดับ",
+  "A Bangkok running community welcoming runners from beginners to experienced athletes.": "คอมมูนิตี้นักวิ่งในกรุงเทพฯ ที่ต้อนรับทั้งมือใหม่และนักวิ่งที่มีประสบการณ์",
+  "An easy-going run club focused on community, good vibes and zero pace pressure.": "คลับวิ่งบรรยากาศสบาย ๆ ที่เน้นคอมมูนิตี้และไม่กดดันเรื่องเพซ",
+  "A social running community focused on fun, connection and running together.": "คอมมูนิตี้วิ่งที่เน้นความสนุก การเชื่อมต่อ และการวิ่งไปด้วยกัน",
+  "A weekly running community for founders, investors and friends, usually followed by coffee.": "คอมมูนิตี้วิ่งประจำสัปดาห์สำหรับผู้ก่อตั้ง นักลงทุน และเพื่อน ๆ โดยมักปิดท้ายด้วยการดื่มกาแฟร่วมกัน",
+  "Easy park loop": "เส้นทางวนรอบสวนแบบสบาย ๆ",
+  "Community park run": "เส้นทางวิ่งในสวนสำหรับคอมมูนิตี้",
+  "Park loop": "เส้นทางวนรอบสวน",
+  "Easy 5K loop": "เส้นทาง 5 กม. แบบสบาย ๆ",
+  "Social park loop": "เส้นทางวนรอบสวนแบบเน้นสังคม",
+  "3K community route": "เส้นทางคอมมูนิตี้ระยะ 3 กม.",
+  "Running shoes and water.": "รองเท้าวิ่งและน้ำดื่ม",
+  "Comfortable running shoes.": "รองเท้าวิ่งที่สวมใส่สบาย",
+  "Running shoes and coffee energy.": "รองเท้าวิ่งและพลังสำหรับกาแฟหลังวิ่ง",
+  "Route will be announced.": "จะแจ้งเส้นทางภายหลัง",
+
+  // Compare
+  "COMPARE": "เปรียบเทียบ",
+  "Which club fits you?": "คลับไหนเหมาะกับคุณ?",
+  "See the differences at a glance.": "ดูความแตกต่างของแต่ละคลับได้อย่างรวดเร็ว",
+  "BEST FIT": "เหมาะกับคุณที่สุด",
+  "Best Fit": "เหมาะที่สุด",
+  "This club matches more of your current running preferences.": "คลับนี้ตรงกับความต้องการในการวิ่งของคุณมากที่สุด",
+  "MATCH BREAKDOWN": "รายละเอียดการจับคู่",
+  "What’s different?": "ต่างกันอย่างไร?",
+  "Matches you": "ตรงกับคุณ",
+  "Preferred area": "พื้นที่ที่ต้องการ",
+  "Your preferred range": "ช่วงระยะทางที่ต้องการ",
+  "Comfortable running pace": "เพซที่เหมาะกับคุณ",
+  "When you prefer to run": "ช่วงเวลาที่ต้องการวิ่ง",
+  "Running experience": "ระดับประสบการณ์",
+  "Community style": "สไตล์คอมมูนิตี้",
+  "Compare Run Clubs": "เปรียบเทียบคลับวิ่ง",
+  "Choose at least 2 clubs": "เลือกอย่างน้อย 2 คลับ",
+  "Select clubs from Discover to compare them.": "เลือกคลับจากหน้าค้นหาเพื่อเปรียบเทียบ",
+
+  // My Runs / notifications
+  "MY RUNRISE": "MY RUNRISE",
+  "Your running space": "พื้นที่การวิ่งของคุณ",
+  "Everything you've joined and saved.": "รวมกิจกรรมและคลับที่คุณเข้าร่วมและบันทึกไว้",
+  "UPCOMING": "กำลังจะมาถึง",
+  "PAST": "ที่ผ่านมา",
+  "Saved Clubs": "คลับที่บันทึกไว้",
+  "YOUR NEXT RUN": "กิจกรรมถัดไปของคุณ",
+  "Cancel next run": "ยกเลิกกิจกรรมถัดไป",
+  "Your next run starts here": "เริ่มต้นกิจกรรมวิ่งครั้งถัดไปของคุณที่นี่",
+  "Find a community and join your first run.": "ค้นหาคอมมูนิตี้และเข้าร่วมกิจกรรมวิ่งแรกของคุณ",
+  "Discover Runs": "ค้นหากิจกรรมวิ่ง",
+  "No saved clubs yet": "ยังไม่มีคลับที่บันทึกไว้",
+  "Save clubs you're interested in and come back anytime.": "บันทึกคลับที่สนใจไว้เพื่อกลับมาดูภายหลังได้ทุกเมื่อ",
+  "Discover Clubs": "ค้นหาคลับ",
+  "No upcoming runs": "ยังไม่มีกิจกรรมวิ่งที่กำลังจะมาถึง",
+  "No past runs": "ยังไม่มีกิจกรรมที่ผ่านมา",
+  "Notifications": "การแจ้งเตือน",
+  "Mark all as read": "ทำเครื่องหมายว่าอ่านทั้งหมดแล้ว",
+  "UPDATES": "อัปเดต",
+  "New club recommendation": "คำแนะนำคลับใหม่",
+  "We found running communities that match your profile.": "เราพบคอมมูนิตี้การวิ่งที่เหมาะกับโปรไฟล์ของคุณ",
+
+  // Runner Profile
+  "Edit Preferences": "แก้ไขความต้องการ",
+  "RUNNING PROFILE": "โปรไฟล์การวิ่ง",
+  "Your preferences": "ความต้องการของคุณ",
+  "Preferred Park": "สวนที่ต้องการ",
+  "Preferred Running Time": "ช่วงเวลาที่ต้องการวิ่ง",
+  "RUNNING GOALS": "เป้าหมายการวิ่ง",
+  "What you’re running for": "เป้าหมายของคุณ",
+  "COMMUNITY PREFERENCE": "คอมมูนิตี้ที่ต้องการ",
+  "Your preferred vibe": "บรรยากาศที่คุณชอบ",
+  "Not selected": "ยังไม่ได้เลือก",
+  "ACCOUNT & SETTINGS": "บัญชีและการตั้งค่า",
+  "Runrise settings": "การตั้งค่า Runrise",
+  "Switch to Founder": "สลับเป็นผู้จัดคลับ",
+  "Switch to Runner": "สลับเป็นนักวิ่ง",
+  "Reset Prototype": "รีเซ็ตต้นแบบ",
+  "EDIT PREFERENCES": "แก้ไขความต้องการ",
+  "Your running profile": "โปรไฟล์การวิ่งของคุณ",
+  "Running Goals": "เป้าหมายการวิ่ง",
+  "Save Preferences": "บันทึกความต้องการ",
+
+  // Founder dashboard
+  "FOUNDER DASHBOARD": "แดชบอร์ดผู้จัดกิจกรรม",
+  "Good morning 👋": "สวัสดีตอนเช้า 👋",
+  "Here's what's happening with your community.": "ภาพรวมคอมมูนิตี้ของคุณในวันนี้",
+  "YOUR RUN CLUB": "คลับวิ่งของคุณ",
+  "Total Members": "สมาชิกทั้งหมด",
+  "Growing": "กำลังเติบโต",
+  "New Members": "สมาชิกใหม่",
+  "This month": "เดือนนี้",
+  "Scheduled": "กำหนดไว้แล้ว",
+  "Event Sign-ups": "ผู้ลงทะเบียนกิจกรรม",
+  "Total runners": "นักวิ่งทั้งหมด",
+  "COMMUNITY GROWTH": "การเติบโตของคอมมูนิตี้",
+  "Growing this month": "การเติบโตในเดือนนี้",
+  "Quick Actions": "ทางลัด",
+  "Create Run": "สร้างกิจกรรมวิ่ง",
+  "Add a new event": "เพิ่มกิจกรรมใหม่",
+  "Edit Club": "แก้ไขคลับ",
+  "Update club profile": "อัปเดตโปรไฟล์คลับ",
+  "Recent Members": "สมาชิกล่าสุด",
+  "Joined Today": "เข้าร่วมวันนี้",
+
+  // Founder club management
+  "CLUB MANAGEMENT": "จัดการคลับ",
+  "Manage your club": "จัดการคลับของคุณ",
+  "Keep your club profile clear and up to date.": "ดูแลข้อมูลคลับให้ครบถ้วนและเป็นปัจจุบัน",
+  "CLUB NAME": "ชื่อคลับ",
+  "DESCRIPTION": "รายละเอียด",
+  "SCHEDULE": "ตารางวิ่ง",
+  "COMMUNITY STYLE": "สไตล์คอมมูนิตี้",
+  "Save Changes": "บันทึกการเปลี่ยนแปลง",
+
+  // Founder event management
+  "EVENT MANAGEMENT": "จัดการกิจกรรม",
+  "Your Runs": "กิจกรรมวิ่งของคุณ",
+  "Create and manage upcoming community runs.": "สร้างและจัดการกิจกรรมวิ่งของคอมมูนิตี้",
+  "EDIT RUN": "แก้ไขกิจกรรม",
+  "NEW RUN": "กิจกรรมใหม่",
+  "Update Run": "อัปเดตกิจกรรม",
+  "Create a Run": "สร้างกิจกรรมวิ่ง",
+  "EVENT NAME": "ชื่อกิจกรรม",
+  "DATE": "วันที่",
+  "TIME": "เวลา",
+  "CAPACITY": "จำนวนที่รับ",
+  "MEETING POINT": "จุดนัดพบ",
+  "ROUTE": "เส้นทาง",
+  "WHAT TO BRING": "สิ่งที่ควรเตรียม",
+  "Publish Run": "เผยแพร่กิจกรรม",
+  "Edit Run": "แก้ไขกิจกรรม",
+  "joined": "เข้าร่วมแล้ว",
+  "of": "จาก",
+  "TBA": "รอประกาศ",
+  "Cancel this run?": "ยกเลิกกิจกรรมนี้หรือไม่?",
+  "Please enter an event name.": "กรุณากรอกชื่อกิจกรรม",
+
+  // Founder member management
+  "MEMBER MANAGEMENT": "จัดการสมาชิก",
+  "Your community": "คอมมูนิตี้ของคุณ",
+  "See who's joining and staying active.": "ดูสมาชิกที่เข้าร่วมและยังคงมีส่วนร่วมกับคลับ",
+  "Run Joins": "การเข้าร่วมกิจกรรม",
+  "Search member": "ค้นหาสมาชิก",
+  "RECENT MEMBER RECORDS": "ข้อมูลสมาชิกล่าสุด",
+  "No members found": "ไม่พบสมาชิก",
+  "Try another name or filter.": "ลองค้นหาด้วยชื่อหรือเงื่อนไขอื่น",
+  "Today": "วันนี้",
+  "2 days ago": "2 วันที่แล้ว",
+  "runs joined": "กิจกรรมที่เข้าร่วม",
+
+  // Founder Profile
+  "Run Club": "คลับวิ่ง",
+  "Runs Hosted": "กิจกรรมที่จัด",
+  "PREFERENCES": "การตั้งค่า",
+
+  // Language
+  "LANGUAGE": "ภาษา",
+  "Language": "ภาษา",
+  "App Language": "ภาษาของแอป",
+  "Choose the language used throughout Runrise.": "เลือกภาษาที่ต้องการใช้ภายในแอป Runrise",
+  "English": "English",
+  "Thai": "ไทย",
+};
+
+const THAI_PLACEHOLDERS: Record<string, string> = {
+  "Search clubs": "ค้นหาคลับ",
+  "Search club or location": "ค้นหาคลับหรือพื้นที่",
+  "Search member": "ค้นหาสมาชิก",
+  "Enter your password": "กรอกรหัสผ่าน",
+  "Your full name": "กรอกชื่อ-นามสกุล",
+  "Create a password": "สร้างรหัสผ่าน",
+  "Re-enter your password": "กรอกรหัสผ่านอีกครั้ง",
+  "Enter your club name": "กรอกชื่อคลับ",
+  "Tell runners about your club": "แนะนำคลับของคุณให้นักวิ่งรู้จัก",
+  "e.g. Lumpini": "เช่น ปทุมวัน",
+  "e.g. 3K": "เช่น 3 กม.",
+  "e.g. 6:00–8:00": "เช่น 6:00–8:00",
+  "e.g. Sat / Sun · Morning": "เช่น ส. / อา. · ช่วงเช้า",
+  "e.g. Sunday Easy 5K": "เช่น Sunday Easy 5K",
+  "25 Oct": "25 ต.ค.",
+  "Where should runners meet?": "ระบุจุดนัดพบ",
+  "Describe the running route": "อธิบายเส้นทางการวิ่ง",
+};
+
+const THAI_TOKEN_REPLACEMENTS: Array<[RegExp, string]> = [
+  // Parks — specific names first
+  [/Benchasiri Park \(Phrom Phong\)/g, "สวนเบญจสิริ (พร้อมพงษ์)"],
+  [/Lumphini Park \(Silom side\)/g, "สวนลุมพินี (ฝั่งสีลม)"],
+  [/Lumphini Park \(nearby\)/g, "สวนลุมพินี (บริเวณใกล้เคียง)"],
+  [/Wachirabenchathat Park \(Rod Fai Park\)/g, "สวนวชิรเบญจทัศ (สวนรถไฟ)"],
+  [/80th Birthday Anniversary Park \(Sathon\)/g, "สวนเฉลิมพระเกียรติ 80 พรรษา (สาทร)"],
+  [/Thonburirom Park \(nearby\)/g, "สวนธนบุรีรมย์ (บริเวณใกล้เคียง)"],
+  [/Benjakitti Park/g, "สวนเบญจกิติ"],
+  [/Benchasiri Park/g, "สวนเบญจสิริ"],
+  [/Lumphini Park/g, "สวนลุมพินี"],
+  [/Chatuchak Park/g, "สวนจตุจักร"],
+  [/Queen Sirikit Park/g, "สวนสมเด็จพระนางเจ้าสิริกิติ์ฯ"],
+  [/Saranrom Park/g, "สวนสราญรมย์"],
+  [/Santichaiprakarn Park/g, "สวนสันติชัยปราการ"],
+  [/Sanam Luang/g, "สนามหลวง"],
+
+  // Bangkok areas
+  [/\bKhlong Toei\b/g, "คลองเตย"],
+  [/\bWatthana\b/g, "วัฒนา"],
+  [/\bPathum Wan\b/g, "ปทุมวัน"],
+  [/\bBang Rak\b/g, "บางรัก"],
+  [/\bChatuchak\b/g, "จตุจักร"],
+  [/\bPhra Nakhon\b/g, "พระนคร"],
+  [/\bThon Buri\b/g, "ธนบุรี"],
+  [/\bSathon\b/g, "สาทร"],
+
+  // Full day names
+  [/\bMonday\b/g, "วันจันทร์"],
+  [/\bTuesday\b/g, "วันอังคาร"],
+  [/\bWednesday\b/g, "วันพุธ"],
+  [/\bThursday\b/g, "วันพฤหัสบดี"],
+  [/\bFriday\b/g, "วันศุกร์"],
+  [/\bSaturday\b/g, "วันเสาร์"],
+  [/\bSunday\b/g, "วันอาทิตย์"],
+
+  // Short day names
+  [/\bMon\b/g, "จ."],
+  [/\bTue\b/g, "อ."],
+  [/\bWed\b/g, "พ."],
+  [/\bThu\b/g, "พฤ."],
+  [/\bFri\b/g, "ศ."],
+  [/\bSat\b/g, "ส."],
+  [/\bSun\b/g, "อา."],
+
+  // Time of day
+  [/\bMorning\b/g, "ช่วงเช้า"],
+  [/\bAfternoon\b/g, "ช่วงบ่าย"],
+  [/\bEvening\b/g, "ช่วงเย็น"],
+  [/\bNight\b/g, "ช่วงค่ำ"],
+  [/\bWeekly\b/g, "ทุกสัปดาห์"],
+
+  // Months
+  [/\bJan\b/g, "ม.ค."],
+  [/\bFeb\b/g, "ก.พ."],
+  [/\bMar\b/g, "มี.ค."],
+  [/\bApr\b/g, "เม.ย."],
+  [/\bMay\b/g, "พ.ค."],
+  [/\bJun\b/g, "มิ.ย."],
+  [/\bJul\b/g, "ก.ค."],
+  [/\bAug\b/g, "ส.ค."],
+  [/\bSep\b/g, "ก.ย."],
+  [/\bOct\b/g, "ต.ค."],
+  [/\bNov\b/g, "พ.ย."],
+  [/\bDec\b/g, "ธ.ค."],
+
+  // Distance values / units
+  [/1-9km/gi, "1–9 กม."],
+  [/10-20km/gi, "10–20 กม."],
+  [/21-41km/gi, "21–41 กม."],
+  [/42km\+/gi, "42 กม. ขึ้นไป"],
+  [/(\d+(?:[–-]\d+)?)\s*km\b/gi, "$1 กม."],
+  [/(\d+(?:[–-]\d+)?)\s*K\b/g, "$1 กม."],
+  [/\bkm\b/gi, "กม."],
+];
+
+function translateDynamicSystemText(core: string): string {
+  if (THAI_TEXT[core]) {
+    return THAI_TEXT[core];
+  }
+
+  const matchScore = core.match(/^(\d+)%\s+Match$/i);
+  if (matchScore) {
+    return `${matchScore[1]}% ตรงกับคุณ`;
+  }
+
+  const communitiesFound = core.match(/^(\d+)\s+communities?\s+found$/i);
+  if (communitiesFound) {
+    return `พบ ${communitiesFound[1]} คอมมูนิตี้`;
+  }
+
+  const savedClubCount = core.match(/^Saved Clubs\s*(\(\d+\))$/i);
+  if (savedClubCount) {
+    return `คลับที่บันทึกไว้ ${savedClubCount[1]}`;
+  }
+
+  const memberCount = core.match(/^([\d,]+)\s+members$/i);
+  if (memberCount) {
+    return `${memberCount[1]} สมาชิก`;
+  }
+
+  const joinedCapacity = core.match(/^(\d+)\s+of\s+(\d+)\s+joined$/i);
+  if (joinedCapacity) {
+    return `เข้าร่วมแล้ว ${joinedCapacity[1]} จาก ${joinedCapacity[2]} คน`;
+  }
+
+  const runsJoined = core.match(/^(\d+)\s+runs?\s+joined$/i);
+  if (runsJoined) {
+    return `เข้าร่วม ${runsJoined[1]} กิจกรรม`;
+  }
+
+  const joinedWhen = core.match(/^Joined\s+(.+)$/i);
+  if (joinedWhen) {
+    const translatedWhen = translateDynamicSystemText(joinedWhen[1]);
+    return `เข้าร่วม ${translatedWhen}`;
+  }
+
+  const compareCount = core.match(/^Compare\s+(\d+)\s+Run Clubs$/i);
+  if (compareCount) {
+    return `เปรียบเทียบ ${compareCount[1]} คลับ`;
+  }
+
+  return THAI_TOKEN_REPLACEMENTS.reduce(
+    (result, [pattern, replacement]) =>
+      result.replace(pattern, replacement),
+    core
+  );
+}
+
+function translateExactText(
+  value: string,
+  language: AppLanguage
+) {
+  if (language === "en") return value;
+
+  const leading = value.match(/^\s*/)?.[0] || "";
+  const trailing = value.match(/\s*$/)?.[0] || "";
+  const core = value.trim();
+
+  if (!core) return value;
+
+  return `${leading}${translateDynamicSystemText(core)}${trailing}`;
+}
+
+const ORIGINAL_TEXT_NODES = new WeakMap<Text, string>();
+const ORIGINAL_PLACEHOLDERS = new WeakMap<
+  HTMLInputElement | HTMLTextAreaElement,
+  string
+>();
+
+function translateRunriseDocument(language: AppLanguage) {
+  const root = document.getElementById("root");
+
+  if (!root) return;
+
+  const walker = document.createTreeWalker(
+    root,
+    NodeFilter.SHOW_TEXT
+  );
+
+  const textNodes: Text[] = [];
+  let current = walker.nextNode();
+
+  while (current) {
+    textNodes.push(current as Text);
+    current = walker.nextNode();
+  }
+
+  textNodes.forEach((node) => {
+    const element = node.parentElement;
+
+    if (!element) return;
+    if (element.closest("[data-no-translate='true']")) return;
+
+    const currentValue = node.nodeValue || "";
+    let original = ORIGINAL_TEXT_NODES.get(node);
+
+    if (original === undefined) {
+      original = currentValue;
+      ORIGINAL_TEXT_NODES.set(node, original);
+    } else if (language === "th") {
+      const translatedStored = translateExactText(original, "th");
+
+      if (
+        currentValue !== original &&
+        currentValue !== translatedStored
+      ) {
+        original = currentValue;
+        ORIGINAL_TEXT_NODES.set(node, original);
+      }
+    }
+
+    const nextValue =
+      language === "th"
+        ? translateExactText(original, "th")
+        : original;
+
+    if (node.nodeValue !== nextValue) {
+      node.nodeValue = nextValue;
+    }
+  });
+
+  root.querySelectorAll<
+    HTMLInputElement | HTMLTextAreaElement
+  >("input[placeholder], textarea[placeholder]")
+    .forEach((element) => {
+      const currentPlaceholder = element.placeholder;
+      let original = ORIGINAL_PLACEHOLDERS.get(element);
+
+      if (original === undefined) {
+        original = currentPlaceholder;
+        ORIGINAL_PLACEHOLDERS.set(element, original);
+      } else if (language === "th") {
+        const translatedStored =
+          THAI_PLACEHOLDERS[original] ||
+          THAI_TEXT[original] ||
+          original;
+
+        if (
+          currentPlaceholder !== original &&
+          currentPlaceholder !== translatedStored
+        ) {
+          original = currentPlaceholder;
+          ORIGINAL_PLACEHOLDERS.set(element, original);
+        }
+      }
+
+      const nextPlaceholder =
+        language === "th"
+          ? THAI_PLACEHOLDERS[original] ||
+            THAI_TEXT[original] ||
+            original
+          : original;
+
+      if (element.placeholder !== nextPlaceholder) {
+        element.placeholder = nextPlaceholder;
+      }
+    });
+
+  document.documentElement.lang =
+    language === "th" ? "th" : "en";
+}
+
+function LanguageSettings({
+  language,
+  onChange,
+}: {
+  language: AppLanguage;
+  onChange: (language: AppLanguage) => void;
+}) {
+  const styles = {
+    section: {
+      margin: "28px 0 32px",
+    } as React.CSSProperties,
+
+    eyebrow: {
+      margin: "0 0 10px",
+      color: "#f56632",
+      fontSize: "12px",
+      fontWeight: 800,
+      letterSpacing: "0.18em",
+      lineHeight: 1.2,
+    } as React.CSSProperties,
+
+    title: {
+      margin: 0,
+      color: "#19191b",
+      fontSize: "25px",
+      fontWeight: 800,
+      lineHeight: 1.15,
+      letterSpacing: "-0.03em",
+    } as React.CSSProperties,
+
+    description: {
+      margin: "10px 0 20px",
+      color: "#929298",
+      fontSize: "15px",
+      fontWeight: 500,
+      lineHeight: 1.45,
+    } as React.CSSProperties,
+
+    container: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: "8px",
+      width: "100%",
+      padding: "6px",
+      borderRadius: "22px",
+      background: "#eeeeF2",
+      boxSizing: "border-box",
+    } as React.CSSProperties,
+
+    button: {
+      minWidth: 0,
+      minHeight: "64px",
+
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: "10px",
+
+      padding: "10px 13px",
+
+      border: "1.5px solid transparent",
+      borderRadius: "17px",
+
+      background: "transparent",
+      color: "#86868d",
+
+      fontFamily: "inherit",
+      cursor: "pointer",
+
+      boxSizing: "border-box",
+    } as React.CSSProperties,
+
+    activeButton: {
+      background: "#ffffff",
+      color: "#f56632",
+      border: "1.5px solid #ffc8b3",
+      boxShadow: "0 6px 18px rgba(245, 102, 50, 0.10)",
+    } as React.CSSProperties,
+
+    left: {
+      display: "flex",
+      alignItems: "center",
+      gap: "9px",
+      minWidth: 0,
+    } as React.CSSProperties,
+
+    code: {
+      width: "36px",
+      height: "36px",
+      flexShrink: 0,
+
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+
+      borderRadius: "12px",
+
+      background: "#e2e2e7",
+      color: "#77777e",
+
+      fontSize: "11px",
+      fontWeight: 800,
+      letterSpacing: "0.04em",
+    } as React.CSSProperties,
+
+    activeCode: {
+      background: "#ffe7dc",
+      color: "#f56632",
+    } as React.CSSProperties,
+
+    languageName: {
+      fontSize: "14px",
+      fontWeight: 800,
+      lineHeight: 1,
+      whiteSpace: "nowrap",
+    } as React.CSSProperties,
+
+    check: {
+      width: "23px",
+      height: "23px",
+      flexShrink: 0,
+
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+
+      borderRadius: "50%",
+
+      background: "#f56632",
+      color: "#ffffff",
+
+      fontSize: "12px",
+      fontWeight: 900,
+    } as React.CSSProperties,
+  };
+
+  return (
+    <section style={styles.section}>
+      <p style={styles.eyebrow}>LANGUAGE</p>
+
+      <h2 style={styles.title}>App Language</h2>
+
+      <p style={styles.description}>
+        Choose the language used throughout Runrise.
+      </p>
+
+      <div
+        style={styles.container}
+        role="group"
+        aria-label="App language"
+        data-no-translate="true"
+      >
+        {/* ENGLISH */}
+        <button
+          type="button"
+          onClick={() => onChange("en")}
+          aria-pressed={language === "en"}
+          style={{
+            ...styles.button,
+            ...(language === "en" ? styles.activeButton : {}),
+          }}
+        >
+          <span style={styles.left}>
+            <span
+              style={{
+                ...styles.code,
+                ...(language === "en" ? styles.activeCode : {}),
+              }}
+            >
+              EN
+            </span>
+
+            <span style={styles.languageName}>
+              English
+            </span>
+          </span>
+
+          {language === "en" && (
+            <span style={styles.check}>
+              ✓
+            </span>
+          )}
+        </button>
+
+        {/* THAI */}
+        <button
+          type="button"
+          onClick={() => onChange("th")}
+          aria-pressed={language === "th"}
+          style={{
+            ...styles.button,
+            ...(language === "th" ? styles.activeButton : {}),
+          }}
+        >
+          <span style={styles.left}>
+            <span
+              style={{
+                ...styles.code,
+                ...(language === "th" ? styles.activeCode : {}),
+              }}
+            >
+              TH
+            </span>
+
+            <span style={styles.languageName}>
+              ไทย
+            </span>
+          </span>
+
+          {language === "th" && (
+            <span style={styles.check}>
+              ✓
+            </span>
+          )}
+        </button>
+      </div>
+    </section>
+  );
+}
+
 function App() {
+  const [language, setLanguage] = useState<AppLanguage>(() => {
+    const saved = localStorage.getItem(RUNRISE_LANGUAGE_KEY);
+    return saved === "th" ? "th" : "en";
+  });
+
   const [page, setPage] = useState<Page>("welcome");
   const [role, setRole] = useState<Role>("runner");
 
@@ -1300,6 +2230,31 @@ function App() {
     setPage("role");
   };
 
+  useEffect(() => {
+    localStorage.setItem(RUNRISE_LANGUAGE_KEY, language);
+
+    const applyLanguage = () => {
+      translateRunriseDocument(language);
+    };
+
+    applyLanguage();
+
+    const observer = new MutationObserver(() => {
+      requestAnimationFrame(applyLanguage);
+    });
+
+    observer.observe(
+      document.getElementById("root") || document.body,
+      {
+        childList: true,
+        subtree: true,
+      }
+    );
+
+    return () => observer.disconnect();
+  }, [language]);
+
+
   return (
     <div className="app-shell">
       <div className="phone">
@@ -1474,6 +2429,8 @@ function App() {
           <RunnerProfile
             profile={profile}
             setProfile={setProfile}
+            language={language}
+            setLanguage={setLanguage}
             onSwitchRole={switchRole}
             onReset={resetPrototype}
             onNav={setPage}
@@ -1554,6 +2511,8 @@ function App() {
               events.filter((event) => event.clubId === 1).length
             }
             newMembers={28}
+            language={language}
+            setLanguage={setLanguage}
             onSwitchRole={switchRole}
             onReset={resetPrototype}
             onNav={setPage}
@@ -2264,18 +3223,23 @@ function ClubCard({
 }) {
   return (
     <article className="club-card">
-      <div
-        className={`club-cover cover-${club.id}`}
-      >
-        <span className="match">
-          {score}% Match
-        </span>
-
-        {club.promoted && (
+      <div className={`club-cover cover-${club.id}`}>
+        {getClubImage(club.id) && (
+          <img
+            src={getClubImage(club.id)}
+            alt={club.name}
+            className="club-cover-image"
+          />
+        )}
+{club.promoted && (
           <span className="featured">
             Featured
           </span>
         )}
+
+        <span className="match">
+          {score}% Match
+        </span>
       </div>
 
       <div className="club-body">
@@ -2573,9 +3537,14 @@ function ClubDetail({
         </button>
       </div>
 
-      <div
-        className={`club-cover large-cover cover-${club.id}`}
-      >
+      <div className={`club-cover large-cover cover-${club.id}`}>
+        {getClubImage(club.id) && (
+          <img
+            src={getClubImage(club.id)}
+            alt={club.name}
+            className="club-cover-image club-detail-cover-image"
+          />
+        )}
         <span className="match">
           {score}% Match
         </span>
@@ -2898,9 +3867,15 @@ function Compare({
                 </span>
               )}
 
-              <div
-                className={`compare-cover compare-cover-v2 cover-${club.id}`}
-              />
+              <div className={`compare-cover compare-cover-v2 cover-${club.id}`}>
+                {getClubImage(club.id) && (
+                  <img
+                    src={getClubImage(club.id)}
+                    alt={club.name}
+                    className="club-cover-image compare-club-image"
+                  />
+                )}
+              </div>
 
               <div className="compare-head-content">
                 <strong>{club.name}</strong>
@@ -3359,6 +4334,8 @@ function MyRuns({
 function RunnerProfile({
   profile,
   setProfile,
+  language,
+  setLanguage,
   onSwitchRole,
   onReset,
   onNav,
@@ -3631,6 +4608,11 @@ function RunnerProfile({
           </section>
         </>
       )}
+
+      <LanguageSettings
+        language={language}
+        onChange={setLanguage}
+      />
 
       <section className="ut-profile-section">
         <div className="ut-profile-section-head">
@@ -4050,7 +5032,7 @@ function FounderClub({
 
       <section className="fcm-cover-card">
         <img
-          src={founderClubCover}
+          src={club6amImage}
           alt={`${draft.name} cover`}
           className="fcm-cover-image"
         />
@@ -5056,6 +6038,8 @@ function FounderProfile({
   club,
   runsHosted,
   newMembers,
+  language,
+  setLanguage,
   onSwitchRole,
   onReset,
   onNav,
@@ -5157,6 +6141,11 @@ function FounderProfile({
           </button>
         </div>
       </section>
+
+      <LanguageSettings
+        language={language}
+        onChange={setLanguage}
+      />
 
       <FounderNav
         active="profile"

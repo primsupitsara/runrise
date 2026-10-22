@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap");
+
 :root {
 
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
@@ -8472,3 +8474,437 @@ h3 {
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================================================
+   CLUB PHOTOS — REAL IMG ELEMENTS
+========================================================= */
+
+.club-cover,
+.compare-cover {
+  position: relative;
+  overflow: hidden;
+}
+
+.club-cover-image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  border-radius: inherit;
+}
+
+.club-card .club-cover {
+  min-height: 136px;
+}
+
+.large-cover {
+  min-height: 215px;
+}
+
+.compare-cover-v2 {
+  min-height: 76px;
+}
+
+/* Keep badges and labels above the photo */
+.club-cover > *:not(.club-cover-image),
+.compare-cover > *:not(.club-cover-image) {
+  position: relative;
+  z-index: 2;
+}
+
+.club-detail-cover-image {
+  object-position: center center;
+}
+
+.compare-club-image {
+  object-position: center center;
+}
+
+/* =========================================================
+   CLUB COVER BADGES — APPEND THIS TO END OF index.css
+   Featured = smaller top-left badge
+   Match = top-right badge
+========================================================= */
+
+.club-cover {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px 28px 0 0;
+}
+
+.club-cover-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* FEATURED — smaller badge */
+.club-cover .featured {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: auto;
+  z-index: 5;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: auto;
+  height: 28px;
+  padding: 0 10px;
+
+  border-radius: 999px;
+
+  background: #ffe478;
+  color: #604300;
+
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1;
+
+  white-space: nowrap;
+  box-sizing: border-box;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+/* MATCH — top right */
+.club-cover .match {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  left: auto;
+  z-index: 6;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: auto;
+  height: 30px;
+  padding: 0 11px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.96);
+  color: #f56632;
+
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+
+  white-space: nowrap;
+  box-sizing: border-box;
+
+  box-shadow: 0 4px 12px rgba(35, 35, 35, 0.06);
+}
+
+/* Prevent overlapping */
+.club-cover:has(.featured) .featured {
+  max-width: 36%;
+}
+
+.club-cover:has(.featured) .match {
+  max-width: 40%;
+}
+
+/* Keep text inside the badges */
+.club-cover .featured,
+.club-cover .match {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Small mobile */
+@media (max-width: 390px) {
+  .club-cover .featured {
+    top: 8px;
+    left: 8px;
+    height: 26px;
+    padding: 0 9px;
+    font-size: 8.5px;
+  }
+
+  .club-cover .match {
+    top: 8px;
+    right: 8px;
+    height: 28px;
+    padding: 0 10px;
+    font-size: 9px;
+  }
+}
+
+/* =========================================================
+   RUNRISE — THAI TYPOGRAPHY
+========================================================= */
+
+/* ภาษาอังกฤษ */
+html[lang="en"] body,
+html[lang="en"] button,
+html[lang="en"] input,
+html[lang="en"] textarea,
+html[lang="en"] select {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+}
+
+/* ภาษาไทย */
+html[lang="th"] body,
+html[lang="th"] button,
+html[lang="th"] input,
+html[lang="th"] textarea,
+html[lang="th"] select {
+  font-family:
+    "Noto Sans Thai",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+}
+
+/* =========================================================
+   THAI HEADINGS
+   ลดความตันของภาษาไทย
+========================================================= */
+
+html[lang="th"] h1 {
+  font-family: "Noto Sans Thai", sans-serif;
+
+  font-weight: 700;
+
+  line-height: 1.18;
+
+  letter-spacing: -0.025em;
+}
+
+html[lang="th"] h2 {
+  font-family: "Noto Sans Thai", sans-serif;
+
+  font-weight: 700;
+
+  line-height: 1.22;
+
+  letter-spacing: -0.02em;
+}
+
+html[lang="th"] h3 {
+  font-family: "Noto Sans Thai", sans-serif;
+
+  font-weight: 700;
+
+  line-height: 1.28;
+
+  letter-spacing: -0.015em;
+}
+
+/* =========================================================
+   THAI BODY TEXT
+========================================================= */
+
+html[lang="th"] p,
+html[lang="th"] span,
+html[lang="th"] small,
+html[lang="th"] label {
+  line-height: 1.55;
+}
+
+/* =========================================================
+   THAI BUTTONS
+========================================================= */
+
+html[lang="th"] button {
+  font-weight: 600;
+
+  line-height: 1.35;
+
+  letter-spacing: 0;
+}
+
+/* =========================================================
+   THAI INPUTS
+========================================================= */
+
+html[lang="th"] input,
+html[lang="th"] textarea,
+html[lang="th"] select {
+  font-weight: 500;
+
+  line-height: 1.5;
+
+  letter-spacing: 0;
+}
+
+/* =========================================================
+   THAI EYEBROWS / SMALL CAPS
+   เช่น SMART MATCHING / COMMUNITY STYLE
+========================================================= */
+
+html[lang="th"] .eyebrow,
+html[lang="th"] [class*="eyebrow"] {
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+
+  line-height: 1.4;
+}
+
+/* =========================================================
+   PREVENT OVER-BOLD THAI TEXT
+========================================================= */
+
+html[lang="th"] strong,
+html[lang="th"] b {
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   RUNRISE — THAI UI FINAL OVERRIDES
+   Keeps English sizing unchanged.
+========================================================= */
+
+html[lang="th"] body,
+html[lang="th"] button,
+html[lang="th"] input,
+html[lang="th"] textarea,
+html[lang="th"] select {
+  font-family:
+    "Noto Sans Thai",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+}
+
+html[lang="th"] h1 {
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+}
+
+html[lang="th"] h2 {
+  font-weight: 700;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+}
+
+html[lang="th"] h3 {
+  font-weight: 700;
+  line-height: 1.28;
+  letter-spacing: -0.015em;
+}
+
+html[lang="th"] .ut-back,
+html[lang="th"] .auth-back {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+html[lang="th"] .auth-field {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: 0;
+}
+
+html[lang="th"] .auth-field input {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+html[lang="th"] .ut-choice-card strong {
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+html[lang="th"] .ut-choice-card.area-park-choice strong {
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+html[lang="th"] .ut-chip {
+  min-height: 48px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+html[lang="th"] .ut-picker-unit {
+  font-size: 13px;
+  font-weight: 650;
+}
+
+html[lang="th"] .chip {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+html[lang="th"] .ut-profile-info span {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+html[lang="th"] .ut-profile-info strong {
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+html[lang="th"] .ut-display-chips span {
+  min-height: 36px;
+  padding: 0 13px;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+html[lang="th"] .fcm-label,
+html[lang="th"] .event-field-label,
+html[lang="th"] .founder-form-card label,
+html[lang="th"] .event-editor label {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+html[lang="th"] .fcm-input,
+html[lang="th"] .fcm-textarea,
+html[lang="th"] .fcm-dropdown-value,
+html[lang="th"] .event-editor input,
+html[lang="th"] .event-editor textarea,
+html[lang="th"] .event-editor select,
+html[lang="th"] .event-distance-trigger {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+html[lang="th"] .nav-button small {
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
