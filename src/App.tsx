@@ -5,6 +5,10 @@ import lumpiniRunningImage from "./assets/Lumpini Running.png";
 import bangkokRunnersImage from "./assets/Runner Bangkok.jpg";
 import antiRunClubImage from "./assets/Anti Run.png";
 import sabaiRunClubImage from "./assets/Sabai.jpg";
+import roadRunImage from "./assets/Loadlann.jpg";
+import mitrMilesImage from "./assets/mitrmile.jpg";
+import sdrcImage from "./assets/sdrc.jpg";
+import runriseLogo from "./assets/runrise-logo.png";
 
 type Role = "runner" | "founder";
 
@@ -38,6 +42,14 @@ type Page =
 
 type RunnerProfile = {
   name: string;
+
+  // Phase 1 onboarding fields
+  runningExperience: string;
+  preferredDistance: string;
+  province: string;
+
+  // Existing fields are preserved for backward compatibility
+  // and for the current matching / Founder prototype logic.
   level: string;
   pace: string;
   distance: string;
@@ -96,6 +108,9 @@ type NotificationItem = {
 
 const defaultProfile: RunnerProfile = {
   name: "",
+  runningExperience: "",
+  preferredDistance: "",
+  province: "",
   level: "",
   pace: "06:30",
   distance: "",
@@ -192,8 +207,54 @@ const initialClubs: Club[] = [
     members: 0,
     founder: "Founders Run Club Bangkok",
   },
+  {
+    id: 7,
+    name: "Roadlaan Runclub",
+    location: "Bangkok",
+    pace: "Flexible",
+    distance: "5K",
+    schedule: "Weekly",
+    level: "All Levels",
+    vibe: ["Social", "Community"],
+    description:
+      "A social running community bringing runners together through shared runs and community experiences.",
+    members: 0,
+    founder: "Roadlaan Runclub",
+  },
+  {
+    id: 8,
+    name: "Mitrmiles Runclub",
+    location: "Bangkok",
+    pace: "Flexible",
+    distance: "5K",
+    schedule: "Weekly",
+    level: "All Levels",
+    vibe: ["Social", "Beginner Friendly"],
+    description:
+      "A friendly running community focused on enjoying the run, meeting people and sharing miles together.",
+    members: 0,
+    founder: "Mitrmiles Runclub",
+  },
+  {
+    id: 9,
+    name: "Sardine Runclub",
+    location: "Bangkok",
+    pace: "Flexible",
+    distance: "5K",
+    schedule: "Weekly",
+    level: "All Levels",
+    vibe: ["Social", "Community"],
+    description:
+      "A community-focused Run Club for runners who enjoy running together and connecting through social runs.",
+    members: 0,
+    founder: "Sardine Runclub",
+  },
 ];
 
+
+const CLUB_INSTAGRAM: Record<number, string> = {
+  7: "https://www.instagram.com/roadlaan.runclub?rpxt=aDl4bzB1czMycXJx",
+};
 
 const CLUB_IMAGES: Record<number, string> = {
   1: club6amImage,
@@ -201,6 +262,9 @@ const CLUB_IMAGES: Record<number, string> = {
   3: bangkokRunnersImage,
   4: antiRunClubImage,
   5: sabaiRunClubImage,
+  7: roadRunImage,
+  8: mitrMilesImage,
+  9: sdrcImage,
 };
 
 function getClubImage(clubId: number) {
@@ -342,16 +406,128 @@ const DISTANCE_PREFERENCES = [
   { label: "42 km+", value: "42km+" },
 ];
 
-const BANGKOK_DISTRICTS = [
-  "Khlong Toei",
-  "Watthana",
-  "Pathum Wan",
-  "Bang Rak",
-  "Chatuchak",
-  "Phra Nakhon",
-  "Thon Buri",
-  "Sathon",
+const RUNNING_EXPERIENCE_OPTIONS = [
+  "Never trained seriously",
+  "Less than 3 months",
+  "3–6 months",
+  "6–12 months",
+  "1–2 years",
+  "More than 2 years",
 ];
+
+const PREFERRED_DISTANCE_OPTIONS = [
+  "3K",
+  "5K",
+  "10K",
+  "Half Marathon 21K",
+  "Marathon 42K",
+];
+
+const PROVINCES = [
+  "Bangkok",
+  "Nonthaburi",
+  "Pathum Thani",
+  "Samut Prakan",
+  "Nakhon Pathom",
+  "Samut Sakhon",
+];
+
+const DISTRICTS_BY_PROVINCE: Record<string, string[]> = {
+  Bangkok: [
+    "Phra Nakhon",
+    "Dusit",
+    "Nong Chok",
+    "Bang Rak",
+    "Bang Khen",
+    "Bang Kapi",
+    "Pathum Wan",
+    "Pom Prap Sattru Phai",
+    "Phra Khanong",
+    "Min Buri",
+    "Lat Krabang",
+    "Yan Nawa",
+    "Samphanthawong",
+    "Phaya Thai",
+    "Thon Buri",
+    "Bangkok Yai",
+    "Huai Khwang",
+    "Khlong San",
+    "Taling Chan",
+    "Bangkok Noi",
+    "Bang Khun Thian",
+    "Phasi Charoen",
+    "Nong Khaem",
+    "Rat Burana",
+    "Bang Phlat",
+    "Din Daeng",
+    "Bueng Kum",
+    "Sathon",
+    "Bang Sue",
+    "Chatuchak",
+    "Bang Kho Laem",
+    "Prawet",
+    "Khlong Toei",
+    "Suan Luang",
+    "Chom Thong",
+    "Don Mueang",
+    "Ratchathewi",
+    "Lat Phrao",
+    "Watthana",
+    "Bang Khae",
+    "Lak Si",
+    "Sai Mai",
+    "Khan Na Yao",
+    "Saphan Sung",
+    "Wang Thonglang",
+    "Khlong Sam Wa",
+    "Bang Na",
+    "Thawi Watthana",
+    "Thung Khru",
+    "Bang Bon",
+  ],
+  Nonthaburi: [
+    "Mueang Nonthaburi",
+    "Bang Kruai",
+    "Bang Yai",
+    "Bang Bua Thong",
+    "Sai Noi",
+    "Pak Kret",
+  ],
+  "Pathum Thani": [
+    "Mueang Pathum Thani",
+    "Khlong Luang",
+    "Thanyaburi",
+    "Nong Suea",
+    "Lat Lum Kaeo",
+    "Lam Luk Ka",
+    "Sam Khok",
+  ],
+  "Samut Prakan": [
+    "Mueang Samut Prakan",
+    "Bang Bo",
+    "Bang Phli",
+    "Phra Pradaeng",
+    "Phra Samut Chedi",
+    "Bang Sao Thong",
+  ],
+  "Nakhon Pathom": [
+    "Mueang Nakhon Pathom",
+    "Kamphaeng Saen",
+    "Nakhon Chai Si",
+    "Don Tum",
+    "Bang Len",
+    "Sam Phran",
+    "Phutthamonthon",
+  ],
+  "Samut Sakhon": [
+    "Mueang Samut Sakhon",
+    "Krathum Baen",
+    "Ban Phaeo",
+  ],
+};
+
+const BANGKOK_DISTRICTS = DISTRICTS_BY_PROVINCE.Bangkok;
+const ALL_LOCATION_DISTRICTS = Object.values(DISTRICTS_BY_PROVINCE).flat();
 
 const PARKS_BY_AREA: Record<string, string[]> = {
   "Khlong Toei": [
@@ -360,12 +536,14 @@ const PARKS_BY_AREA: Record<string, string[]> = {
   ],
   Watthana: [
     "Benchasiri Park (Phrom Phong)",
+    "Benjakitti Park",
   ],
   "Pathum Wan": [
     "Lumphini Park",
   ],
   "Bang Rak": [
     "Lumphini Park (Silom side)",
+    "Lumphini Park",
   ],
   Chatuchak: [
     "Chatuchak Park",
@@ -384,7 +562,54 @@ const PARKS_BY_AREA: Record<string, string[]> = {
     "80th Birthday Anniversary Park (Sathon)",
     "Lumphini Park (nearby)",
   ],
+  Prawet: [
+    "Suan Luang Rama IX",
+  ],
+  "Phra Khanong": [
+    "Wachiratham Sathit Park",
+  ],
+  "Bang Kapi": [
+    "Seri Thai Park",
+  ],
+  "Bang Khen": [
+    "Bang Bua Canal Park",
+  ],
+  "Lak Si": [
+    "Thung Si Kan Park",
+  ],
+  "Mueang Nonthaburi": [
+    "Chaloem Kanchanaphisek Park",
+  ],
+  "Pak Kret": [
+    "Suan Somdet Phra Srinagarindra Nonthaburi",
+  ],
+  "Khlong Luang": [
+    "Thammasat University Rangsit Sports Area",
+  ],
+  "Mueang Samut Prakan": [
+    "Bang Pu Recreation Center",
+  ],
+  "Phra Pradaeng": [
+    "Sri Nakhon Khuean Khan Park",
+  ],
+  "Mueang Nakhon Pathom": [
+    "Sanam Chan Palace Park",
+  ],
+  "Phutthamonthon": [
+    "Phutthamonthon Park",
+  ],
+  "Mueang Samut Sakhon": [
+    "Saphan Daeng Recreation Area",
+  ],
 };
+
+function getAvailableParksForLocations(locations: string[]) {
+  return Array.from(
+    new Set(
+      locations.flatMap((location) => PARKS_BY_AREA[location] || [])
+    )
+  );
+}
 
 const RUNNING_GOALS = [
   "Health & Fitness",
@@ -432,6 +657,66 @@ const LEVEL_OPTIONS = [
   },
 ];
 
+function experienceToLegacyLevel(experience: string) {
+  if (
+    experience === "Never trained seriously" ||
+    experience === "Less than 3 months"
+  ) {
+    return "Beginner";
+  }
+
+  if (
+    experience === "3–6 months" ||
+    experience === "6–12 months"
+  ) {
+    return "Casual";
+  }
+
+  if (experience === "1–2 years") {
+    return "Intermediate";
+  }
+
+  if (experience === "More than 2 years") {
+    return "Advanced";
+  }
+
+  return "";
+}
+
+function preferredDistanceToLegacyRange(distance: string) {
+  if (distance === "3K") return "1-9km";
+  if (distance === "5K") return "1-9km";
+  if (distance === "10K") return "10-20km";
+  if (distance === "Half Marathon 21K") return "21-41km";
+  if (distance === "Marathon 42K") return "42km+";
+  return "";
+}
+
+function legacyDistanceToPreferredDistance(distance: string) {
+  if (distance === "1-9km") return "5K";
+  if (distance === "10-20km") return "10K";
+  if (distance === "21-41km") return "Half Marathon 21K";
+  if (distance === "42km+") return "Marathon 42K";
+  return "";
+}
+
+function inferProvinceFromDistricts(districts: string[]) {
+  for (const [province, options] of Object.entries(DISTRICTS_BY_PROVINCE)) {
+    if (districts.some((district) => options.includes(district))) {
+      return province;
+    }
+  }
+  return "";
+}
+
+function legacyLevelToExperience(level: string) {
+  if (level === "Beginner") return "Less than 3 months";
+  if (level === "Casual") return "3–6 months";
+  if (level === "Intermediate") return "1–2 years";
+  if (level === "Advanced") return "More than 2 years";
+  return "";
+}
+
 function normalizeGoal(goal: unknown): string[] {
   const source = Array.isArray(goal)
     ? goal.filter((item): item is string => typeof item === "string")
@@ -440,8 +725,9 @@ function normalizeGoal(goal: unknown): string[] {
       : [];
 
   const rename: Record<string, string> = {
-    Health: "Health & Fitness",
+    "Health": "Health & Fitness",
     "Community / Social": "Social / Meet People",
+    "Competition": "Race Training",
   };
 
   return Array.from(
@@ -554,12 +840,41 @@ function normalizeProfile(value: unknown): RunnerProfile {
       ? (value as Partial<RunnerProfile> & { goal?: unknown })
       : {};
 
+  const normalizedDistance = normalizeDistancePreference(raw.distance);
+  const normalizedLocation = normalizeAreas(raw.location);
+
+  const preferredDistance =
+    typeof raw.preferredDistance === "string" && raw.preferredDistance
+      ? raw.preferredDistance
+      : legacyDistanceToPreferredDistance(normalizedDistance);
+
+  const runningExperience =
+    typeof raw.runningExperience === "string" && raw.runningExperience
+      ? raw.runningExperience
+      : legacyLevelToExperience(
+          typeof raw.level === "string" ? raw.level : ""
+        );
+
+  const province =
+    typeof raw.province === "string" && raw.province
+      ? raw.province
+      : inferProvinceFromDistricts(normalizedLocation);
+
   return {
     ...defaultProfile,
     ...raw,
+    runningExperience,
+    preferredDistance,
+    province,
+    level:
+      typeof raw.level === "string" && raw.level
+        ? raw.level
+        : experienceToLegacyLevel(runningExperience),
     pace: normalizePace(raw.pace),
-    distance: normalizeDistancePreference(raw.distance),
-    location: normalizeAreas(raw.location),
+    distance:
+      normalizedDistance ||
+      preferredDistanceToLegacyRange(preferredDistance),
+    location: normalizedLocation,
     parks: normalizeParks((raw as { parks?: unknown }).parks),
     goal: normalizeGoal(raw.goal),
     vibe: normalizeVibe(raw.vibe),
@@ -568,11 +883,11 @@ function normalizeProfile(value: unknown): RunnerProfile {
 
 function isRunnerProfileComplete(profile: RunnerProfile) {
   return Boolean(
-    profile.level.trim() &&
+    profile.runningExperience.trim() &&
       profile.pace.trim() &&
-      profile.distance.trim() &&
+      profile.preferredDistance.trim() &&
+      profile.province.trim() &&
       profile.location.length > 0 &&
-      profile.parks.length > 0 &&
       profile.time.trim() &&
       profile.goal.length > 0 &&
       profile.vibe.length > 0
@@ -992,6 +1307,157 @@ function AreaParkSelector({
 }
 
 
+function LocationParkSelector({
+  province,
+  districtOptions,
+  selectedDistricts,
+  selectedParks,
+  onChangeProvince,
+  onChange,
+}: {
+  province: string;
+  districtOptions: string[];
+  selectedDistricts: string[];
+  selectedParks: string[];
+  onChangeProvince: () => void;
+  onChange: (districts: string[], parks: string[]) => void;
+}) {
+  const availableParks = getAvailableParksForLocations(selectedDistricts);
+
+  const toggleDistrict = (district: string) => {
+    const nextDistricts = selectedDistricts.includes(district)
+      ? selectedDistricts.filter((item) => item !== district)
+      : [...selectedDistricts, district];
+
+    const nextAvailableParks = new Set(
+      getAvailableParksForLocations(nextDistricts)
+    );
+
+    const nextParks = selectedParks.filter((park) =>
+      nextAvailableParks.has(park)
+    );
+
+    onChange(nextDistricts, nextParks);
+  };
+
+  const togglePark = (park: string) => {
+    const nextParks = selectedParks.includes(park)
+      ? selectedParks.filter((item) => item !== park)
+      : [...selectedParks, park];
+
+    onChange(selectedDistricts, nextParks);
+  };
+
+  const clubsInSelectedArea =
+    selectedDistricts.length === 0 ||
+    initialClubs.some((club) =>
+      selectedDistricts.includes(club.location)
+    );
+
+  return (
+    <div className="ut-area-park-selector">
+      <div className="ut-location-context">
+        <span>Province</span>
+        <strong>{province}</strong>
+        <button type="button" onClick={onChangeProvince}>
+          Change
+        </button>
+      </div>
+
+      <section className="ut-area-park-group">
+        <div className="ut-subcategory-heading">
+          <div>
+            <span>AREA</span>
+            <strong>Choose your running areas</strong>
+          </div>
+
+          <small>
+            {selectedDistricts.length > 0
+              ? `${selectedDistricts.length} selected`
+              : "Select one or more"}
+          </small>
+        </div>
+
+        <div className="ut-choice-grid district-grid">
+          {districtOptions.map((district) => {
+            const selected = selectedDistricts.includes(district);
+
+            return (
+              <button
+                type="button"
+                key={district}
+                className={
+                  selected
+                    ? "ut-choice-card selected"
+                    : "ut-choice-card"
+                }
+                onClick={() => toggleDistrict(district)}
+              >
+                <strong>{district}</strong>
+                {selected && <span>✓</span>}
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      {!clubsInSelectedArea && selectedDistricts.length > 0 && (
+        <div className="ut-area-availability-note">
+          No Run Clubs are available in this area yet, but you can still explore nearby areas.
+        </div>
+      )}
+
+      <section className="ut-area-park-group park-group">
+        <div className="ut-subcategory-heading">
+          <div>
+            <span>PARK</span>
+            <strong>Choose your preferred parks</strong>
+          </div>
+
+          <small>
+            {selectedParks.length > 0
+              ? `${selectedParks.length} selected`
+              : "Select one or more"}
+          </small>
+        </div>
+
+        {selectedDistricts.length === 0 ? (
+          <div className="ut-park-empty">
+            Select at least one Area first to see park choices.
+          </div>
+        ) : availableParks.length === 0 ? (
+          <div className="ut-park-empty">
+            No park suggestions are available for the selected area yet, but you can still continue.
+          </div>
+        ) : (
+          <div className="ut-choice-grid area-park park-choices">
+            {availableParks.map((park) => {
+              const selected = selectedParks.includes(park);
+
+              return (
+                <button
+                  type="button"
+                  key={park}
+                  className={
+                    selected
+                      ? "ut-choice-card area-park-choice park-choice selected"
+                      : "ut-choice-card area-park-choice park-choice"
+                  }
+                  onClick={() => togglePark(park)}
+                >
+                  <strong>{park}</strong>
+                  {selected && <span>✓</span>}
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}
+
+
 const RUNRISE_LANGUAGE_KEY = "runrise-language";
 
 /*
@@ -1080,6 +1546,139 @@ const THAI_TEXT: Record<string, string> = {
   "Create, manage and grow your running community.": "สร้าง จัดการ และพัฒนาคอมมูนิตี้การวิ่งของคุณ",
 
   // Onboarding
+  "Profile setup": "ตั้งค่าโปรไฟล์",
+  "A quick setup for better recommendations": "ตั้งค่าสั้น ๆ เพื่อให้คำแนะนำตรงกับคุณมากขึ้น",
+  "Answer a few short questions so Runrise can recommend Run Clubs and events that fit your pace, preferred distance, area and goals.": "ตอบคำถามสั้น ๆ เพื่อให้ Runrise แนะนำ Run Club และกิจกรรมที่เหมาะกับ Pace ระยะวิ่ง พื้นที่ และเป้าหมายของคุณ",
+  "This takes about 1–2 minutes. You can edit these preferences later.": "ใช้เวลาประมาณ 1–2 นาที และคุณสามารถกลับมาแก้ไขความต้องการได้ภายหลัง",
+  "Start profile setup": "เริ่มตั้งค่าโปรไฟล์",
+  "We use these answers to personalize your recommendations.": "เราจะใช้คำตอบเหล่านี้เพื่อปรับคำแนะนำให้เหมาะกับคุณ",
+  "Running experience": "ประสบการณ์การวิ่ง",
+  "How long have you been running?": "คุณวิ่งมานานแค่ไหนแล้ว?",
+  "This helps us recommend Run Clubs that feel comfortable for your current experience.": "คำตอบนี้ช่วยให้เราแนะนำ Run Club ที่เหมาะกับประสบการณ์การวิ่งของคุณ",
+  "Pace (min/km)": "Pace (นาที/กม.)",
+  "What is your usual Easy Run pace?": "Pace ที่คุณใช้วิ่ง Easy Run โดยทั่วไปอยู่ที่ประมาณเท่าไหร่?",
+  "Choose the pace you use for most comfortable training runs, not your race pace.": "เลือกความเร็วที่คุณใช้วิ่งสบาย ๆ ในการซ้อมส่วนใหญ่ ไม่ใช่ความเร็วตอนแข่ง",
+  "Favorite distance": "ระยะที่สนใจ",
+  "Which distance are you most interested in running?": "ระยะที่คุณชอบวิ่งมากที่สุดคือระยะไหน?",
+  "Choose the distance you are most interested in joining. It does not have to be your everyday training distance.": "เลือกระยะที่คุณรู้สึกว่าสนใจหรืออยากเข้าร่วมมากที่สุด ไม่จำเป็นต้องเป็นระยะที่คุณซ้อมทุกวัน",
+  "Province": "จังหวัด",
+  "Which province would you like to run in?": "คุณอยากวิ่งในจังหวัดไหน?",
+  "Choose your main area first. You can change this later.": "เลือกจังหวัดที่คุณต้องการวิ่งเป็นหลักก่อน และสามารถเปลี่ยนได้ภายหลัง",
+  "District / Amphoe": "เขต / อำเภอ",
+  "Which district or amphoe would you prefer?": "คุณอยากวิ่งในเขตหรืออำเภอไหน?",
+  "Choose one or more areas. Recommendations will prioritize these locations.": "เลือกได้มากกว่า 1 พื้นที่ โดยคำแนะนำจะให้ความสำคัญกับพื้นที่เหล่านี้ก่อน",
+  "When do you usually prefer to run?": "ปกติคุณสะดวกวิ่งช่วงเวลาไหน?",
+  "This helps us prioritize events that fit your usual schedule.": "คำตอบนี้ช่วยให้เราแนะนำกิจกรรมที่เข้ากับช่วงเวลาที่คุณสะดวก",
+  "Main goal": "เป้าหมายหลัก",
+  "What is your main goal for joining a Run Club?": "เป้าหมายหลักในการเข้าร่วม Run Club ของคุณคืออะไร?",
+  "Choose the reason that matters most to you. You can select more than one.": "เลือกเป้าหมายที่สำคัญกับคุณ โดยสามารถเลือกได้มากกว่า 1 ข้อ",
+  "Choose the goals that matter to you. You can select more than one.": "เลือกเป้าหมายที่สำคัญกับคุณ โดยสามารถเลือกได้มากกว่า 1 ข้อ",
+  "Choose all community styles that feel comfortable for you. You can select more than one.": "เลือกสไตล์คอมมูนิตี้ที่เหมาะกับคุณได้มากกว่า 1 ข้อ",
+  "Community preference": "สไตล์คอมมูนิตี้",
+  "What kind of Run Club atmosphere do you enjoy?": "คุณชอบบรรยากาศ Run Club แบบไหน?",
+  "Choose all styles that feel comfortable for you.": "เลือกบรรยากาศที่คุณรู้สึกว่าเหมาะกับตัวเองได้มากกว่า 1 แบบ",
+  "Never trained seriously": "ยังไม่เคยวิ่งจริงจัง",
+  "Less than 3 months": "น้อยกว่า 3 เดือน",
+  "3–6 months": "3–6 เดือน",
+  "6–12 months": "6–12 เดือน",
+  "1–2 years": "1–2 ปี",
+  "More than 2 years": "มากกว่า 2 ปี",
+  "3K": "3 กม.",
+  "5K": "5 กม.",
+  "10K": "10 กม.",
+  "Half Marathon 21K": "Half Marathon 21 กม.",
+  "Marathon 42K": "Marathon 42 กม.",
+  "Health": "สุขภาพ",
+  "Competition": "แข่งขัน",
+  "You can select more than one goal.": "เลือกได้มากกว่า 1 เป้าหมาย",
+  "You can select more than one community style.": "เลือกได้มากกว่า 1 ข้อ",
+  "Bangkok": "กรุงเทพมหานคร",
+  "Nonthaburi": "นนทบุรี",
+  "Pathum Thani": "ปทุมธานี",
+  "Samut Prakan": "สมุทรปราการ",
+  "Nakhon Pathom": "นครปฐม",
+  "Samut Sakhon": "สมุทรสาคร",
+  "Dusit": "ดุสิต",
+  "Nong Chok": "หนองจอก",
+  "Bang Khen": "บางเขน",
+  "Bang Kapi": "บางกะปิ",
+  "Pom Prap Sattru Phai": "ป้อมปราบศัตรูพ่าย",
+  "Phra Khanong": "พระโขนง",
+  "Min Buri": "มีนบุรี",
+  "Lat Krabang": "ลาดกระบัง",
+  "Yan Nawa": "ยานนาวา",
+  "Samphanthawong": "สัมพันธวงศ์",
+  "Phaya Thai": "พญาไท",
+  "Bangkok Yai": "บางกอกใหญ่",
+  "Huai Khwang": "ห้วยขวาง",
+  "Khlong San": "คลองสาน",
+  "Taling Chan": "ตลิ่งชัน",
+  "Bangkok Noi": "บางกอกน้อย",
+  "Bang Khun Thian": "บางขุนเทียน",
+  "Phasi Charoen": "ภาษีเจริญ",
+  "Nong Khaem": "หนองแขม",
+  "Rat Burana": "ราษฎร์บูรณะ",
+  "Bang Phlat": "บางพลัด",
+  "Din Daeng": "ดินแดง",
+  "Bueng Kum": "บึงกุ่ม",
+  "Bang Sue": "บางซื่อ",
+  "Bang Kho Laem": "บางคอแหลม",
+  "Prawet": "ประเวศ",
+  "Suan Luang": "สวนหลวง",
+  "Chom Thong": "จอมทอง",
+  "Don Mueang": "ดอนเมือง",
+  "Ratchathewi": "ราชเทวี",
+  "Lat Phrao": "ลาดพร้าว",
+  "Bang Khae": "บางแค",
+  "Lak Si": "หลักสี่",
+  "Sai Mai": "สายไหม",
+  "Khan Na Yao": "คันนายาว",
+  "Saphan Sung": "สะพานสูง",
+  "Wang Thonglang": "วังทองหลาง",
+  "Khlong Sam Wa": "คลองสามวา",
+  "Bang Na": "บางนา",
+  "Thawi Watthana": "ทวีวัฒนา",
+  "Thung Khru": "ทุ่งครุ",
+  "Bang Bon": "บางบอน",
+  "Mueang Nonthaburi": "เมืองนนทบุรี",
+  "Bang Kruai": "บางกรวย",
+  "Bang Yai": "บางใหญ่",
+  "Bang Bua Thong": "บางบัวทอง",
+  "Sai Noi": "ไทรน้อย",
+  "Pak Kret": "ปากเกร็ด",
+  "Mueang Pathum Thani": "เมืองปทุมธานี",
+  "Khlong Luang": "คลองหลวง",
+  "Thanyaburi": "ธัญบุรี",
+  "Nong Suea": "หนองเสือ",
+  "Lat Lum Kaeo": "ลาดหลุมแก้ว",
+  "Lam Luk Ka": "ลำลูกกา",
+  "Sam Khok": "สามโคก",
+  "Mueang Samut Prakan": "เมืองสมุทรปราการ",
+  "Bang Bo": "บางบ่อ",
+  "Bang Phli": "บางพลี",
+  "Phra Pradaeng": "พระประแดง",
+  "Phra Samut Chedi": "พระสมุทรเจดีย์",
+  "Bang Sao Thong": "บางเสาธง",
+  "Mueang Nakhon Pathom": "เมืองนครปฐม",
+  "Kamphaeng Saen": "กำแพงแสน",
+  "Nakhon Chai Si": "นครชัยศรี",
+  "Don Tum": "ดอนตูม",
+  "Bang Len": "บางเลน",
+  "Sam Phran": "สามพราน",
+  "Phutthamonthon": "พุทธมณฑล",
+  "Mueang Samut Sakhon": "เมืองสมุทรสาคร",
+  "Krathum Baen": "กระทุ่มแบน",
+  "Ban Phaeo": "บ้านแพ้ว",
+  "No Run Clubs are available in this area yet, but you can still explore nearby areas.": "ยังไม่มี Run Club ในพื้นที่นี้ แต่คุณยังสามารถดูพื้นที่ใกล้เคียงได้",
+  "No park suggestions are available for the selected area yet, but you can still continue.": "ยังไม่มีสวนที่แนะนำในพื้นที่ที่เลือก แต่คุณยังสามารถดำเนินการต่อได้",
+  "Why we ask": "ทำไมเราถึงถาม",
+  "Selected Easy Run pace:": "Pace สำหรับ Easy Run ที่เลือก:",
+  "Final step": "ขั้นตอนสุดท้าย",
+  "steps left": "ขั้นตอนที่เหลือ",
+  "Change": "เปลี่ยน",
+  "Based on your pace, preferred distance, area and goals.": "แนะนำจาก Pace ระยะที่สนใจ พื้นที่ และเป้าหมายของคุณ",
+  "Areas": "พื้นที่",
+  "Goals": "เป้าหมาย",
   "Running Level": "ระดับการวิ่ง",
   "Where are you in your running journey?": "ตอนนี้คุณอยู่ในระดับใดของการวิ่ง?",
   "Usual Pace": "เพซปกติ",
@@ -1170,6 +1769,19 @@ const THAI_TEXT: Record<string, string> = {
   "Thonburirom Park (nearby)": "สวนธนบุรีรมย์ (บริเวณใกล้เคียง)",
   "80th Birthday Anniversary Park (Sathon)": "สวนเฉลิมพระเกียรติ 80 พรรษา (สาทร)",
   "Lumphini Park (nearby)": "สวนลุมพินี (บริเวณใกล้เคียง)",
+  "Suan Luang Rama IX": "สวนหลวง ร.9",
+  "Wachiratham Sathit Park": "สวนวชิรธรรมสาธิต",
+  "Seri Thai Park": "สวนเสรีไทย",
+  "Bang Bua Canal Park": "สวนริมคลองบางบัว",
+  "Thung Si Kan Park": "สวนทุ่งสีกัน",
+  "Chaloem Kanchanaphisek Park": "สวนเฉลิมกาญจนาภิเษก",
+  "Suan Somdet Phra Srinagarindra Nonthaburi": "สวนสมเด็จพระศรีนครินทร์ นนทบุรี",
+  "Thammasat University Rangsit Sports Area": "พื้นที่กีฬามหาวิทยาลัยธรรมศาสตร์ รังสิต",
+  "Bang Pu Recreation Center": "สถานตากอากาศบางปู",
+  "Sri Nakhon Khuean Khan Park": "สวนศรีนครเขื่อนขันธ์",
+  "Sanam Chan Palace Park": "สวนพระราชวังสนามจันทร์",
+  "Phutthamonthon Park": "อุทยานพุทธมณฑล",
+  "Saphan Daeng Recreation Area": "พื้นที่พักผ่อนสะพานแดง",
 
   // Days / months
   "Mon": "จ.",
@@ -1281,7 +1893,6 @@ const THAI_TEXT: Record<string, string> = {
   "Your preferred range": "ช่วงระยะทางที่ต้องการ",
   "Comfortable running pace": "เพซที่เหมาะกับคุณ",
   "When you prefer to run": "ช่วงเวลาที่ต้องการวิ่ง",
-  "Running experience": "ระดับประสบการณ์",
   "Community style": "สไตล์คอมมูนิตี้",
   "Compare Run Clubs": "เปรียบเทียบคลับวิ่ง",
   "Choose at least 2 clubs": "เลือกอย่างน้อย 2 คลับ",
@@ -1411,6 +2022,15 @@ const THAI_TEXT: Record<string, string> = {
   "Choose the language used throughout Runrise.": "เลือกภาษาที่ต้องการใช้ภายในแอป Runrise",
   "English": "English",
   "Thai": "ไทย",
+  "Please enter your full name.": "กรุณากรอกชื่อ-นามสกุล",
+  "Please enter your email.": "กรุณากรอกอีเมล",
+  "Please enter a valid email address.": "กรุณากรอกอีเมลให้ถูกต้อง",
+  "Please enter a password.": "กรุณากรอกรหัสผ่าน",
+  "Please confirm your password.": "กรุณายืนยันรหัสผ่าน",
+  "Passwords do not match.": "รหัสผ่านไม่ตรงกัน",
+  "Please agree to the Terms & Privacy Policy.": "กรุณายอมรับข้อกำหนดและนโยบายความเป็นส่วนตัว",
+  "No Runrise account found yet. Please create an account first.": "ยังไม่พบบัญชี Runrise กรุณาสร้างบัญชีก่อน",
+  "Email or password is incorrect. Please try again.": "อีเมลหรือรหัสผ่านไม่ถูกต้อง กรุณาลองอีกครั้ง",
 };
 
 const THAI_PLACEHOLDERS: Record<string, string> = {
@@ -1555,6 +2175,11 @@ function translateDynamicSystemText(core: string): string {
     return `เปรียบเทียบ ${compareCount[1]} คลับ`;
   }
 
+  const stepsLeft = core.match(/^(\d+)\s+steps?\s+left$/i);
+  if (stepsLeft) {
+    return `เหลืออีก ${stepsLeft[1]} ขั้นตอน`;
+  }
+
   return THAI_TOKEN_REPLACEMENTS.reduce(
     (result, [pattern, replacement]) =>
       result.replace(pattern, replacement),
@@ -1674,6 +2299,44 @@ function translateRunriseDocument(language: AppLanguage) {
 
   document.documentElement.lang =
     language === "th" ? "th" : "en";
+}
+
+
+function LanguageQuickSwitch({
+  language,
+  onChange,
+  compact = false,
+}: {
+  language: AppLanguage;
+  onChange: (language: AppLanguage) => void;
+  compact?: boolean;
+}) {
+  return (
+    <div
+      className={
+        compact
+          ? "language-quick-switch compact"
+          : "language-quick-switch"
+      }
+      data-no-translate="true"
+      aria-label="Language"
+    >
+      <button
+        type="button"
+        className={language === "th" ? "active" : ""}
+        onClick={() => onChange("th")}
+      >
+        ไทย
+      </button>
+      <button
+        type="button"
+        className={language === "en" ? "active" : ""}
+        onClick={() => onChange("en")}
+      >
+        EN
+      </button>
+    </div>
+  );
 }
 
 function LanguageSettings({
@@ -1899,7 +2562,7 @@ function LanguageSettings({
 function App() {
   const [language, setLanguage] = useState<AppLanguage>(() => {
     const saved = localStorage.getItem(RUNRISE_LANGUAGE_KEY);
-    return saved === "th" ? "th" : "en";
+    return saved === "en" ? "en" : "th";
   });
 
   const [page, setPage] = useState<Page>("welcome");
@@ -1917,12 +2580,56 @@ function App() {
     )
   );
 
-  const [clubs, setClubs] = useState<Club[]>(() =>
-    readStorage<Club[]>("runrise-clubs", initialClubs).map((club) => ({
-      ...club,
-      location: normalizeDistrict(club.location),
-    }))
+const [clubs, setClubs] = useState<Club[]>(() => {
+  const storedClubs = readStorage<Club[]>(
+    "runrise-clubs",
+    initialClubs
   );
+
+  const updatedStoredClubs = storedClubs.map((club) => {
+    if (club.id === 7) {
+      return {
+        ...club,
+        name: "Roadlaan Runclub",
+        founder: "Roadlaan Runclub",
+      };
+    }
+
+    if (club.id === 8) {
+      return {
+        ...club,
+        name: "Mitrmiles Runclub",
+        founder: "Mitrmiles Runclub",
+      };
+    }
+
+    if (club.id === 9) {
+      return {
+        ...club,
+        name: "Sardine Runclub",
+        founder: "Sardine Runclub",
+      };
+    }
+
+    return club;
+  });
+
+  const storedIds = new Set(
+    updatedStoredClubs.map((club) => club.id)
+  );
+
+  const mergedClubs = [
+    ...updatedStoredClubs,
+    ...initialClubs.filter(
+      (club) => !storedIds.has(club.id)
+    ),
+  ];
+
+  return mergedClubs.map((club) => ({
+    ...club,
+    location: normalizeDistrict(club.location),
+  }));
+});
 
   const [events, setEvents] = useState<RunEvent[]>(() =>
     readStorage<RunEvent[]>("runrise-events", initialEvents).map((event) => ({
@@ -2260,6 +2967,8 @@ function App() {
       <div className="phone">
         {page === "welcome" && (
           <Welcome
+            language={language}
+            setLanguage={setLanguage}
             onStart={() => setPage("login")}
             onRegister={() => setPage("register")}
           />
@@ -2267,6 +2976,8 @@ function App() {
 
         {page === "login" && (
           <Login
+            language={language}
+            setLanguage={setLanguage}
             storedUser={user}
             onLogin={loginUser}
             onRegister={() => setPage("register")}
@@ -2276,6 +2987,8 @@ function App() {
 
         {page === "register" && (
           <Register
+            language={language}
+            setLanguage={setLanguage}
             onRegister={registerUser}
             onLogin={() => setPage("login")}
             onBack={() => setPage("welcome")}
@@ -2284,6 +2997,8 @@ function App() {
 
         {page === "role" && (
           <RoleSelect
+            language={language}
+            setLanguage={setLanguage}
             onBack={() => setPage("login")}
             onRunner={() => {
               setRole("runner");
@@ -2302,6 +3017,8 @@ function App() {
 
         {page === "runner-onboarding" && (
           <RunnerOnboarding
+            language={language}
+            setLanguage={setLanguage}
             profile={profile}
             setProfile={setProfile}
             onBack={() => setPage("role")}
@@ -2314,6 +3031,8 @@ function App() {
 
         {page === "runner-home" && (
           <RunnerHome
+            language={language}
+            setLanguage={setLanguage}
             profile={profile}
             clubs={matchedClubs}
             calculateMatch={calculateMatch}
@@ -2524,15 +3243,25 @@ function App() {
 }
 
 function Welcome({
+  language,
+  setLanguage,
   onStart,
   onRegister,
 }: {
+  language: AppLanguage;
+  setLanguage: (language: AppLanguage) => void;
   onStart: () => void;
   onRegister: () => void;
 }) {
   return (
     <main className="screen welcome">
-      <div className="brand-symbol">R</div>
+      <div className="welcome-language-row">
+        <LanguageQuickSwitch language={language} onChange={setLanguage} compact />
+      </div>
+
+      <div className="brand-symbol">
+        <img src={runriseLogo} alt="Runrise" />
+      </div>
 
       <div>
         <p className="eyebrow">RUNRISE</p>
@@ -2568,11 +3297,15 @@ function Welcome({
 }
 
 function Login({
+  language,
+  setLanguage,
   storedUser,
   onLogin,
   onRegister,
   onBack,
 }: {
+  language: AppLanguage;
+  setLanguage: (language: AppLanguage) => void;
   storedUser: UserAccount | null;
   onLogin: (account: UserAccount) => void;
   onRegister: () => void;
@@ -2581,13 +3314,31 @@ function Login({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [emailTouched, setEmailTouched] = useState(false);
+
+  const emailValid =
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+
+  const emailInlineError =
+    emailTouched && email.trim() === ""
+      ? "Please enter your email."
+      : email.trim() !== "" && !emailValid
+        ? "Please enter a valid email address."
+        : "";
 
   const canSubmit =
     email.trim() !== "" &&
+    emailValid &&
     password.trim() !== "";
 
   const submit = () => {
     setError("");
+    setEmailTouched(true);
+
+    if (!emailValid) {
+      return;
+    }
 
     if (!storedUser) {
       setError("No Runrise account found yet. Please create an account first.");
@@ -2607,6 +3358,10 @@ function Login({
 
   return (
     <main className="screen auth-screen">
+      <div className="auth-language-switch">
+        <LanguageQuickSwitch language={language} onChange={setLanguage} compact />
+      </div>
+
       <button
         type="button"
         className="auth-back"
@@ -2615,7 +3370,9 @@ function Login({
         ← Back
       </button>
 
-      <div className="auth-brand-mark">R</div>
+      <div className="auth-brand-mark">
+        <img src={runriseLogo} alt="Runrise" />
+      </div>
 
       <div className="auth-heading">
         <p className="eyebrow">WELCOME BACK</p>
@@ -2633,25 +3390,111 @@ function Login({
             autoComplete="email"
             placeholder="you@example.com"
             value={email}
+            aria-invalid={Boolean(emailInlineError)}
+            onBlur={() => setEmailTouched(true)}
             onChange={(event) => {
               setEmail(event.target.value);
               setError("");
             }}
           />
+          {emailInlineError && (
+            <small className="auth-inline-error" role="alert">
+              {emailInlineError}
+            </small>
+          )}
         </label>
 
         <label className="auth-field">
           <span>Password</span>
-          <input
-            type="password"
-            autoComplete="current-password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(event) => {
-              setPassword(event.target.value);
-              setError("");
-            }}
-          />
+          <div className="auth-password-wrap">
+            <input
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                setError("");
+              }}
+            />
+            <button
+              type="button"
+              className="auth-password-toggle"
+              onClick={() => setShowPassword((current) => !current)}
+              aria-label={
+                showPassword
+                  ? language === "th"
+                    ? "ซ่อนรหัสผ่าน"
+                    : "Hide password"
+                  : language === "th"
+                    ? "ดูรหัสผ่าน"
+                    : "Show password"
+              }
+              title={
+                showPassword
+                  ? language === "th"
+                    ? "ซ่อนรหัสผ่าน"
+                    : "Hide password"
+                  : language === "th"
+                    ? "ดูรหัสผ่าน"
+                    : "Show password"
+              }
+            >
+              {showPassword ? (
+                <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="2.7"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                />
+              </svg>
+              ) : (
+                <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M3 3l18 18"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M10.6 6.2A8.8 8.8 0 0 1 12 6c6 0 9.5 6 9.5 6a15.9 15.9 0 0 1-3.2 3.8M6.1 6.1C3.7 7.7 2.5 12 2.5 12s3.5 6 9.5 6a9.7 9.7 0 0 0 3.1-.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M9.9 9.9a3 3 0 0 0 4.2 4.2"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+              </svg>
+              )}
+            </button>
+          </div>
         </label>
 
         {error && (
@@ -2681,10 +3524,14 @@ function Login({
 }
 
 function Register({
+  language,
+  setLanguage,
   onRegister,
   onLogin,
   onBack,
 }: {
+  language: AppLanguage;
+  setLanguage: (language: AppLanguage) => void;
   onRegister: (account: UserAccount) => void;
   onLogin: () => void;
   onBack: () => void;
@@ -2695,6 +3542,11 @@ function Register({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [agreed, setAgreed] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [emailTouched, setEmailTouched] = useState(false);
+  const [passwordTouched, setPasswordTouched] = useState(false);
+  const [confirmTouched, setConfirmTouched] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const emailValid =
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
@@ -2726,6 +3578,19 @@ function Register({
         : "",
   };
 
+  const showEmailError =
+    submitted ||
+    emailTouched ||
+    (email.trim() !== "" && !emailValid);
+
+  const showPasswordError =
+    submitted || passwordTouched;
+
+  const showConfirmError =
+    submitted ||
+    confirmTouched ||
+    (confirmPassword !== "" && confirmPassword !== password);
+
   const canSubmit =
     !errors.name &&
     !errors.email &&
@@ -2735,6 +3600,9 @@ function Register({
 
   const submit = () => {
     setSubmitted(true);
+    setEmailTouched(true);
+    setPasswordTouched(true);
+    setConfirmTouched(true);
 
     if (!canSubmit) return;
 
@@ -2747,6 +3615,10 @@ function Register({
 
   return (
     <main className="screen auth-screen auth-register-screen">
+      <div className="auth-language-switch">
+        <LanguageQuickSwitch language={language} onChange={setLanguage} compact />
+      </div>
+
       <button
         type="button"
         className="auth-back"
@@ -2754,6 +3626,10 @@ function Register({
       >
         ← Back
       </button>
+
+      <div className="auth-brand-mark">
+        <img src={runriseLogo} alt="Runrise" />
+      </div>
 
       <div className="auth-heading">
         <p className="eyebrow">JOIN RUNRISE</p>
@@ -2784,38 +3660,206 @@ function Register({
             autoComplete="email"
             placeholder="you@example.com"
             value={email}
+            aria-invalid={showEmailError && Boolean(errors.email)}
+            onBlur={() => setEmailTouched(true)}
             onChange={(event) => setEmail(event.target.value)}
           />
-          {submitted && errors.email && (
-            <small className="auth-inline-error">{errors.email}</small>
+          {showEmailError && errors.email && (
+            <small className="auth-inline-error" role="alert">
+              {errors.email}
+            </small>
           )}
         </label>
 
         <label className="auth-field">
           <span>Password</span>
-          <input
-            type="password"
-            autoComplete="new-password"
-            placeholder="Create a password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-          {submitted && errors.password && (
-            <small className="auth-inline-error">{errors.password}</small>
+          <div className="auth-password-wrap">
+            <input
+              type={showPassword ? "text" : "password"}
+              autoComplete="new-password"
+              placeholder="Create a password"
+              value={password}
+              aria-invalid={showPasswordError && Boolean(errors.password)}
+              onBlur={() => setPasswordTouched(true)}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <button
+              type="button"
+              className="auth-password-toggle"
+              onClick={() => setShowPassword((current) => !current)}
+              aria-label={
+                showPassword
+                  ? language === "th"
+                    ? "ซ่อนรหัสผ่าน"
+                    : "Hide password"
+                  : language === "th"
+                    ? "ดูรหัสผ่าน"
+                    : "Show password"
+              }
+              title={
+                showPassword
+                  ? language === "th"
+                    ? "ซ่อนรหัสผ่าน"
+                    : "Hide password"
+                  : language === "th"
+                    ? "ดูรหัสผ่าน"
+                    : "Show password"
+              }
+            >
+              {showPassword ? (
+                <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="2.7"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                />
+              </svg>
+              ) : (
+                <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M3 3l18 18"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M10.6 6.2A8.8 8.8 0 0 1 12 6c6 0 9.5 6 9.5 6a15.9 15.9 0 0 1-3.2 3.8M6.1 6.1C3.7 7.7 2.5 12 2.5 12s3.5 6 9.5 6a9.7 9.7 0 0 0 3.1-.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M9.9 9.9a3 3 0 0 0 4.2 4.2"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+              </svg>
+              )}
+            </button>
+          </div>
+          {showPasswordError && errors.password && (
+            <small className="auth-inline-error" role="alert">
+              {errors.password}
+            </small>
           )}
         </label>
 
         <label className="auth-field">
           <span>Confirm Password</span>
-          <input
-            type="password"
-            autoComplete="new-password"
-            placeholder="Re-enter your password"
-            value={confirmPassword}
-            onChange={(event) => setConfirmPassword(event.target.value)}
-          />
-          {submitted && errors.confirmPassword && (
-            <small className="auth-inline-error">
+          <div className="auth-password-wrap">
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              autoComplete="new-password"
+              placeholder="Re-enter your password"
+              value={confirmPassword}
+              aria-invalid={showConfirmError && Boolean(errors.confirmPassword)}
+              onBlur={() => setConfirmTouched(true)}
+              onChange={(event) => setConfirmPassword(event.target.value)}
+            />
+            <button
+              type="button"
+              className="auth-password-toggle"
+              onClick={() => setShowConfirmPassword((current) => !current)}
+              aria-label={
+                showConfirmPassword
+                  ? language === "th"
+                    ? "ซ่อนรหัสผ่าน"
+                    : "Hide password"
+                  : language === "th"
+                    ? "ดูรหัสผ่าน"
+                    : "Show password"
+              }
+              title={
+                showConfirmPassword
+                  ? language === "th"
+                    ? "ซ่อนรหัสผ่าน"
+                    : "Hide password"
+                  : language === "th"
+                    ? "ดูรหัสผ่าน"
+                    : "Show password"
+              }
+            >
+              {showConfirmPassword ? (
+                <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="2.7"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                />
+              </svg>
+              ) : (
+                <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M3 3l18 18"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M10.6 6.2A8.8 8.8 0 0 1 12 6c6 0 9.5 6 9.5 6a15.9 15.9 0 0 1-3.2 3.8M6.1 6.1C3.7 7.7 2.5 12 2.5 12s3.5 6 9.5 6a9.7 9.7 0 0 0 3.1-.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M9.9 9.9a3 3 0 0 0 4.2 4.2"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+              </svg>
+              )}
+            </button>
+          </div>
+          {showConfirmError && errors.confirmPassword && (
+            <small className="auth-inline-error" role="alert">
               {errors.confirmPassword}
             </small>
           )}
@@ -2857,16 +3901,24 @@ function Register({
 }
 
 function RoleSelect({
+  language,
+  setLanguage,
   onRunner,
   onFounder,
   onBack,
 }: {
+  language: AppLanguage;
+  setLanguage: (language: AppLanguage) => void;
   onRunner: () => void;
   onFounder: () => void;
   onBack: () => void;
 }) {
   return (
     <main className="screen role-screen">
+      <div className="role-language-switch">
+        <LanguageQuickSwitch language={language} onChange={setLanguage} compact />
+      </div>
+
       <button
         type="button"
         className="auth-back"
@@ -2922,33 +3974,97 @@ function RoleSelect({
 }
 
 function RunnerOnboarding({
+  language,
+  setLanguage,
   profile,
   setProfile,
   onBack,
   onFinish,
 }: {
+  language: AppLanguage;
+  setLanguage: (language: AppLanguage) => void;
   profile: RunnerProfile;
   setProfile: (profile: RunnerProfile) => void;
   onBack: () => void;
   onFinish: () => void;
 }) {
+  const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
 
   const questions = [
-    { title: "Running Level", subtitle: "Where are you in your running journey?" },
-    { title: "Usual Pace", subtitle: "What’s your average running pace?" },
-    { title: "Preferred Distance", subtitle: "How far do you usually run?" },
-    { title: "Preferred Area", subtitle: "Which area do you prefer to run in?" },
-    { title: "Running Time", subtitle: "When do you normally prefer to run?" },
-    { title: "Running Goal", subtitle: "What are you hoping to get from running?" },
-    { title: "Community Style", subtitle: "What kind of running community feels right for you?" },
+    {
+      title: "Running experience",
+      subtitle: "How long have you been running?",
+      helper:
+        "This helps us recommend Run Clubs that feel comfortable for your current experience.",
+    },
+    {
+      title: "Pace (min/km)",
+      subtitle: "What is your usual Easy Run pace?",
+      helper:
+        "Choose the pace you use for most comfortable training runs, not your race pace.",
+    },
+    {
+      title: "Favorite distance",
+      subtitle: "Which distance are you most interested in running?",
+      helper:
+        "Choose the distance you are most interested in joining. It does not have to be your everyday training distance.",
+    },
+    {
+      title: "Province",
+      subtitle: "Which province would you like to run in?",
+      helper:
+        "Choose your main area first. You can change this later.",
+    },
+    {
+      title: "District / Amphoe",
+      subtitle: "Which district or amphoe would you prefer?",
+      helper:
+        "Choose one or more areas. Recommendations will prioritize these locations.",
+    },
+    {
+      title: "Running Time",
+      subtitle: "When do you usually prefer to run?",
+      helper:
+        "This helps us prioritize events that fit your usual schedule.",
+    },
+    {
+      title: "Main goal",
+      subtitle: "What is your main goal for joining a Run Club?",
+      helper:
+        "Choose the goals that matter to you. You can select more than one.",
+    },
+    {
+      title: "Community preference",
+      subtitle: "What kind of Run Club atmosphere do you enjoy?",
+      helper:
+        "Choose all community styles that feel comfortable for you. You can select more than one.",
+    },
   ];
 
+  const totalSteps = questions.length;
+  const currentStepNumber = step + 1;
+  const remainingSteps = Math.max(0, totalSteps - currentStepNumber);
+  const progressPercent = (currentStepNumber / totalSteps) * 100;
+
+  const stepRemainingLabel =
+    remainingSteps === 0
+      ? language === "th"
+        ? "ขั้นตอนสุดท้าย"
+        : "Final step"
+      : language === "th"
+        ? `เหลืออีก ${remainingSteps} ขั้นตอน`
+        : `${remainingSteps} ${remainingSteps === 1 ? "step" : "steps"} left`;
+
+  const districtOptions =
+    DISTRICTS_BY_PROVINCE[profile.province] || [];
+
   const currentComplete = [
-    Boolean(profile.level),
+    Boolean(profile.runningExperience),
     Boolean(profile.pace),
-    Boolean(profile.distance),
-    profile.location.length > 0 && profile.parks.length > 0,
+    Boolean(profile.preferredDistance),
+    Boolean(profile.province),
+    profile.location.length > 0,
     Boolean(profile.time),
     profile.goal.length > 0,
     profile.vibe.length > 0,
@@ -2964,24 +4080,105 @@ function RunnerOnboarding({
     } as RunnerProfile);
   };
 
+  const setExperience = (runningExperience: string) => {
+    setProfile({
+      ...profile,
+      runningExperience,
+      level: experienceToLegacyLevel(runningExperience),
+    });
+  };
+
+  const setPreferredDistance = (preferredDistance: string) => {
+    setProfile({
+      ...profile,
+      preferredDistance,
+      distance: preferredDistanceToLegacyRange(preferredDistance),
+    });
+  };
+
+  const setProvince = (province: string) => {
+    setProfile({
+      ...profile,
+      province,
+      location: [],
+      parks: [],
+    });
+  };
+
   const goBack = () => {
-    if (step === 0) {
+    if (!started) {
       onBack();
       return;
     }
+
+    if (step === 0) {
+      setStarted(false);
+      return;
+    }
+
     setStep((previous) => previous - 1);
   };
 
   const goNext = () => {
     if (!currentComplete) return;
 
-    if (step === questions.length - 1) {
+    if (step === totalSteps - 1) {
       onFinish();
       return;
     }
 
     setStep((previous) => previous + 1);
   };
+
+  if (!started) {
+    return (
+      <main className="ut-onboarding ut-onboarding-intro">
+        <div className="ut-onboarding-scroll">
+          <div className="ut-onboarding-top intro-top">
+            <button type="button" className="ut-back" onClick={onBack}>
+              ← Back
+            </button>
+
+            <LanguageQuickSwitch
+              language={language}
+              onChange={setLanguage}
+              compact
+            />
+          </div>
+
+          <section className="ut-setup-intro-card">
+            <div className="ut-setup-intro-icon">
+              <img src={runriseLogo} alt="Runrise" />
+            </div>
+            <p className="eyebrow">Profile setup</p>
+            <h1>A quick setup for better recommendations</h1>
+            <p className="ut-setup-intro-copy">
+              Answer a few short questions so Runrise can recommend Run Clubs
+              and events that fit your pace, preferred distance, area and goals.
+            </p>
+
+            <div className="ut-setup-benefits">
+              <span>Run Clubs</span>
+              <span>Events</span>
+              <span>Pace</span>
+              <span>Areas</span>
+              <span>Goals</span>
+            </div>
+
+            <p className="ut-setup-time">
+              This takes about 1–2 minutes. You can edit these preferences later.
+            </p>
+          </section>
+        </div>
+
+        <div className="ut-fixed-cta">
+          <button type="button" onClick={() => setStarted(true)}>
+            Start profile setup
+          </button>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="ut-onboarding">
@@ -2990,49 +4187,78 @@ function RunnerOnboarding({
           <button type="button" className="ut-back" onClick={goBack}>
             ← Back
           </button>
-          <span className="ut-step-counter">
-            {step + 1} / {questions.length}
-          </span>
+
+          <div className="ut-onboarding-top-actions">
+            <LanguageQuickSwitch
+              language={language}
+              onChange={setLanguage}
+              compact
+            />
+            <span
+              className="ut-step-counter"
+              data-no-translate="true"
+            >
+              {currentStepNumber} / {totalSteps}
+            </span>
+          </div>
         </div>
 
-        <div className="ut-progress">
+        <div
+          className="ut-progress"
+          data-no-translate="true"
+          aria-label={
+            language === "th"
+              ? `ขั้นตอน ${currentStepNumber} จาก ${totalSteps}`
+              : `Step ${currentStepNumber} of ${totalSteps}`
+          }
+        >
           <div
             className="ut-progress-fill"
             style={{
-              width: `${((step + 1) / questions.length) * 100}%`,
+              width: `${progressPercent}%`,
             }}
           />
         </div>
 
+        <div
+          className="ut-progress-caption"
+          data-no-translate="true"
+        >
+          <span>{stepRemainingLabel}</span>
+        </div>
+
         <section className="ut-question-card">
-          <p className="ut-question-number">
-            {String(step + 1).padStart(2, "0")}
+          <p
+            className="ut-question-number"
+            data-no-translate="true"
+          >
+            {String(currentStepNumber).padStart(2, "0")}
           </p>
 
           <h1>{questions[step].title}</h1>
-          <p>{questions[step].subtitle}</p>
+          <p className="ut-question-prompt">{questions[step].subtitle}</p>
+
+          <div className="ut-question-explainer">
+            <span>Why we ask</span>
+            <p>{questions[step].helper}</p>
+          </div>
 
           <div className="ut-answer-area">
             {step === 0 && (
-              <div className="ut-level-grid">
-                {LEVEL_OPTIONS.map((option) => (
+              <div className="ut-choice-grid experience-grid">
+                {RUNNING_EXPERIENCE_OPTIONS.map((option) => (
                   <button
                     type="button"
-                    key={option.value}
+                    key={option}
                     className={
-                      profile.level === option.value
-                        ? "ut-level-card selected"
-                        : "ut-level-card"
+                      profile.runningExperience === option
+                        ? "ut-choice-card selected"
+                        : "ut-choice-card"
                     }
-                    onClick={() =>
-                      updateProfile("level", option.value)
-                    }
+                    onClick={() => setExperience(option)}
                   >
-                    <div>
-                      <strong>{option.label}</strong>
-                      <span>{option.description}</span>
-                    </div>
-                    {profile.level === option.value && <b>✓</b>}
+                    <strong>{option}</strong>
+                    {profile.runningExperience === option && <span>✓</span>}
                   </button>
                 ))}
               </div>
@@ -3046,26 +4272,60 @@ function RunnerOnboarding({
                     updateProfile("pace", value)
                   }
                 />
-                <p className="ut-helper">
-                  Swipe minutes and seconds separately. Selected pace:{" "}
+                <p className="ut-helper pace-selected-helper">
+                  Selected Easy Run pace:{" "}
                   <strong>{profile.pace} / km</strong>
                 </p>
               </>
             )}
 
             {step === 2 && (
-              <DistanceChoices
-                value={profile.distance}
-                onChange={(value) =>
-                  updateProfile("distance", value)
-                }
-              />
+              <div className="ut-choice-grid preferred-distance-grid">
+                {PREFERRED_DISTANCE_OPTIONS.map((option) => (
+                  <button
+                    type="button"
+                    key={option}
+                    className={
+                      profile.preferredDistance === option
+                        ? "ut-choice-card selected"
+                        : "ut-choice-card"
+                    }
+                    onClick={() => setPreferredDistance(option)}
+                  >
+                    <strong>{option}</strong>
+                    {profile.preferredDistance === option && <span>✓</span>}
+                  </button>
+                ))}
+              </div>
             )}
 
             {step === 3 && (
-              <AreaParkSelector
-                areas={profile.location}
-                parks={profile.parks}
+              <div className="ut-choice-grid province-grid">
+                {PROVINCES.map((province) => (
+                  <button
+                    type="button"
+                    key={province}
+                    className={
+                      profile.province === province
+                        ? "ut-choice-card selected"
+                        : "ut-choice-card"
+                    }
+                    onClick={() => setProvince(province)}
+                  >
+                    <strong>{province}</strong>
+                    {profile.province === province && <span>✓</span>}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {step === 4 && (
+              <LocationParkSelector
+                province={profile.province}
+                districtOptions={districtOptions}
+                selectedDistricts={profile.location}
+                selectedParks={profile.parks}
+                onChangeProvince={() => setStep(3)}
                 onChange={(location, parks) =>
                   setProfile({
                     ...profile,
@@ -3076,7 +4336,7 @@ function RunnerOnboarding({
               />
             )}
 
-            {step === 4 && (
+            {step === 5 && (
               <ChipChoices
                 options={RUNNING_TIMES}
                 value={profile.time}
@@ -3086,7 +4346,7 @@ function RunnerOnboarding({
               />
             )}
 
-            {step === 5 && (
+            {step === 6 && (
               <>
                 <ChipChoices
                   options={RUNNING_GOALS}
@@ -3096,13 +4356,16 @@ function RunnerOnboarding({
                     updateProfile("goal", value as string[])
                   }
                 />
-                <p className="ut-helper">
-                  You can choose more than one goal.
+                <p
+                  className="ut-helper"
+                  style={{ marginTop: 12, textAlign: "right" }}
+                >
+                  You can select more than one goal.
                 </p>
               </>
             )}
 
-            {step === 6 && (
+            {step === 7 && (
               <>
                 <ChipChoices
                   options={COMMUNITY_STYLES}
@@ -3112,9 +4375,11 @@ function RunnerOnboarding({
                     updateProfile("vibe", value as string[])
                   }
                 />
-
-                <p className="ut-helper">
-                  Choose all styles that feel right for you.
+                <p
+                  className="ut-helper"
+                  style={{ marginTop: 12, textAlign: "right" }}
+                >
+                  You can select more than one community style.
                 </p>
               </>
             )}
@@ -3128,7 +4393,7 @@ function RunnerOnboarding({
           disabled={!currentComplete}
           onClick={goNext}
         >
-          {step === questions.length - 1
+          {step === totalSteps - 1
             ? "Complete Your Profile"
             : "Continue"}
         </button>
@@ -3138,6 +4403,8 @@ function RunnerOnboarding({
 }
 
 function RunnerHome({
+  language,
+  setLanguage,
   profile,
   clubs,
   calculateMatch,
@@ -3152,6 +4419,13 @@ function RunnerHome({
       <div className="ut-home-header">
         <div className="ut-home-brand-row">
           <p className="eyebrow">RUNRISE</p>
+
+          <div className="ut-home-actions">
+            <LanguageQuickSwitch
+              language={language}
+              onChange={setLanguage}
+              compact
+            />
 
           <button
             className="ut-notification"
@@ -3173,6 +4447,7 @@ function RunnerHome({
 
             {unread > 0 && <span>{unread}</span>}
           </button>
+          </div>
         </div>
 
         <h1 className="ut-home-greeting">
@@ -3189,6 +4464,9 @@ function RunnerHome({
         <div>
           <p className="eyebrow">SMART MATCHING</p>
           <h2>Recommended for you</h2>
+          <p className="ut-recommendation-helper">
+            Based on your pace, preferred distance, area and goals.
+          </p>
         </div>
 
         <button className="link" onClick={onDiscover}>
@@ -3304,7 +4582,7 @@ function Discover({
 }: any) {
   const locations = [
     "All",
-    ...BANGKOK_DISTRICTS,
+    ...ALL_LOCATION_DISTRICTS,
   ];
 
   const distances = [
@@ -3584,6 +4862,55 @@ function ClubDetail({
         <p className="muted">
           {club.description}
         </p>
+
+        {CLUB_INSTAGRAM[club.id] && (
+          <a
+            className="club-instagram-contact"
+            href={CLUB_INSTAGRAM[club.id]}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Open ${club.name} Instagram`}
+          >
+            <span
+              className="club-instagram-icon"
+              aria-hidden="true"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                focusable="false"
+              >
+                <rect
+                  x="3"
+                  y="3"
+                  width="18"
+                  height="18"
+                  rx="5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                />
+                <circle
+                  cx="17.5"
+                  cy="6.5"
+                  r="1.2"
+                  fill="currentColor"
+                />
+              </svg>
+            </span>
+
+            <span className="club-instagram-link-text">
+              {CLUB_INSTAGRAM[club.id]}
+            </span>
+          </a>
+        )}
       </section>
 
       <section className="section">
@@ -3682,6 +5009,7 @@ function ClubDetail({
             : "⇆ Compare Club"}
         </button>
       </section>
+
     </main>
   );
 }
@@ -4355,6 +5683,8 @@ function RunnerProfile({
         ...profile,
         goal: [...profile.goal],
         vibe: [...profile.vibe],
+        location: [...profile.location],
+        parks: [...profile.parks],
       });
     }
   }, [profile, editing]);
@@ -4378,6 +5708,9 @@ function RunnerProfile({
     setDraft({
       ...profile,
       goal: [...profile.goal],
+      vibe: [...profile.vibe],
+      location: [...profile.location],
+      parks: [...profile.parks],
     });
     setEditing(false);
   };
@@ -4421,33 +5754,34 @@ function RunnerProfile({
           </div>
 
           <div className="ut-edit-block">
-            <h3>Running Level</h3>
-            <div className="ut-level-grid compact">
-              {LEVEL_OPTIONS.map((option) => (
+            <h3>Running experience</h3>
+            <div className="ut-choice-grid experience-grid compact">
+              {RUNNING_EXPERIENCE_OPTIONS.map((option) => (
                 <button
                   type="button"
-                  key={option.value}
+                  key={option}
                   className={
-                    draft.level === option.value
-                      ? "ut-level-card selected"
-                      : "ut-level-card"
+                    draft.runningExperience === option
+                      ? "ut-choice-card selected"
+                      : "ut-choice-card"
                   }
                   onClick={() =>
-                    setDraft({ ...draft, level: option.value })
+                    setDraft({
+                      ...draft,
+                      runningExperience: option,
+                      level: experienceToLegacyLevel(option),
+                    })
                   }
                 >
-                  <div>
-                    <strong>{option.label}</strong>
-                    <span>{option.description}</span>
-                  </div>
-                  {draft.level === option.value && <b>✓</b>}
+                  <strong>{option}</strong>
+                  {draft.runningExperience === option && <span>✓</span>}
                 </button>
               ))}
             </div>
           </div>
 
           <div className="ut-edit-block">
-            <h3>Usual Pace</h3>
+            <h3>Pace (min/km)</h3>
             <PaceWheelPicker
               value={draft.pace}
               onChange={(pace) => setDraft({ ...draft, pace })}
@@ -4455,21 +5789,76 @@ function RunnerProfile({
           </div>
 
           <div className="ut-edit-block">
-            <h3>Preferred Distance</h3>
-            <DistanceChoices
-              value={draft.distance}
-              onChange={(distance) =>
-                setDraft({ ...draft, distance })
-              }
-            />
+            <h3>Favorite distance</h3>
+            <div className="ut-choice-grid preferred-distance-grid compact">
+              {PREFERRED_DISTANCE_OPTIONS.map((option) => (
+                <button
+                  type="button"
+                  key={option}
+                  className={
+                    draft.preferredDistance === option
+                      ? "ut-choice-card selected"
+                      : "ut-choice-card"
+                  }
+                  onClick={() =>
+                    setDraft({
+                      ...draft,
+                      preferredDistance: option,
+                      distance: preferredDistanceToLegacyRange(option),
+                    })
+                  }
+                >
+                  <strong>{option}</strong>
+                  {draft.preferredDistance === option && <span>✓</span>}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="ut-edit-block">
-            <h3>Preferred Area & Park</h3>
+            <h3>Province</h3>
+            <div className="ut-choice-grid province-grid compact">
+              {PROVINCES.map((province) => (
+                <button
+                  type="button"
+                  key={province}
+                  className={
+                    draft.province === province
+                      ? "ut-choice-card selected"
+                      : "ut-choice-card"
+                  }
+                  onClick={() =>
+                    setDraft({
+                      ...draft,
+                      province,
+                      location: [],
+                      parks: [],
+                    })
+                  }
+                >
+                  <strong>{province}</strong>
+                  {draft.province === province && <span>✓</span>}
+                </button>
+              ))}
+            </div>
+          </div>
 
-            <AreaParkSelector
-              areas={draft.location}
-              parks={draft.parks}
+          <div className="ut-edit-block">
+            <h3>District / Amphoe & Preferred Park</h3>
+
+            <LocationParkSelector
+              province={draft.province}
+              districtOptions={DISTRICTS_BY_PROVINCE[draft.province] || []}
+              selectedDistricts={draft.location}
+              selectedParks={draft.parks}
+              onChangeProvince={() =>
+                setDraft({
+                  ...draft,
+                  province: "",
+                  location: [],
+                  parks: [],
+                })
+              }
               onChange={(location, parks) =>
                 setDraft({
                   ...draft,
@@ -4542,18 +5931,24 @@ function RunnerProfile({
             </div>
 
             <div className="ut-profile-row-grid">
-              <ProfileInfo label="Running Level" value={profile.level || "—"} />
-              <ProfileInfo label="Usual Pace" value={`${profile.pace} / km`} />
               <ProfileInfo
-                label="Preferred Distance"
-                value={
-                  DISTANCE_PREFERENCES.find(
-                    (item) => item.value === profile.distance
-                  )?.label || profile.distance || "—"
-                }
+                label="Running experience"
+                value={profile.runningExperience || "—"}
               />
               <ProfileInfo
-                label="Preferred Area"
+                label="Pace (min/km)"
+                value={`${profile.pace} / km`}
+              />
+              <ProfileInfo
+                label="Favorite distance"
+                value={profile.preferredDistance || "—"}
+              />
+              <ProfileInfo
+                label="Province"
+                value={profile.province || "—"}
+              />
+              <ProfileInfo
+                label="District / Amphoe"
                 value={
                   profile.location.length > 0
                     ? profile.location.join(", ")

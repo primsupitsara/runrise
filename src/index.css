@@ -8,23 +8,23 @@
 
 
 
-  --orange: #f36b32;
+  --orange: #CC6B37;
 
-  --pink: #ef8584;
+  --pink: #FBD185;
 
-  --peach: #ffb477;
+  --peach: #DC9242;
 
-  --yellow: #ffe885;
+  --yellow: #FBD185;
 
 
 
-  --bg: #f5f5f9;
+  --bg: #F9F2E0;
 
   --card: #ffffff;
 
-  --text: #19191b;
+  --text: #3E2D28;
 
-  --muted: #8d8d94;
+  --muted: #806E66;
 
   --line: rgba(60, 60, 67, 0.12);
 
@@ -360,7 +360,7 @@ h3 {
 
 
 
-  box-shadow: 0 15px 35px rgba(243, 107, 50, 0.25);
+  box-shadow: 0 15px 35px rgba(204, 107, 55, 0.25);
 
 }
 
@@ -414,7 +414,7 @@ h3 {
 
 
 
-  box-shadow: 0 9px 22px rgba(243, 107, 50, 0.2);
+  box-shadow: 0 9px 22px rgba(204, 107, 55, 0.2);
 
 }
 
@@ -422,7 +422,7 @@ h3 {
 
 .secondary {
 
-  background: #fff0e9;
+  background: #F6DFBF;
 
   color: var(--orange);
 
@@ -588,7 +588,7 @@ h3 {
 
 
 
-  background: #fff0e9;
+  background: #F6DFBF;
 
 
 
@@ -702,11 +702,11 @@ h3 {
 
 .option.selected {
 
-  border-color: rgba(243, 107, 50, 0.35);
+  border-color: rgba(204, 107, 55, 0.35);
 
 
 
-  background: #fff3ed;
+  background: #F6DFBF;
 
   color: var(--orange);
 
@@ -1122,7 +1122,7 @@ h3 {
 
 
 
-  background: #fff0e9;
+  background: #F6DFBF;
 
   color: #ba572d;
 
@@ -1358,7 +1358,7 @@ h3 {
 
 .compare-toggle.active {
 
-  background: #fff0e9;
+  background: #F6DFBF;
 
   color: var(--orange);
 
@@ -1520,11 +1520,11 @@ h3 {
 
 .compare-profile-button.active {
 
-  border-color: rgba(243, 107, 50, 0.3);
+  border-color: rgba(204, 107, 55, 0.3);
 
 
 
-  background: #fff0e9;
+  background: #F6DFBF;
 
   color: var(--orange);
 
@@ -1804,7 +1804,7 @@ h3 {
 
 
 
-  background: linear-gradient(135deg, #fff0e9, #fff8e9);
+  background: linear-gradient(135deg, #F6DFBF, #fff8e9);
 
 }
 
@@ -2042,7 +2042,7 @@ h3 {
 
 
 
-  box-shadow: 0 10px 24px rgba(243, 107, 50, 0.23);
+  box-shadow: 0 10px 24px rgba(204, 107, 55, 0.23);
 
 }
 
@@ -2278,7 +2278,7 @@ h3 {
 
 
 
-  box-shadow: 0 12px 28px rgba(243, 107, 50, 0.2);
+  box-shadow: 0 12px 28px rgba(204, 107, 55, 0.2);
 
 
 
@@ -2510,7 +2510,7 @@ h3 {
 
 
 
-  background: #fff0e9;
+  background: #F6DFBF;
 
   color: var(--orange);
 
@@ -3334,7 +3334,7 @@ h3 {
 
 
 
-  background: #fff0e9;
+  background: #F6DFBF;
 
   color: var(--orange);
 
@@ -3790,7 +3790,7 @@ h3 {
 
 
 
-  background: #fff0e9;
+  background: #F6DFBF;
 
 
 
@@ -4250,7 +4250,7 @@ h3 {
 
 
 
-  background: #fff0e9;
+  background: #F6DFBF;
 
 
 
@@ -4482,7 +4482,7 @@ h3 {
 
 
 
-  background: #fff0e9;
+  background: #F6DFBF;
 
 
 
@@ -4786,7 +4786,7 @@ h3 {
 
 
 
-  background: #fff0e9;
+  background: #F6DFBF;
 
 
 
@@ -5118,7 +5118,7 @@ h3 {
 
 
 
-  background: #fff0e9;
+  background: #F6DFBF;
 
 
 
@@ -6030,7 +6030,7 @@ h3 {
 
 
 
-  background: #fff0e9;
+  background: #F6DFBF;
 
 
 
@@ -6290,9 +6290,9 @@ h3 {
 ========================================================= */
 
 .founder-club-page {
-  --fcm-orange: #f36b32;
+  --fcm-orange: #CC6B37;
   --fcm-orange-dark: #e95a22;
-  --fcm-text: #19191b;
+  --fcm-text: #3E2D28;
   --fcm-muted: #929298;
   --fcm-field: #f6f6f8;
   --fcm-border: rgba(45, 45, 50, .08);
@@ -6301,7 +6301,7 @@ h3 {
 
   background:
     radial-gradient(circle at 100% 0%, rgba(255, 183, 145, .26), transparent 29%),
-    radial-gradient(circle at 0% 41%, rgba(239, 133, 132, .10), transparent 26%),
+    radial-gradient(circle at 0% 41%, rgba(251, 209, 133, .10), transparent 26%),
     #f7f7fa;
 }
 
@@ -6434,9 +6434,9 @@ h3 {
 
 .fcm-input:focus,
 .fcm-textarea:focus {
-  border-color: rgba(243, 107, 50, .36);
+  border-color: rgba(204, 107, 55, .36);
   background: white;
-  box-shadow: 0 0 0 4px rgba(243, 107, 50, .06);
+  box-shadow: 0 0 0 4px rgba(204, 107, 55, .06);
 }
 
 .fcm-grid {
@@ -6473,9 +6473,9 @@ h3 {
 }
 
 .fcm-dropdown-trigger.open {
-  border-color: rgba(243, 107, 50, .40);
+  border-color: rgba(204, 107, 55, .40);
   background: white;
-  box-shadow: 0 0 0 4px rgba(243, 107, 50, .065);
+  box-shadow: 0 0 0 4px rgba(204, 107, 55, .065);
 }
 
 .fcm-dropdown-value {
@@ -6545,7 +6545,7 @@ h3 {
 }
 
 .fcm-dropdown-option.selected {
-  background: #fff0e9;
+  background: #F6DFBF;
   color: var(--fcm-orange-dark);
 }
 
@@ -6601,8 +6601,8 @@ h3 {
 }
 
 .fcm-vibe.selected {
-  border-color: rgba(243, 107, 50, .34);
-  background: linear-gradient(145deg, #fff1ea, #fff8f4);
+  border-color: rgba(204, 107, 55, .34);
+  background: linear-gradient(145deg, #F6DFBF, #fff8f4);
   color: var(--fcm-orange-dark);
 }
 
@@ -6612,11 +6612,11 @@ h3 {
   margin-top: 15px;
   border: none;
   border-radius: 17px;
-  background: linear-gradient(135deg, #ef8584, #f36b32);
+  background: linear-gradient(135deg, #FBD185, #CC6B37);
   color: white;
   font-size: 13px;
   font-weight: 850;
-  box-shadow: 0 9px 22px rgba(243, 107, 50, .20);
+  box-shadow: 0 9px 22px rgba(204, 107, 55, .20);
 }
 
 .fcm-save-button.saved {
@@ -6687,7 +6687,7 @@ h3 {
   background:
     linear-gradient(145deg, #fff0e7, #ffe1d1);
 
-  color: #f36b32;
+  color: #CC6B37;
 
   box-shadow:
     inset 0 0 0 1px rgba(243,107,50,.05);
@@ -6716,7 +6716,7 @@ h3 {
 
   margin-bottom: 6px;
 
-  color: #19191b;
+  color: #3E2D28;
   font-size: 11px;
   font-weight: 780;
   line-height: 1.2;
@@ -6883,7 +6883,7 @@ h3 {
 .mini-bars i:nth-child(5) {
   height: 68px;
   background:
-    linear-gradient(180deg, #ff8b4c, #f36b32);
+    linear-gradient(180deg, #ff8b4c, #CC6B37);
 }
 
 /* UPCOMING RUNS — subtle route */
@@ -6931,7 +6931,7 @@ h3 {
 
   border-radius: 50% 50% 50% 0;
 
-  background: #f36b32;
+  background: #CC6B37;
 
   transform: rotate(-45deg);
 
@@ -7063,7 +7063,7 @@ h3 {
   border-color: #ff9e7b;
   background: #ffffff;
   box-shadow:
-    0 0 0 4px rgba(243, 107, 50, .075);
+    0 0 0 4px rgba(204, 107, 55, .075);
 }
 
 /* DISTANCE custom field */
@@ -7122,7 +7122,7 @@ h3 {
   border-color: #ff9e7b;
   background: #ffffff;
   box-shadow:
-    0 0 0 4px rgba(243, 107, 50, .075);
+    0 0 0 4px rgba(204, 107, 55, .075);
 }
 
 .event-distance-chevron {
@@ -7200,7 +7200,7 @@ h3 {
 }
 
 .event-distance-option.selected {
-  background: #fff0e9;
+  background: #F6DFBF;
   color: var(--orange);
 }
 
@@ -7258,7 +7258,7 @@ h3 {
     ),
     radial-gradient(
       circle at 0% 70%,
-      rgba(239, 133, 132, .10),
+      rgba(251, 209, 133, .10),
       transparent 28%
     ),
     var(--bg);
@@ -7271,9 +7271,9 @@ h3 {
   align-self: flex-start;
   padding: 0 13px;
   margin-bottom: 22px;
-  border: 1px solid rgba(243, 107, 50, .10);
+  border: 1px solid rgba(204, 107, 55, .10);
   border-radius: 999px;
-  background: #fff0e9;
+  background: #F6DFBF;
   color: var(--orange);
   font-size: 11px;
   font-weight: 800;
@@ -7287,11 +7287,11 @@ h3 {
   place-items: center;
   margin-bottom: 20px;
   border-radius: 20px;
-  background: linear-gradient(145deg, #ef8584, #f36b32);
+  background: linear-gradient(145deg, #FBD185, #CC6B37);
   color: white;
   font-size: 26px;
   font-weight: 900;
-  box-shadow: 0 14px 30px rgba(243, 107, 50, .16);
+  box-shadow: 0 14px 30px rgba(204, 107, 55, .16);
 }
 
 .auth-heading {
@@ -7354,7 +7354,7 @@ h3 {
 .auth-field input:focus {
   border-color: #ff9e7b;
   background: white;
-  box-shadow: 0 0 0 4px rgba(243, 107, 50, .07);
+  box-shadow: 0 0 0 4px rgba(204, 107, 55, .07);
 }
 
 .auth-error,
@@ -7371,11 +7371,11 @@ h3 {
   min-height: 50px;
   border: 0;
   border-radius: 16px;
-  background: linear-gradient(135deg, #ef8584, #f36b32);
+  background: linear-gradient(135deg, #FBD185, #CC6B37);
   color: white;
   font-size: 12px;
   font-weight: 850;
-  box-shadow: 0 9px 22px rgba(243, 107, 50, .18);
+  box-shadow: 0 9px 22px rgba(204, 107, 55, .18);
   cursor: pointer;
 }
 
@@ -7440,7 +7440,7 @@ h3 {
   place-items: center;
   margin-bottom: 14px;
   border-radius: 16px;
-  background: #fff0e9;
+  background: #F6DFBF;
   color: var(--orange);
 }
 
@@ -7469,7 +7469,7 @@ h3 {
   overflow: hidden;
   background:
     radial-gradient(circle at 100% 0%, rgba(255, 183, 145, .25), transparent 30%),
-    radial-gradient(circle at 0% 48%, rgba(239, 133, 132, .10), transparent 26%),
+    radial-gradient(circle at 0% 48%, rgba(251, 209, 133, .10), transparent 26%),
     #f7f7fa;
 }
 
@@ -7495,16 +7495,16 @@ h3 {
 .ut-back {
   min-height: 40px;
   padding: 0 14px;
-  border: 1px solid rgba(243, 107, 50, .12);
+  border: 1px solid rgba(204, 107, 55, .12);
   border-radius: 999px;
   background: rgba(255, 240, 233, .95);
-  color: #f36b32;
+  color: #CC6B37;
   font-size: 12px;
   font-weight: 800;
 }
 
 .ut-step-counter {
-  color: #8d8d94;
+  color: #806E66;
   font-size: 11px;
   font-weight: 800;
 }
@@ -7520,7 +7520,7 @@ h3 {
 .ut-progress-fill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #ef8584, #f36b32);
+  background: linear-gradient(90deg, #FBD185, #CC6B37);
   transition: width .22s ease;
 }
 
@@ -7537,15 +7537,15 @@ h3 {
   margin: 0 0 12px;
   padding: 7px 10px;
   border-radius: 11px;
-  background: #fff0e8;
-  color: #f36b32;
+  background: #F6DFBF;
+  color: #CC6B37;
   font-size: 11px;
   font-weight: 900;
 }
 
 .ut-question-card h1 {
   margin: 0;
-  color: #19191b;
+  color: #3E2D28;
   font-size: 28px;
   line-height: 1.08;
   letter-spacing: -1px;
@@ -7579,11 +7579,11 @@ h3 {
   min-height: 54px;
   border: none;
   border-radius: 18px;
-  background: linear-gradient(135deg, #ef8584, #f36b32);
+  background: linear-gradient(135deg, #FBD185, #CC6B37);
   color: white;
   font-size: 14px;
   font-weight: 850;
-  box-shadow: 0 10px 24px rgba(243, 107, 50, .20);
+  box-shadow: 0 10px 24px rgba(204, 107, 55, .20);
 }
 
 .ut-fixed-cta button:disabled,
@@ -7609,7 +7609,7 @@ h3 {
   border: 1px solid transparent;
   border-radius: 20px;
   background: #f5f5f8;
-  color: #19191b;
+  color: #3E2D28;
   text-align: left;
 }
 
@@ -7633,14 +7633,14 @@ h3 {
   place-items: center;
   flex-shrink: 0;
   border-radius: 50%;
-  background: #f36b32;
+  background: #CC6B37;
   color: white;
   font-size: 11px;
 }
 
 .ut-level-card.selected {
-  border-color: rgba(243, 107, 50, .34);
-  background: #fff3ed;
+  border-color: rgba(204, 107, 55, .34);
+  background: #F6DFBF;
 }
 
 .ut-level-grid.compact .ut-level-card { min-height: 82px; }
@@ -7666,7 +7666,7 @@ h3 {
   top: 50%;
   height: 46px;
   transform: translateY(-50%);
-  border: 1px solid rgba(243, 107, 50, .20);
+  border: 1px solid rgba(204, 107, 55, .20);
   border-radius: 14px;
   background: rgba(255, 240, 233, .75);
   pointer-events: none;
@@ -7700,7 +7700,7 @@ h3 {
 }
 
 .ut-wheel-item.selected {
-  color: #19191b;
+  color: #3E2D28;
   font-size: 24px;
   font-weight: 850;
 }
@@ -7709,7 +7709,7 @@ h3 {
 .ut-picker-unit {
   position: relative;
   z-index: 3;
-  color: #19191b;
+  color: #3E2D28;
   font-weight: 850;
 }
 
@@ -7749,11 +7749,11 @@ h3 {
 }
 
 .ut-choice-card strong { font-size: 12px; }
-.ut-choice-card span { color: #f36b32; font-size: 13px; }
+.ut-choice-card span { color: #CC6B37; font-size: 13px; }
 
 .ut-choice-card.selected {
-  border-color: rgba(243, 107, 50, .34);
-  background: #fff2ec;
+  border-color: rgba(204, 107, 55, .34);
+  background: #F6DFBF;
   color: #e95a22;
 }
 
@@ -7775,8 +7775,8 @@ h3 {
 }
 
 .ut-chip.selected {
-  border-color: rgba(243, 107, 50, .34);
-  background: #fff1ea;
+  border-color: rgba(204, 107, 55, .34);
+  background: #F6DFBF;
   color: #e95a22;
 }
 
@@ -7830,7 +7830,7 @@ h3 {
   padding: 0 4px;
   border: 2px solid #f7f7fa;
   border-radius: 999px;
-  background: #f36b32;
+  background: #CC6B37;
   color: white;
   font-size: 8px;
   font-weight: 900;
@@ -7839,7 +7839,7 @@ h3 {
 .ut-home-greeting {
   margin: 0;
   max-width: 100%;
-  color: #19191b;
+  color: #3E2D28;
   font-size: clamp(29px, 8.5vw, 34px);
   line-height: 1.04;
   letter-spacing: -1.25px;
@@ -7887,9 +7887,9 @@ h3 {
   width: fit-content;
   min-height: 40px;
   padding: 0 14px;
-  border: 1px solid rgba(243, 107, 50, .18);
+  border: 1px solid rgba(204, 107, 55, .18);
   border-radius: 999px;
-  background: #fff1ea;
+  background: #F6DFBF;
   color: #e95a22;
   font-size: 11px;
   font-weight: 800;
@@ -7937,7 +7937,7 @@ h3 {
 .ut-profile-info strong {
   display: block;
   overflow-wrap: anywhere;
-  color: #19191b;
+  color: #3E2D28;
   font-size: 12px;
   line-height: 1.35;
 }
@@ -7954,7 +7954,7 @@ h3 {
   align-items: center;
   padding: 0 12px;
   border-radius: 999px;
-  background: #fff1ea;
+  background: #F6DFBF;
   color: #e95a22;
   font-size: 10px;
   font-weight: 760;
@@ -7964,7 +7964,7 @@ h3 {
 
 .ut-edit-block h3 {
   margin: 0 0 10px;
-  color: #19191b;
+  color: #3E2D28;
   font-size: 14px;
 }
 
@@ -7991,8 +7991,8 @@ h3 {
 
 .ut-chip-wrap .ut-chip.selected {
   box-shadow:
-    inset 0 0 0 1px rgba(243, 107, 50, .10),
-    0 5px 14px rgba(243, 107, 50, .07);
+    inset 0 0 0 1px rgba(204, 107, 55, .10),
+    0 5px 14px rgba(204, 107, 55, .07);
 }
 
 /* =========================================================
@@ -8014,7 +8014,7 @@ h3 {
   margin: 6px 0 18px;
   padding: 16px;
 
-  border: 1px solid rgba(243, 107, 50, .14);
+  border: 1px solid rgba(204, 107, 55, .14);
   border-radius: 22px;
 
   background:
@@ -8025,7 +8025,7 @@ h3 {
     ),
     linear-gradient(145deg, #fff4ee, #fffafa);
 
-  box-shadow: 0 10px 26px rgba(243, 107, 50, .07);
+  box-shadow: 0 10px 26px rgba(204, 107, 55, .07);
 }
 
 .compare-winner-label {
@@ -8036,7 +8036,7 @@ h3 {
 
   border-radius: 18px;
 
-  background: #f36b32;
+  background: #CC6B37;
   color: #fff;
 
   font-size: 9px;
@@ -8048,14 +8048,14 @@ h3 {
   display: inline-block;
   margin-bottom: 2px;
 
-  color: #f36b32;
+  color: #CC6B37;
   font-size: 11px;
   font-weight: 900;
 }
 
 .compare-winner h2 {
   margin: 0;
-  color: #19191b;
+  color: #3E2D28;
   font-size: 18px;
   line-height: 1.2;
 }
@@ -8087,11 +8087,11 @@ h3 {
 }
 
 .compare-club-head-v2.best {
-  border-color: rgba(243, 107, 50, .30);
+  border-color: rgba(204, 107, 55, .30);
 
   box-shadow:
-    0 10px 24px rgba(243, 107, 50, .08),
-    inset 0 0 0 1px rgba(243, 107, 50, .05);
+    0 10px 24px rgba(204, 107, 55, .08),
+    inset 0 0 0 1px rgba(204, 107, 55, .05);
 }
 
 .compare-cover-v2 {
@@ -8112,7 +8112,7 @@ h3 {
   overflow: hidden;
   min-height: 30px;
 
-  color: #19191b;
+  color: #3E2D28;
 
   font-size: 11px;
   line-height: 1.3;
@@ -8130,7 +8130,7 @@ h3 {
 }
 
 .compare-score-row b {
-  color: #f36b32;
+  color: #CC6B37;
   font-size: 18px;
   line-height: 1;
 }
@@ -8152,7 +8152,7 @@ h3 {
   border-radius: 999px;
 
   background: rgba(255, 255, 255, .92);
-  color: #f36b32;
+  color: #CC6B37;
 
   font-size: 7px;
   font-weight: 900;
@@ -8189,7 +8189,7 @@ h3 {
 
 .compare-breakdown-title h2 {
   margin: 0;
-  color: #19191b;
+  color: #3E2D28;
   font-size: 18px;
 }
 
@@ -8210,7 +8210,7 @@ h3 {
 
   border-radius: 50%;
 
-  background: #f36b32;
+  background: #CC6B37;
 }
 
 .compare-criterion-row {
@@ -8288,14 +8288,14 @@ h3 {
 }
 
 .compare-value-card.matches {
-  border-color: rgba(243, 107, 50, .22);
+  border-color: rgba(204, 107, 55, .22);
 
   background: #fff2eb;
   color: #e85b24;
 }
 
 .compare-value-card.matches.best-column {
-  border-color: rgba(243, 107, 50, .36);
+  border-color: rgba(204, 107, 55, .36);
 
   background:
     linear-gradient(145deg, #fff0e7, #fff8f4);
@@ -8314,7 +8314,7 @@ h3 {
 
   border-radius: 50%;
 
-  background: #f36b32;
+  background: #CC6B37;
   color: white;
 
   font-size: 8px;
@@ -8363,7 +8363,7 @@ h3 {
 }
 
 .ut-area-park-group.park-group {
-  border-color: rgba(243, 107, 50, .10);
+  border-color: rgba(204, 107, 55, .10);
   background: #fffaf7;
 }
 
@@ -8382,7 +8382,7 @@ h3 {
 .ut-subcategory-heading span {
   display: block;
   margin-bottom: 3px;
-  color: #f36b32;
+  color: #CC6B37;
   font-size: 8px;
   font-weight: 900;
   letter-spacing: 1.1px;
@@ -8413,8 +8413,8 @@ h3 {
   min-height: 58px;
   padding: 12px 14px;
   border-radius: 17px;
-  background: #eeeeF2;
-  color: #67676e;
+  background: #F3E8D6;
+  color: #6C5952;
 }
 
 .ut-choice-card.area-park-choice strong {
@@ -8423,12 +8423,12 @@ h3 {
 }
 
 .ut-choice-card.area-park-choice.selected {
-  border-color: rgba(243, 107, 50, .32);
-  background: #fff0e8;
-  color: #e85a23;
+  border-color: rgba(204, 107, 55, .32);
+  background: #F6DFBF;
+  color: #A04C2A;
   box-shadow:
-    inset 0 0 0 1px rgba(243, 107, 50, .05),
-    0 6px 16px rgba(243, 107, 50, .06);
+    inset 0 0 0 1px rgba(204, 107, 55, .05),
+    0 6px 16px rgba(204, 107, 55, .06);
 }
 
 .ut-choice-card.area-park-choice span {
@@ -8438,7 +8438,7 @@ h3 {
   place-items: center;
   flex-shrink: 0;
   border-radius: 50%;
-  background: #f36b32;
+  background: #CC6B37;
   color: white;
   font-size: 9px;
   font-weight: 900;
@@ -8455,7 +8455,7 @@ h3 {
 }
 
 .ut-choice-card.park-choice.selected {
-  background: #fff2ec;
+  background: #F6DFBF;
 }
 
 .ut-park-empty {
@@ -8594,7 +8594,7 @@ h3 {
   border-radius: 999px;
 
   background: rgba(255, 255, 255, 0.96);
-  color: #f56632;
+  color: #CC6B37;
 
   font-size: 10px;
   font-weight: 800;
@@ -8908,3 +8908,1649 @@ html[lang="th"] .nav-button small {
   line-height: 1.3;
 }
 
+
+/* =========================================================
+   RUNRISE — PHASE 1 USER TESTING
+   Onboarding clarity + language access only
+========================================================= */
+
+.language-quick-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid #e5e5e9;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 8px 24px rgba(24, 24, 27, 0.06);
+}
+
+.language-quick-switch button {
+  min-width: 50px;
+  height: 38px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #929298;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.language-quick-switch button.active {
+  background: #CC6B37;
+  color: #fff;
+  box-shadow: 0 5px 14px rgba(204, 107, 55, 0.18);
+}
+
+.language-quick-switch.compact button {
+  min-width: 44px;
+  height: 34px;
+  padding: 0 11px;
+  font-size: 12px;
+}
+
+.welcome-language-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.auth-language-switch,
+.role-language-switch {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.ut-onboarding-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ut-onboarding-intro .ut-onboarding-scroll {
+  padding-bottom: 132px;
+}
+
+.ut-setup-intro-card {
+  margin-top: 34px;
+  padding: 36px 30px;
+  border-radius: 34px;
+  background: #fff;
+  box-shadow: 0 18px 55px rgba(28, 28, 32, 0.07);
+}
+
+.ut-setup-intro-icon {
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 24px;
+  border-radius: 20px;
+  background: #F6DFBF;
+  color: #CC6B37;
+  font-size: 25px;
+  font-weight: 900;
+}
+
+.ut-setup-intro-card h1 {
+  margin: 8px 0 14px;
+  font-size: clamp(32px, 7vw, 46px);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.ut-setup-intro-copy {
+  margin: 0;
+  color: #77777f;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.ut-setup-benefits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 26px 0 22px;
+}
+
+.ut-setup-benefits span {
+  padding: 9px 13px;
+  border-radius: 999px;
+  background: #F6DFBF;
+  color: #c95127;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.ut-setup-time {
+  margin: 0;
+  padding-top: 20px;
+  border-top: 1px solid #ededf0;
+  color: #9a9aa1;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ut-progress-caption {
+  display: flex;
+  justify-content: flex-end;
+  margin: 8px 2px 0;
+  color: #a0a0a7;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.ut-question-prompt {
+  margin-bottom: 12px !important;
+}
+
+.ut-question-explainer {
+  margin: 18px 0 26px;
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: #f7f7f9;
+}
+
+.ut-question-explainer span {
+  display: block;
+  margin-bottom: 5px;
+  color: #CC6B37;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ut-question-explainer p {
+  margin: 0 !important;
+  color: #74747c !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+
+.experience-grid,
+.preferred-distance-grid,
+.province-grid,
+.district-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.experience-grid .ut-choice-card,
+.preferred-distance-grid .ut-choice-card,
+.province-grid .ut-choice-card,
+.district-grid .ut-choice-card {
+  min-height: 94px;
+  padding: 18px;
+}
+
+.district-grid {
+  max-height: 440px;
+  overflow-y: auto;
+  padding-right: 4px;
+  overscroll-behavior: contain;
+}
+
+.district-grid::-webkit-scrollbar {
+  width: 5px;
+}
+
+.district-grid::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: #d7d7dc;
+}
+
+.ut-location-context {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: #f5f5f7;
+}
+
+.ut-location-context span {
+  color: #9999a0;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.ut-location-context strong {
+  font-size: 14px;
+}
+
+.ut-location-context button {
+  border: 0;
+  background: transparent;
+  color: #CC6B37;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.ut-area-availability-note,
+.ut-discover-empty-area {
+  margin-top: 16px;
+  padding: 15px 17px;
+  border: 1px solid #ffd9c9;
+  border-radius: 18px;
+  background: #fff8f4;
+  color: #8c6658;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.pace-selected-helper {
+  margin-top: 14px;
+}
+
+.ut-home-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.ut-recommendation-helper {
+  max-width: 320px;
+  margin: 4px 0 0;
+  color: #9999a0;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.ut-choice-grid.compact .ut-choice-card,
+.experience-grid.compact .ut-choice-card,
+.preferred-distance-grid.compact .ut-choice-card,
+.province-grid.compact .ut-choice-card,
+.district-grid.compact .ut-choice-card {
+  min-height: 72px;
+}
+
+@media (max-width: 430px) {
+  .ut-onboarding-top-actions {
+    gap: 8px;
+  }
+
+  .language-quick-switch.compact button {
+    min-width: 40px;
+    padding: 0 9px;
+  }
+
+  .ut-setup-intro-card {
+    padding: 30px 24px;
+  }
+
+  .experience-grid,
+  .preferred-distance-grid,
+  .province-grid,
+  .district-grid {
+    gap: 12px;
+  }
+
+  .experience-grid .ut-choice-card,
+  .preferred-distance-grid .ut-choice-card,
+  .province-grid .ut-choice-card,
+  .district-grid .ut-choice-card {
+    min-height: 84px;
+    padding: 15px;
+  }
+}
+
+/* Thai reading comfort for Phase 1 onboarding */
+html[lang="th"] .ut-question-card h1,
+html[lang="th"] .ut-setup-intro-card h1 {
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+}
+
+html[lang="th"] .ut-question-prompt,
+html[lang="th"] .ut-question-explainer p,
+html[lang="th"] .ut-choice-card strong,
+html[lang="th"] .ut-setup-intro-copy {
+  line-height: 1.55;
+}
+
+html[lang="th"] .ut-choice-card strong {
+  font-size: 14px;
+  font-weight: 650;
+}
+
+
+
+/* =========================================================
+   RUNRISE — ONBOARDING COMPACT GRID FIX
+   Fixes vertical single-column cards and oversized spacing.
+========================================================= */
+
+.experience-grid,
+.preferred-distance-grid,
+.province-grid,
+.district-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  width: 100%;
+  align-items: stretch;
+}
+
+.experience-grid .ut-choice-card,
+.preferred-distance-grid .ut-choice-card,
+.province-grid .ut-choice-card,
+.district-grid .ut-choice-card {
+  width: 100%;
+  min-width: 0;
+  min-height: 64px !important;
+  height: auto;
+  margin: 0 !important;
+  padding: 12px 13px !important;
+  border-radius: 17px !important;
+  justify-content: space-between;
+}
+
+.experience-grid .ut-choice-card strong,
+.preferred-distance-grid .ut-choice-card strong,
+.province-grid .ut-choice-card strong,
+.district-grid .ut-choice-card strong {
+  min-width: 0;
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+  overflow-wrap: anywhere;
+}
+
+html[lang="th"] .experience-grid .ut-choice-card strong,
+html[lang="th"] .preferred-distance-grid .ut-choice-card strong,
+html[lang="th"] .province-grid .ut-choice-card strong,
+html[lang="th"] .district-grid .ut-choice-card strong {
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+  font-weight: 650;
+}
+
+/* Experience: 6 choices = neat 2 x 3 layout */
+.experience-grid {
+  grid-auto-rows: minmax(64px, auto);
+}
+
+/* Distance: compact cards, long race names can span full width */
+.preferred-distance-grid {
+  grid-auto-rows: minmax(64px, auto);
+}
+
+.preferred-distance-grid .ut-choice-card:nth-child(4),
+.preferred-distance-grid .ut-choice-card:nth-child(5) {
+  grid-column: span 2;
+  min-height: 60px !important;
+}
+
+/* Province: 6 provinces = neat 2 x 3 layout */
+.province-grid {
+  grid-auto-rows: minmax(64px, auto);
+}
+
+/* Districts stay scrollable without creating giant cards */
+.district-grid {
+  max-height: 300px !important;
+  overflow-y: auto;
+  padding-right: 3px;
+  overscroll-behavior: contain;
+}
+
+.district-grid .ut-choice-card {
+  min-height: 58px !important;
+}
+
+/* Reduce overall onboarding vertical scale */
+.ut-question-card {
+  padding: 17px 15px 18px !important;
+}
+
+.ut-question-card h1 {
+  font-size: 24px !important;
+  line-height: 1.12 !important;
+}
+
+.ut-question-card > p:not(.ut-question-number),
+.ut-question-prompt {
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+}
+
+.ut-question-explainer {
+  margin: 12px 0 16px !important;
+  padding: 11px 13px !important;
+  border-radius: 15px !important;
+}
+
+.ut-question-explainer p {
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+}
+
+.ut-answer-area {
+  margin-top: 14px !important;
+}
+
+@media (max-width: 390px) {
+  .experience-grid,
+  .preferred-distance-grid,
+  .province-grid,
+  .district-grid {
+    gap: 10px !important;
+  }
+
+  .experience-grid .ut-choice-card,
+  .preferred-distance-grid .ut-choice-card,
+  .province-grid .ut-choice-card,
+  .district-grid .ut-choice-card {
+    min-height: 60px !important;
+    padding: 10px 11px !important;
+  }
+
+  .experience-grid .ut-choice-card strong,
+  .preferred-distance-grid .ut-choice-card strong,
+  .province-grid .ut-choice-card strong,
+  .district-grid .ut-choice-card strong {
+    font-size: 11.5px !important;
+  }
+}
+/* =========================================================
+   RUNRISE — SMALLER ONBOARDING INTRO TYPOGRAPHY
+========================================================= */
+
+.ut-setup-intro-card h1 {
+  font-size: 30px !important;
+  line-height: 1.18 !important;
+  letter-spacing: -0.025em !important;
+  margin: 6px 0 12px !important;
+}
+
+.ut-setup-intro-copy {
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+
+.ut-setup-benefits span {
+  font-size: 11px !important;
+  padding: 7px 11px !important;
+}
+
+.ut-setup-time {
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+}
+
+.ut-setup-intro-card .eyebrow {
+  font-size: 10px !important;
+}
+
+.ut-setup-intro-icon {
+  width: 50px !important;
+  height: 50px !important;
+  font-size: 22px !important;
+  margin-bottom: 16px !important;
+}
+
+/* Thai version */
+html[lang="th"] .ut-setup-intro-card h1 {
+  font-size: 28px !important;
+  line-height: 1.24 !important;
+  letter-spacing: -0.015em !important;
+}
+
+html[lang="th"] .ut-setup-intro-copy {
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+}
+
+html[lang="th"] .ut-setup-benefits span {
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+}
+
+html[lang="th"] .ut-setup-time {
+  font-size: 12px !important;
+  line-height: 1.55 !important;
+}
+
+@media (max-width: 390px) {
+  .ut-setup-intro-card h1 {
+    font-size: 27px !important;
+  }
+
+  html[lang="th"] .ut-setup-intro-card h1 {
+    font-size: 26px !important;
+  }
+
+  .ut-setup-intro-copy {
+    font-size: 13px !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE — UNIFORM ONBOARDING CHOICE BUTTONS
+   ทำให้ปุ่มคำตอบขนาดเท่ากันทุกข้อ
+========================================================= */
+
+/* Grid หลัก */
+.experience-grid,
+.preferred-distance-grid,
+.province-grid,
+.district-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  width: 100%;
+}
+
+/* ทุกปุ่มมีขนาดเท่ากัน */
+.experience-grid .ut-choice-card,
+.preferred-distance-grid .ut-choice-card,
+.province-grid .ut-choice-card,
+.district-grid .ut-choice-card {
+  width: 100% !important;
+  min-width: 0 !important;
+
+  height: 70px !important;
+  min-height: 70px !important;
+
+  margin: 0 !important;
+  padding: 12px 14px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+
+  border-radius: 18px !important;
+
+  box-sizing: border-box;
+}
+
+/* ยกเลิกการกินเต็มแถวของ Half / Marathon */
+.preferred-distance-grid .ut-choice-card:nth-child(4),
+.preferred-distance-grid .ut-choice-card:nth-child(5) {
+  grid-column: auto !important;
+  width: 100% !important;
+}
+
+/* ขนาดข้อความให้เท่ากัน */
+.experience-grid .ut-choice-card strong,
+.preferred-distance-grid .ut-choice-card strong,
+.province-grid .ut-choice-card strong,
+.district-grid .ut-choice-card strong {
+  font-size: 12px !important;
+  font-weight: 650 !important;
+  line-height: 1.35 !important;
+
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* ไทย */
+html[lang="th"] .experience-grid .ut-choice-card strong,
+html[lang="th"] .preferred-distance-grid .ut-choice-card strong,
+html[lang="th"] .province-grid .ut-choice-card strong,
+html[lang="th"] .district-grid .ut-choice-card strong {
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+}
+
+/* เครื่องหมายถูก */
+.experience-grid .ut-choice-card span,
+.preferred-distance-grid .ut-choice-card span,
+.province-grid .ut-choice-card span,
+.district-grid .ut-choice-card span {
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+/* District ให้เล็กลงนิดหน่อยเพราะมีหลายตัวเลือก */
+.district-grid .ut-choice-card {
+  height: 62px !important;
+  min-height: 62px !important;
+}
+
+/* Mobile เล็ก */
+@media (max-width: 390px) {
+  .experience-grid,
+  .preferred-distance-grid,
+  .province-grid,
+  .district-grid {
+    gap: 10px !important;
+  }
+
+  .experience-grid .ut-choice-card,
+  .preferred-distance-grid .ut-choice-card,
+  .province-grid .ut-choice-card,
+  .district-grid .ut-choice-card {
+    height: 64px !important;
+    min-height: 64px !important;
+    padding: 10px 12px !important;
+  }
+
+  .experience-grid .ut-choice-card strong,
+  .preferred-distance-grid .ut-choice-card strong,
+  .province-grid .ut-choice-card strong,
+  .district-grid .ut-choice-card strong {
+    font-size: 11px !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE — STABLE ONBOARDING CHOICES
+   Keep every choice in the same position before/after select.
+========================================================= */
+
+/* ---------------------------------------------------------
+   1) Card-style choices:
+   Experience / Distance / Province / District
+--------------------------------------------------------- */
+.experience-grid,
+.preferred-distance-grid,
+.province-grid,
+.district-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  width: 100% !important;
+  align-items: stretch !important;
+}
+
+.experience-grid .ut-choice-card,
+.preferred-distance-grid .ut-choice-card,
+.province-grid .ut-choice-card,
+.district-grid .ut-choice-card {
+  position: relative !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+
+  height: 70px !important;
+  min-height: 70px !important;
+  max-height: 70px !important;
+
+  margin: 0 !important;
+  padding: 12px 38px 12px 14px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-radius: 18px !important;
+
+  box-sizing: border-box !important;
+}
+
+/* Keep text area fixed */
+.experience-grid .ut-choice-card strong,
+.preferred-distance-grid .ut-choice-card strong,
+.province-grid .ut-choice-card strong,
+.district-grid .ut-choice-card strong {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+
+  margin: 0 !important;
+
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+  font-weight: 650 !important;
+
+  overflow-wrap: anywhere;
+}
+
+/* Check mark floats over reserved right-side space,
+   so it never changes button width or text position */
+.experience-grid .ut-choice-card > span,
+.preferred-distance-grid .ut-choice-card > span,
+.province-grid .ut-choice-card > span,
+.district-grid .ut-choice-card > span {
+  position: absolute !important;
+  top: 50% !important;
+  right: 13px !important;
+  transform: translateY(-50%) !important;
+
+  margin: 0 !important;
+
+  flex: none !important;
+}
+
+/* Cancel older rules that made long Distance choices span rows */
+.preferred-distance-grid .ut-choice-card:nth-child(4),
+.preferred-distance-grid .ut-choice-card:nth-child(5) {
+  grid-column: auto !important;
+  width: 100% !important;
+}
+
+/* District remains scrollable, but every cell is fixed */
+.district-grid {
+  max-height: 300px !important;
+  overflow-y: auto !important;
+  padding-right: 3px !important;
+}
+
+.district-grid .ut-choice-card {
+  height: 62px !important;
+  min-height: 62px !important;
+  max-height: 62px !important;
+}
+
+/* ---------------------------------------------------------
+   2) Chip choices:
+   Running time / Goals / Community Style
+--------------------------------------------------------- */
+.ut-chip-wrap {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+
+  width: 100% !important;
+
+  overflow: visible !important;
+}
+
+/* Every chip occupies one fixed grid cell */
+.ut-chip-wrap .ut-chip {
+  position: relative !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+
+  height: 58px !important;
+  min-height: 58px !important;
+  max-height: 58px !important;
+
+  margin: 0 !important;
+  padding: 0 36px 0 15px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-radius: 18px !important;
+
+  box-sizing: border-box !important;
+
+  text-align: left !important;
+
+  white-space: normal !important;
+  overflow: hidden !important;
+
+  font-size: 12px !important;
+  font-weight: 650 !important;
+  line-height: 1.35 !important;
+}
+
+/* Selected state changes only color — never size */
+.ut-chip-wrap .ut-chip.selected {
+  transform: none !important;
+  width: 100% !important;
+  height: 58px !important;
+  min-height: 58px !important;
+  max-height: 58px !important;
+}
+
+/* Reserve check position without changing layout */
+.ut-chip-wrap .ut-chip-check {
+  position: absolute !important;
+  top: 50% !important;
+  right: 13px !important;
+
+  width: auto !important;
+  height: auto !important;
+
+  margin: 0 !important;
+
+  transform: translateY(-50%) !important;
+
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+
+  pointer-events: none !important;
+}
+
+/* Thai choices stay readable without changing size when selected */
+html[lang="th"] .ut-chip-wrap .ut-chip {
+  font-size: 13px !important;
+  font-weight: 650 !important;
+  line-height: 1.4 !important;
+}
+
+html[lang="th"] .experience-grid .ut-choice-card strong,
+html[lang="th"] .preferred-distance-grid .ut-choice-card strong,
+html[lang="th"] .province-grid .ut-choice-card strong,
+html[lang="th"] .district-grid .ut-choice-card strong {
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+}
+
+/* ---------------------------------------------------------
+   3) Area / Park choices:
+   Preserve their positions when selected
+--------------------------------------------------------- */
+.ut-choice-grid.area-park,
+.ut-choice-grid.park-choices {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  width: 100% !important;
+}
+
+.ut-choice-card.area-park-choice,
+.ut-choice-card.area-park-choice.park-choice {
+  position: relative !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+
+  height: 62px !important;
+  min-height: 62px !important;
+  max-height: 62px !important;
+
+  padding: 11px 38px 11px 14px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+
+  box-sizing: border-box !important;
+}
+
+/* Do not let the selected border/check resize anything */
+.ut-choice-card.area-park-choice > span,
+.ut-choice-card.area-park-choice.park-choice > span {
+  position: absolute !important;
+  top: 50% !important;
+  right: 13px !important;
+
+  margin: 0 !important;
+
+  transform: translateY(-50%) !important;
+
+  flex: none !important;
+}
+
+/* ---------------------------------------------------------
+   4) Small phones
+--------------------------------------------------------- */
+@media (max-width: 390px) {
+  .experience-grid,
+  .preferred-distance-grid,
+  .province-grid,
+  .district-grid,
+  .ut-chip-wrap,
+  .ut-choice-grid.area-park,
+  .ut-choice-grid.park-choices {
+    gap: 10px !important;
+  }
+
+  .ut-chip-wrap .ut-chip {
+    height: 56px !important;
+    min-height: 56px !important;
+    max-height: 56px !important;
+
+    padding-left: 13px !important;
+    padding-right: 32px !important;
+
+    font-size: 11.5px !important;
+  }
+
+  html[lang="th"] .ut-chip-wrap .ut-chip {
+    font-size: 12px !important;
+  }
+
+  .ut-chip-wrap .ut-chip-check {
+    right: 11px !important;
+  }
+}
+
+
+/* =========================================================
+   RUNRISE — FINAL AREA COLOR MATCH PARK
+   Keep stable choice layout, only make Area unselected cards
+   use the same darker gray as Park cards.
+========================================================= */
+
+/* Unselected Area choices */
+.ut-choice-grid.district-grid .ut-choice-card {
+  background: #F3E8D6 !important;
+  color: #6C5952 !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.ut-choice-grid.district-grid .ut-choice-card strong {
+  color: #6C5952 !important;
+}
+
+/* Selected Area choices stay orange/cream */
+.ut-choice-grid.district-grid .ut-choice-card.selected {
+  background: #F6DFBF !important;
+  color: #A04C2A !important;
+  border-color: rgba(204, 107, 55, .32) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(204, 107, 55, .05),
+    0 6px 16px rgba(204, 107, 55, .06) !important;
+}
+
+.ut-choice-grid.district-grid .ut-choice-card.selected strong {
+  color: #A04C2A !important;
+}
+
+/* Preserve the fixed check position from the stable-layout rules */
+.ut-choice-grid.district-grid .ut-choice-card > span {
+  position: absolute !important;
+  top: 50% !important;
+  right: 13px !important;
+  transform: translateY(-50%) !important;
+  margin: 0 !important;
+}
+
+
+/* =========================================================
+   RUNRISE — FINAL PARK LIST STYLE
+   1 choice per row + same visual style as Area choices.
+========================================================= */
+
+/* Park section container = same neutral visual language as Area */
+.ut-area-park-group.park-group {
+  background: #f8f8fa !important;
+  border-color: rgba(60, 60, 67, .06) !important;
+}
+
+/* PARK list: one full-width choice per row */
+.ut-choice-grid.area-park.park-choices,
+.ut-choice-grid.park-choices {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 12px !important;
+  width: 100% !important;
+}
+
+/* Unselected Park choice = same colors as unselected Area choice */
+.ut-choice-grid.park-choices .ut-choice-card.park-choice,
+.ut-choice-grid.area-park.park-choices .ut-choice-card.park-choice {
+  position: relative !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+
+  height: 62px !important;
+  min-height: 62px !important;
+  max-height: 62px !important;
+
+  margin: 0 !important;
+  padding: 11px 42px 11px 14px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+
+  border: 1px solid transparent !important;
+  border-radius: 18px !important;
+
+  background: #F3E8D6 !important;
+  color: #6C5952 !important;
+
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+
+  text-align: left !important;
+}
+
+/* Park text = same gray as Area */
+.ut-choice-grid.park-choices .ut-choice-card.park-choice strong,
+.ut-choice-grid.area-park.park-choices .ut-choice-card.park-choice strong {
+  width: 100% !important;
+  min-width: 0 !important;
+
+  margin: 0 !important;
+
+  color: #6C5952 !important;
+
+  font-size: 12px !important;
+  font-weight: 650 !important;
+  line-height: 1.4 !important;
+
+  overflow-wrap: anywhere;
+}
+
+/* Selected Park choice = same cream/orange style as selected Area */
+.ut-choice-grid.park-choices .ut-choice-card.park-choice.selected,
+.ut-choice-grid.area-park.park-choices .ut-choice-card.park-choice.selected {
+  background: #F6DFBF !important;
+  color: #A04C2A !important;
+
+  border-color: rgba(204, 107, 55, .32) !important;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(204, 107, 55, .05),
+    0 6px 16px rgba(204, 107, 55, .06) !important;
+}
+
+.ut-choice-grid.park-choices .ut-choice-card.park-choice.selected strong,
+.ut-choice-grid.area-park.park-choices .ut-choice-card.park-choice.selected strong {
+  color: #A04C2A !important;
+}
+
+/* Check stays fixed at the right and never changes card size */
+.ut-choice-grid.park-choices .ut-choice-card.park-choice > span,
+.ut-choice-grid.area-park.park-choices .ut-choice-card.park-choice > span {
+  position: absolute !important;
+
+  top: 50% !important;
+  right: 14px !important;
+
+  margin: 0 !important;
+
+  transform: translateY(-50%) !important;
+
+  width: auto !important;
+  height: auto !important;
+
+  background: transparent !important;
+  color: #CC6B37 !important;
+
+  border-radius: 0 !important;
+
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+
+  flex: none !important;
+}
+
+/* Thai Park text */
+html[lang="th"] .ut-choice-grid.park-choices .ut-choice-card.park-choice strong,
+html[lang="th"] .ut-choice-grid.area-park.park-choices .ut-choice-card.park-choice strong {
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+  font-weight: 650 !important;
+}
+
+/* Small phones */
+@media (max-width: 390px) {
+  .ut-choice-grid.area-park.park-choices,
+  .ut-choice-grid.park-choices {
+    gap: 10px !important;
+  }
+
+  .ut-choice-grid.park-choices .ut-choice-card.park-choice,
+  .ut-choice-grid.area-park.park-choices .ut-choice-card.park-choice {
+    height: 60px !important;
+    min-height: 60px !important;
+    max-height: 60px !important;
+
+    padding-left: 13px !important;
+    padding-right: 38px !important;
+  }
+
+  html[lang="th"] .ut-choice-grid.park-choices .ut-choice-card.park-choice strong,
+  html[lang="th"] .ut-choice-grid.area-park.park-choices .ut-choice-card.park-choice strong {
+    font-size: 12px !important;
+  }
+}
+
+
+/* =========================================================
+   RUNRISE — ONBOARDING HEADER SIZE & SPACING
+   Same layout for Thai and English.
+========================================================= */
+
+/* Smaller language switch in onboarding */
+.ut-onboarding-top-actions .language-quick-switch.compact {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+
+  padding: 3px !important;
+  border-radius: 999px !important;
+
+  width: auto !important;
+  min-width: 0 !important;
+
+  box-sizing: border-box !important;
+}
+
+/* Both Thai / EN buttons use exactly the same fixed size */
+.ut-onboarding-top-actions .language-quick-switch.compact button {
+  width: 42px !important;
+  min-width: 42px !important;
+  height: 30px !important;
+  min-height: 30px !important;
+
+  padding: 0 8px !important;
+
+  border-radius: 999px !important;
+
+  font-size: 11px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+
+  box-sizing: border-box !important;
+}
+
+/* Active language stays clear, but less visually dominant */
+.ut-onboarding-top-actions .language-quick-switch.compact button.active {
+  box-shadow: 0 3px 9px rgba(204, 107, 55, 0.14) !important;
+}
+
+/* Keep Back / Language / Step counter vertically aligned */
+.ut-onboarding-top {
+  align-items: center !important;
+}
+
+.ut-onboarding-top-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+/* Step counter keeps the same footprint in both languages */
+.ut-step-counter {
+  min-width: 32px !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+}
+
+/* More breathing room between "steps left" and the white question card */
+.ut-progress-caption {
+  display: flex !important;
+  justify-content: flex-end !important;
+
+  margin: 8px 2px 20px !important;
+
+  min-height: 18px !important;
+
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+  font-weight: 700 !important;
+
+  white-space: nowrap !important;
+}
+
+/* Thai / English use exactly the same positioning */
+html[lang="th"] .ut-progress-caption,
+html[lang="en"] .ut-progress-caption {
+  margin: 8px 2px 20px !important;
+  min-height: 18px !important;
+}
+
+html[lang="th"] .ut-onboarding-top-actions .language-quick-switch.compact button,
+html[lang="en"] .ut-onboarding-top-actions .language-quick-switch.compact button {
+  width: 42px !important;
+  min-width: 42px !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  padding: 0 8px !important;
+}
+
+/* Small phones */
+@media (max-width: 390px) {
+  .ut-onboarding-top-actions {
+    gap: 8px !important;
+  }
+
+  .ut-onboarding-top-actions .language-quick-switch.compact button {
+    width: 39px !important;
+    min-width: 39px !important;
+    height: 29px !important;
+    min-height: 29px !important;
+    padding: 0 6px !important;
+    font-size: 10.5px !important;
+  }
+
+  .ut-progress-caption,
+  html[lang="th"] .ut-progress-caption,
+  html[lang="en"] .ut-progress-caption {
+    margin-bottom: 18px !important;
+  }
+}
+
+
+/* =========================================================
+   RUNRISE — AUTH VALIDATION & PASSWORD VISIBILITY
+========================================================= */
+
+.auth-password-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.auth-password-wrap input {
+  width: 100%;
+  padding-right: 56px !important;
+}
+
+.auth-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+
+  min-width: 38px;
+  height: 30px;
+  padding: 0 8px;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: #F3E8D6;
+  color: #66666d;
+
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.auth-password-toggle:hover {
+  background: #e7e7eb;
+}
+
+.auth-password-toggle:focus-visible {
+  outline: 2px solid rgba(204, 107, 55, .45);
+  outline-offset: 2px;
+}
+
+.auth-field input[aria-invalid="true"] {
+  border-color: #e38369 !important;
+  background: #fff8f5 !important;
+  box-shadow: 0 0 0 3px rgba(227, 131, 105, .08) !important;
+}
+
+.auth-inline-error {
+  display: block;
+  margin-top: 1px !important;
+  color: #c84f34 !important;
+  font-size: 10px !important;
+  line-height: 1.45 !important;
+  font-weight: 650 !important;
+  letter-spacing: 0 !important;
+}
+
+html[lang="th"] .auth-password-toggle {
+  min-width: 40px;
+  height: 30px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+html[lang="th"] .auth-inline-error {
+  font-size: 11px !important;
+  line-height: 1.5 !important;
+}
+
+
+/* =========================================================
+   RUNRISE — PASSWORD EYE ICON
+========================================================= */
+
+.auth-password-toggle {
+  width: 34px !important;
+  min-width: 34px !important;
+  height: 34px !important;
+  padding: 0 !important;
+
+  display: grid !important;
+  place-items: center !important;
+
+  border-radius: 50% !important;
+}
+
+.auth-password-toggle svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+html[lang="th"] .auth-password-toggle,
+html[lang="en"] .auth-password-toggle {
+  width: 34px !important;
+  min-width: 34px !important;
+  height: 34px !important;
+  padding: 0 !important;
+}
+
+
+/* =========================================================
+   RUNRISE — NEW CI / SUNRISE BRAND SYSTEM
+   Palette:
+   Background Cream #F9F2E0
+   Soft Sand        #F6DFBF
+   Sunrise Gold     #FBD185
+   Warm Ochre       #DC9242
+   Terracotta       #CC6B37
+   Deep Rust Brown  #A04C2A
+   Dark Brown       #3E2D28
+========================================================= */
+
+:root {
+  --runrise-cream: #F9F2E0;
+  --runrise-sand: #F6DFBF;
+  --runrise-gold: #FBD185;
+  --runrise-ochre: #DC9242;
+  --runrise-terracotta: #CC6B37;
+  --runrise-rust: #A04C2A;
+  --runrise-brown: #3E2D28;
+
+  --orange: var(--runrise-terracotta) !important;
+  --pink: var(--runrise-gold) !important;
+  --peach: var(--runrise-ochre) !important;
+  --yellow: var(--runrise-gold) !important;
+
+  --bg: var(--runrise-cream) !important;
+  --card: #fffaf0 !important;
+  --text: var(--runrise-brown) !important;
+  --muted: rgba(62, 45, 40, .58) !important;
+  --line: rgba(62, 45, 40, .12) !important;
+}
+
+/* App / phone background */
+body {
+  background: #d8cec1 !important;
+}
+
+.phone,
+.phone-frame,
+.app-shell,
+.app {
+  --orange: var(--runrise-terracotta);
+}
+
+/* Main app surfaces */
+.screen,
+.ut-screen,
+.auth-screen,
+.welcome,
+.runner-shell,
+.founder-shell {
+  background-color: var(--runrise-cream) !important;
+}
+
+/* Primary text */
+h1,
+h2,
+h3,
+h4,
+strong,
+.hero-title,
+.auth-heading h1,
+.ut-question-card h1,
+.ut-home-greeting {
+  color: var(--runrise-brown);
+}
+
+/* Secondary text */
+.muted,
+.auth-heading > p:last-child,
+.ut-home-subtitle,
+.ut-question-card > p:not(.ut-question-number),
+.ut-question-explainer p {
+  color: rgba(62, 45, 40, .56) !important;
+}
+
+/* Eyebrows / brand labels */
+.eyebrow,
+.ut-question-number,
+.ut-subcategory-heading span,
+.small-label {
+  color: var(--runrise-terracotta) !important;
+}
+
+/* Primary CTA */
+.primary,
+button.primary,
+.ut-bottom-action button,
+.auth-submit,
+.founder-primary,
+.event-primary-button {
+  background: linear-gradient(
+    135deg,
+    var(--runrise-terracotta),
+    var(--runrise-rust)
+  ) !important;
+  color: #fffaf0 !important;
+  border-color: transparent !important;
+  box-shadow: 0 10px 24px rgba(160, 76, 42, .18) !important;
+}
+
+/* Active progress */
+.ut-progress-fill {
+  background: linear-gradient(
+    90deg,
+    var(--runrise-gold),
+    var(--runrise-terracotta)
+  ) !important;
+}
+
+/* Cards */
+.auth-card,
+.ut-question-card,
+.ut-setup-intro-card,
+.club-card,
+.event-card,
+.profile-card,
+.founder-card {
+  background: #fffaf0 !important;
+}
+
+/* Secondary / neutral choices */
+.ut-choice-card,
+.ut-chip,
+.chip,
+.ut-choice-card.area-park-choice,
+.ut-choice-card.area-park-choice.park-choice {
+  background: #F3E8D6 !important;
+  color: #6C5952 !important;
+}
+
+/* Selected choice state */
+.ut-choice-card.selected,
+.ut-chip.selected,
+.chip.selected,
+.ut-choice-card.area-park-choice.selected,
+.ut-choice-card.area-park-choice.park-choice.selected {
+  background: var(--runrise-sand) !important;
+  color: var(--runrise-rust) !important;
+  border-color: rgba(204, 107, 55, .45) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(204, 107, 55, .05),
+    0 6px 16px rgba(160, 76, 42, .07) !important;
+}
+
+.ut-choice-card.selected strong,
+.ut-chip.selected,
+.chip.selected,
+.ut-choice-card.area-park-choice.selected strong,
+.ut-choice-card.area-park-choice.park-choice.selected strong {
+  color: var(--runrise-rust) !important;
+}
+
+/* Language selected state */
+.language-quick-switch button.active {
+  background: var(--runrise-terracotta) !important;
+  color: #fffaf0 !important;
+}
+
+/* Back buttons / soft accents */
+.auth-back,
+.ut-back {
+  background: rgba(246, 223, 191, .56) !important;
+  border-color: rgba(204, 107, 55, .18) !important;
+  color: var(--runrise-terracotta) !important;
+}
+
+/* Form focus */
+.auth-field input:focus,
+.auth-field textarea:focus,
+.auth-field select:focus,
+.fcm-input:focus,
+.fcm-textarea:focus {
+  border-color: var(--runrise-terracotta) !important;
+  box-shadow: 0 0 0 4px rgba(204, 107, 55, .08) !important;
+}
+
+/* Info / helper panels */
+.ut-question-explainer,
+.personalized-filter,
+.ut-location-context,
+.ut-area-availability-note {
+  background: rgba(246, 223, 191, .38) !important;
+}
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.brand-symbol,
+.auth-brand-mark,
+.ut-setup-intro-icon {
+  overflow: hidden !important;
+  padding: 0 !important;
+
+  background: var(--runrise-cream) !important;
+  border: 1px solid rgba(160, 76, 42, .08) !important;
+
+  box-shadow: 0 12px 30px rgba(62, 45, 40, .10) !important;
+}
+
+.brand-symbol {
+  width: 92px !important;
+  height: 92px !important;
+  border-radius: 27px !important;
+}
+
+.auth-brand-mark {
+  width: 62px !important;
+  height: 62px !important;
+  border-radius: 19px !important;
+}
+
+.ut-setup-intro-icon {
+  width: 52px !important;
+  height: 52px !important;
+  border-radius: 16px !important;
+}
+
+.brand-symbol img,
+.auth-brand-mark img,
+.ut-setup-intro-icon img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+/* Brand wordmark feeling */
+.welcome .eyebrow,
+.ut-home-brand-row .eyebrow {
+  color: var(--runrise-rust) !important;
+  letter-spacing: .16em;
+}
+
+/* Notification / accents */
+.notification-dot,
+.badge-accent,
+.match-badge {
+  background-color: var(--runrise-terracotta) !important;
+}
+
+/* Preserve readable Thai text */
+html[lang="th"] body {
+  color: var(--runrise-brown);
+}
+
+
+
+
+/* =========================================================
+   RUNRISE — CLUB INSTAGRAM LINK UNDER ABOUT
+========================================================= */
+
+.club-instagram-contact {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+
+  max-width: 100%;
+  margin-top: 14px;
+
+  color: var(--runrise-rust, #A04C2A);
+  text-decoration: none;
+
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.4;
+
+  transition:
+    color .18s ease,
+    opacity .18s ease;
+}
+
+.club-instagram-icon {
+  width: 25px;
+  height: 25px;
+
+  display: inline-grid;
+  place-items: center;
+
+  flex: 0 0 25px;
+
+  border: 1px solid rgba(160, 76, 42, .18);
+  border-radius: 8px;
+
+  background: var(--runrise-sand, #F6DFBF);
+  color: var(--runrise-rust, #A04C2A);
+}
+
+.club-instagram-icon svg {
+  width: 15px;
+  height: 15px;
+  display: block;
+}
+
+.club-instagram-link-text {
+  min-width: 0;
+
+  color: inherit;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
+
+  text-decoration: underline;
+  text-decoration-color: rgba(160, 76, 42, .28);
+  text-underline-offset: 3px;
+}
+
+.club-instagram-contact:hover {
+  color: var(--runrise-terracotta, #CC6B37);
+}
+
+.club-instagram-contact:hover .club-instagram-icon {
+  border-color: rgba(204, 107, 55, .32);
+  background: var(--runrise-gold, #FBD185);
+}
+
+.club-instagram-contact:focus-visible {
+  outline: 2px solid var(--runrise-terracotta, #CC6B37);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+html[lang="th"] .club-instagram-contact {
+  font-size: 11px;
+}
