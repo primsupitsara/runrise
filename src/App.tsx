@@ -634,28 +634,6 @@ const RUNNING_TIMES = [
   "Flexible",
 ];
 
-const LEVEL_OPTIONS = [
-  {
-    value: "Beginner",
-    label: "Beginner",
-    description: "Just getting started",
-  },
-  {
-    value: "Casual",
-    label: "Casual",
-    description: "Run for fun",
-  },
-  {
-    value: "Intermediate",
-    label: "Intermediate",
-    description: "Run regularly",
-  },
-  {
-    value: "Advanced",
-    label: "Advanced",
-    description: "Train seriously",
-  },
-];
 
 function experienceToLegacyLevel(experience: string) {
   if (
@@ -1104,33 +1082,6 @@ function PaceWheelPicker({
   );
 }
 
-function DistanceChoices({
-  value,
-  onChange,
-}: {
-  value: string;
-  onChange: (value: string) => void;
-}) {
-  return (
-    <div className="ut-choice-grid distance">
-      {DISTANCE_PREFERENCES.map((option) => (
-        <button
-          type="button"
-          key={option.value}
-          className={
-            value === option.value
-              ? "ut-choice-card selected"
-              : "ut-choice-card"
-          }
-          onClick={() => onChange(option.value)}
-        >
-          <strong>{option.label}</strong>
-          {value === option.value && <span>✓</span>}
-        </button>
-      ))}
-    </div>
-  );
-}
 
 function ChipChoices({
   options,
@@ -1182,129 +1133,6 @@ function ChipChoices({
 }
 
 
-function AreaParkSelector({
-  areas,
-  parks,
-  onChange,
-}: {
-  areas: string[];
-  parks: string[];
-  onChange: (areas: string[], parks: string[]) => void;
-}) {
-  const availableParks = Array.from(
-    new Set(
-      areas.flatMap((area) => PARKS_BY_AREA[area] || [])
-    )
-  );
-
-  const toggleArea = (area: string) => {
-    const nextAreas = areas.includes(area)
-      ? areas.filter((item) => item !== area)
-      : [...areas, area];
-
-    const nextAvailableParks = new Set(
-      nextAreas.flatMap((item) => PARKS_BY_AREA[item] || [])
-    );
-
-    const nextParks = parks.filter((park) =>
-      nextAvailableParks.has(park)
-    );
-
-    onChange(nextAreas, nextParks);
-  };
-
-  const togglePark = (park: string) => {
-    const nextParks = parks.includes(park)
-      ? parks.filter((item) => item !== park)
-      : [...parks, park];
-
-    onChange(areas, nextParks);
-  };
-
-  return (
-    <div className="ut-area-park-selector">
-      <section className="ut-area-park-group">
-        <div className="ut-subcategory-heading">
-          <div>
-            <span>AREA</span>
-            <strong>Choose your running areas</strong>
-          </div>
-
-          <small>
-            {areas.length > 0
-              ? `${areas.length} selected`
-              : "Select one or more"}
-          </small>
-        </div>
-
-        <div className="ut-choice-grid area-park">
-          {BANGKOK_DISTRICTS.map((area) => {
-            const selected = areas.includes(area);
-
-            return (
-              <button
-                type="button"
-                key={area}
-                className={
-                  selected
-                    ? "ut-choice-card area-park-choice selected"
-                    : "ut-choice-card area-park-choice"
-                }
-                onClick={() => toggleArea(area)}
-              >
-                <strong>{area}</strong>
-                {selected && <span>✓</span>}
-              </button>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="ut-area-park-group park-group">
-        <div className="ut-subcategory-heading">
-          <div>
-            <span>PARK</span>
-            <strong>Choose your preferred parks</strong>
-          </div>
-
-          <small>
-            {parks.length > 0
-              ? `${parks.length} selected`
-              : "Select one or more"}
-          </small>
-        </div>
-
-        {areas.length === 0 ? (
-          <div className="ut-park-empty">
-            Select at least one Area first to see park choices.
-          </div>
-        ) : (
-          <div className="ut-choice-grid area-park park-choices">
-            {availableParks.map((park) => {
-              const selected = parks.includes(park);
-
-              return (
-                <button
-                  type="button"
-                  key={park}
-                  className={
-                    selected
-                      ? "ut-choice-card area-park-choice park-choice selected"
-                      : "ut-choice-card area-park-choice park-choice"
-                  }
-                  onClick={() => togglePark(park)}
-                >
-                  <strong>{park}</strong>
-                  {selected && <span>✓</span>}
-                </button>
-              );
-            })}
-          </div>
-        )}
-      </section>
-    </div>
-  );
-}
 
 
 function LocationParkSelector({
