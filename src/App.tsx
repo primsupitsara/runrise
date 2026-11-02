@@ -526,7 +526,7 @@ const DISTRICTS_BY_PROVINCE: Record<string, string[]> = {
   ],
 };
 
-const BANGKOK_DISTRICTS = DISTRICTS_BY_PROVINCE.Bangkok;
+
 const ALL_LOCATION_DISTRICTS = Object.values(DISTRICTS_BY_PROVINCE).flat();
 
 const PARKS_BY_AREA: Record<string, string[]> = {
