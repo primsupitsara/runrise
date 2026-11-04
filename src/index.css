@@ -11545,3 +11545,5756 @@ html[lang="th"] .profile-language-copy h2 {
 .ut-profile-page .ut-profile-section .settings-row.reset-row > span {
   color: var(--runrise-terracotta, #CC6B37) !important;
 }
+
+
+/* =========================================================
+   RUNRISE — HOME CLUB ACTIONS
+========================================================= */
+
+.home-club-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+
+  margin: 18px 0 24px;
+}
+
+.home-club-action-button {
+  min-height: 66px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  padding: 12px 14px;
+
+  border: 0;
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--runrise-gold, #FBD185),
+      var(--runrise-terracotta, #CC6B37)
+    );
+
+  color: #fffaf0;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 850;
+  line-height: 1.1;
+
+  box-shadow:
+    0 10px 22px rgba(160, 76, 42, .14);
+
+  cursor: pointer;
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease;
+}
+
+.home-club-action-button:active {
+  transform: scale(.98);
+}
+
+.home-club-action-icon {
+  width: 29px;
+  height: 29px;
+
+  display: grid;
+  place-items: center;
+
+  flex: 0 0 29px;
+}
+
+.home-club-action-icon svg {
+  width: 27px;
+  height: 27px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.home-club-list-anchor {
+  scroll-margin-top: 18px;
+}
+
+/* =========================================================
+   RUNRISE — COMPARE SELECT
+========================================================= */
+
+.compare-select-page {
+  position: relative;
+
+  min-height: 100%;
+
+  padding:
+    22px
+    16px
+    116px !important;
+
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(251, 209, 133, .16),
+      transparent 28%
+    ),
+    var(--runrise-cream, #F9F2E0) !important;
+}
+
+.compare-select-header {
+  display: grid;
+  grid-template-columns: 38px 1fr 38px;
+  align-items: start;
+
+  margin-bottom: 16px;
+}
+
+.compare-select-back {
+  width: 34px;
+  height: 34px;
+
+  display: grid;
+  place-items: center;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: rgba(246, 223, 191, .72);
+  color: var(--runrise-rust, #A04C2A);
+
+  font-size: 18px;
+}
+
+.compare-select-header > div {
+  text-align: center;
+}
+
+.compare-select-header h1 {
+  margin: 0;
+
+  color: var(--runrise-brown, #3E2D28);
+
+  font-size: 25px;
+  line-height: 1;
+  letter-spacing: -.8px;
+}
+
+.compare-select-header p {
+  margin: 6px 0 0;
+
+  color: rgba(62, 45, 40, .48);
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.compare-select-search {
+  min-height: 46px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-bottom: 17px;
+  padding: 0 14px;
+
+  border: 1px solid rgba(62, 45, 40, .07);
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, .86);
+
+  color: rgba(62, 45, 40, .46);
+
+  box-shadow:
+    0 6px 18px rgba(62, 45, 40, .035);
+}
+
+.compare-select-search svg {
+  width: 20px;
+  height: 20px;
+
+  flex: 0 0 20px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.compare-select-search span {
+  font-size: 10.5px;
+  font-weight: 650;
+}
+
+.compare-select-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin: 0 2px 11px;
+}
+
+.compare-select-section-head h2 {
+  margin: 0;
+
+  color: var(--runrise-brown, #3E2D28);
+
+  font-size: 16px;
+}
+
+.compare-select-section-head strong {
+  color: var(--runrise-terracotta, #CC6B37);
+
+  font-size: 9.5px;
+}
+
+.compare-select-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.compare-select-card {
+  min-width: 0;
+
+  overflow: hidden;
+
+  padding: 0;
+
+  border: 1.5px solid transparent;
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, .9);
+
+  color: var(--runrise-brown, #3E2D28);
+
+  text-align: left;
+
+  box-shadow:
+    0 7px 18px rgba(62, 45, 40, .035);
+
+  cursor: pointer;
+
+  transition:
+    border-color .16s ease,
+    transform .16s ease,
+    box-shadow .16s ease;
+}
+
+.compare-select-card.selected {
+  border-color:
+    var(--runrise-terracotta, #CC6B37);
+
+  box-shadow:
+    0 8px 20px rgba(160, 76, 42, .10);
+}
+
+.compare-select-card:active {
+  transform: scale(.985);
+}
+
+.compare-select-image-wrap {
+  position: relative;
+
+  width: 100%;
+  aspect-ratio: 1.42;
+
+  overflow: hidden;
+
+  background: var(--runrise-sand, #F6DFBF);
+}
+
+.compare-select-image-wrap img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+.compare-select-check {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+
+  width: 27px;
+  height: 27px;
+
+  display: grid;
+  place-items: center;
+
+  border: 2px solid rgba(62, 45, 40, .22);
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, .92);
+
+  color: #fff;
+
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.compare-select-check.selected {
+  border-color:
+    var(--runrise-terracotta, #CC6B37);
+
+  background:
+    var(--runrise-terracotta, #CC6B37);
+}
+
+.compare-select-score {
+  position: absolute;
+  left: 7px;
+  bottom: 7px;
+
+  padding: 4px 7px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 250, 240, .9);
+
+  color: var(--runrise-rust, #A04C2A);
+
+  font-size: 7.5px;
+  font-weight: 850;
+}
+
+.compare-select-card-body {
+  padding: 10px 10px 11px;
+}
+
+.compare-select-card-body h3 {
+  margin: 0 0 5px;
+
+  overflow: hidden;
+
+  color: var(--runrise-brown, #3E2D28);
+
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 850;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compare-select-card-body p {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  margin: 3px 0;
+
+  color: rgba(62, 45, 40, .52);
+
+  font-size: 8.5px;
+  line-height: 1.3;
+}
+
+.compare-select-card-body p > span {
+  color: var(--runrise-terracotta, #CC6B37);
+}
+
+.compare-select-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+
+  margin-top: 7px;
+}
+
+.compare-select-tags span {
+  padding: 4px 7px;
+
+  border-radius: 999px;
+
+  background: rgba(246, 223, 191, .72);
+  color: var(--runrise-rust, #A04C2A);
+
+  font-size: 7px;
+  font-weight: 750;
+}
+
+.compare-select-sticky {
+  position: sticky;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  z-index: 30;
+
+  margin:
+    18px
+    -16px
+    -116px;
+
+  padding:
+    9px
+    16px
+    calc(14px + env(safe-area-inset-bottom));
+
+  border-top: 1px solid rgba(62, 45, 40, .06);
+
+  background:
+    rgba(255, 250, 240, .96);
+
+  backdrop-filter: blur(18px);
+}
+
+.compare-select-sticky p {
+  margin: 0 0 7px;
+
+  color: rgba(62, 45, 40, .48);
+
+  font-size: 8.5px;
+}
+
+.compare-select-sticky button {
+  width: 100%;
+  min-height: 52px;
+
+  display: grid;
+  grid-template-columns: 32px 1fr 32px;
+  align-items: center;
+
+  padding: 0 12px;
+
+  border: 0;
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--runrise-gold, #FBD185),
+      var(--runrise-terracotta, #CC6B37),
+      var(--runrise-rust, #A04C2A)
+    );
+
+  color: #fffaf0;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 850;
+
+  box-shadow:
+    0 10px 22px rgba(160, 76, 42, .16);
+}
+
+.compare-select-sticky button:disabled {
+  opacity: .38;
+
+  box-shadow: none;
+}
+
+/* Responsive */
+@media (max-width: 360px) {
+  .home-club-action-button {
+    min-height: 60px;
+
+    padding: 10px;
+
+    font-size: 10.5px;
+  }
+
+  .home-club-action-icon {
+    width: 25px;
+    height: 25px;
+  }
+
+  .home-club-action-icon svg {
+    width: 23px;
+    height: 23px;
+  }
+
+  .compare-select-grid {
+    gap: 8px;
+  }
+
+  .compare-select-card-body h3 {
+    font-size: 10px;
+  }
+}
+
+
+/* =========================================================
+   RUNRISE — CLEARER COMPARE ICON
+========================================================= */
+
+.home-compare-icon {
+  width: 31px !important;
+  height: 31px !important;
+}
+
+.home-compare-icon svg {
+  width: 31px !important;
+  height: 31px !important;
+
+  stroke-width: 1.9 !important;
+}
+
+.home-club-action-button:hover .home-compare-icon {
+  transform: translateY(-1px);
+}
+
+.home-compare-icon {
+  transition: transform .18s ease;
+}
+
+
+/* =========================================================
+   RUNRISE — HOME SEARCH + SPONSORED
+========================================================= */
+
+.home-club-search {
+  width: 100%;
+  min-height: 52px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin: 16px 0 14px;
+  padding: 0 15px;
+
+  border: 1px solid rgba(62, 45, 40, .07);
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, .93);
+
+  box-shadow:
+    0 7px 20px rgba(62, 45, 40, .04);
+}
+
+.home-club-search-icon {
+  width: 22px;
+  height: 22px;
+
+  display: grid;
+  place-items: center;
+
+  flex: 0 0 22px;
+
+  color: rgba(62, 45, 40, .52);
+}
+
+.home-club-search-icon svg {
+  width: 21px;
+  height: 21px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.home-club-search input {
+  min-width: 0;
+  flex: 1;
+
+  padding: 0;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: var(--runrise-brown, #3E2D28);
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.home-club-search input::placeholder {
+  color: rgba(62, 45, 40, .40);
+}
+
+.home-club-search-clear {
+  width: 28px;
+  height: 28px;
+
+  display: grid;
+  place-items: center;
+
+  flex: 0 0 28px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: rgba(246, 223, 191, .72);
+  color: var(--runrise-rust, #A04C2A);
+
+  font-size: 18px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+/* Sponsored card */
+.home-sponsored-card {
+  position: relative;
+
+  min-height: 154px;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(110px, .75fr);
+
+  overflow: hidden;
+
+  margin: 0 0 14px;
+  padding: 18px;
+
+  border: 1px solid rgba(160, 76, 42, .08);
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #FBE8C8 0%,
+      #FBD185 48%,
+      #E69A50 100%
+    );
+
+  box-shadow:
+    0 10px 26px rgba(160, 76, 42, .10);
+}
+
+.home-sponsored-card::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 78% 18%,
+      rgba(255, 250, 240, .52),
+      transparent 25%
+    );
+}
+
+.home-sponsored-content {
+  position: relative;
+  z-index: 3;
+
+  align-self: center;
+}
+
+.home-sponsored-badge {
+  display: inline-flex;
+  align-items: center;
+
+  margin-bottom: 8px;
+  padding: 5px 9px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 250, 240, .74);
+  color: var(--runrise-rust, #A04C2A);
+
+  font-size: 7.5px;
+  font-weight: 850;
+}
+
+.home-sponsored-content h2 {
+  max-width: 245px;
+
+  margin: 0;
+
+  color: var(--runrise-brown, #3E2D28);
+
+  font-size: 21px;
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -.55px;
+}
+
+.home-sponsored-content p {
+  max-width: 250px;
+
+  margin: 8px 0 12px;
+
+  color: rgba(62, 45, 40, .66);
+
+  font-size: 9.5px;
+  line-height: 1.4;
+  font-weight: 550;
+}
+
+.home-sponsored-content button {
+  min-height: 36px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  padding: 0 13px;
+
+  border: 0;
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--runrise-terracotta, #CC6B37),
+      var(--runrise-rust, #A04C2A)
+    );
+
+  color: #FFFAF0;
+
+  font-family: inherit;
+  font-size: 9px;
+  font-weight: 850;
+
+  box-shadow:
+    0 6px 14px rgba(160, 76, 42, .15);
+
+  cursor: pointer;
+}
+
+.home-sponsored-content button span {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.home-sponsored-visual {
+  position: relative;
+  z-index: 2;
+
+  min-width: 0;
+  height: 100%;
+}
+
+.home-sponsored-visual img {
+  position: absolute;
+  right: 4px;
+  bottom: 7px;
+
+  width: 72px;
+  height: 72px;
+
+  object-fit: cover;
+
+  border: 5px solid rgba(255, 250, 240, .92);
+  border-radius: 22px;
+
+  background: rgba(255, 250, 240, .95);
+
+  box-shadow:
+    0 7px 20px rgba(160, 76, 42, .18);
+
+  transform: rotate(3deg);
+}
+
+.home-sponsored-sun {
+  position: absolute;
+  right: 17px;
+  top: 6px;
+
+  width: 58px;
+  height: 58px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 246, 205, .78);
+
+  box-shadow:
+    0 0 0 14px rgba(255, 250, 240, .09);
+}
+
+.home-sponsored-track {
+  position: absolute;
+
+  width: 150px;
+  height: 50px;
+
+  border: 3px solid rgba(255, 250, 240, .74);
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+
+  border-radius: 50%;
+
+  transform: rotate(-24deg);
+}
+
+.home-sponsored-track.track-one {
+  right: -65px;
+  bottom: 10px;
+}
+
+.home-sponsored-track.track-two {
+  right: -50px;
+  bottom: -1px;
+
+  opacity: .75;
+}
+
+.home-sponsored-track.track-three {
+  right: -36px;
+  bottom: -13px;
+
+  opacity: .52;
+}
+
+/* Search result empty state */
+.home-club-search-empty {
+  padding: 30px 20px;
+
+  border: 1px solid rgba(62, 45, 40, .06);
+  border-radius: 22px;
+
+  background: rgba(255, 255, 255, .82);
+
+  text-align: center;
+}
+
+.home-club-search-empty strong {
+  display: block;
+
+  color: var(--runrise-brown, #3E2D28);
+
+  font-size: 13px;
+}
+
+.home-club-search-empty p {
+  margin: 7px 0 14px;
+
+  color: rgba(62, 45, 40, .52);
+
+  font-size: 9.5px;
+  line-height: 1.45;
+}
+
+.home-club-search-empty button {
+  min-height: 36px;
+
+  padding: 0 14px;
+
+  border: 0;
+  border-radius: 12px;
+
+  background: var(--runrise-sand, #F6DFBF);
+  color: var(--runrise-rust, #A04C2A);
+
+  font-family: inherit;
+  font-size: 9px;
+  font-weight: 850;
+}
+
+@media (max-width: 380px) {
+  .home-sponsored-card {
+    grid-template-columns: minmax(0, 1.4fr) 90px;
+
+    min-height: 146px;
+
+    padding: 16px;
+  }
+
+  .home-sponsored-content h2 {
+    font-size: 18px;
+  }
+
+  .home-sponsored-content p {
+    font-size: 8.8px;
+  }
+
+  .home-sponsored-visual img {
+    width: 62px;
+    height: 62px;
+    right: 0;
+  }
+}
+
+/* =========================================================
+   RUNRISE — EVENT LIST PAGE
+   Full page replacement for the old empty Event tab
+========================================================= */
+
+.runrise-event-list-page {
+  --event-cream: #F9F2E0;
+  --event-sand: #F6DFBF;
+  --event-gold: #FBD185;
+  --event-ochre: #DC9242;
+  --event-terracotta: #CC6B37;
+  --event-rust: #A04C2A;
+  --event-brown: #3E2D28;
+
+  padding: 22px 18px 108px !important;
+
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(251, 209, 133, .20),
+      transparent 26%
+    ),
+    radial-gradient(
+      circle at 0% 33%,
+      rgba(246, 223, 191, .16),
+      transparent 25%
+    ),
+    var(--event-cream) !important;
+}
+
+/* Top header */
+.event-list-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin-bottom: 7px;
+}
+
+.event-list-brand {
+  margin: 0;
+
+  color: var(--event-rust);
+
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.6px;
+}
+
+.event-list-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.event-list-notification {
+  position: relative;
+
+  width: 41px;
+  height: 41px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+
+  border: 1px solid rgba(62, 45, 40, .06);
+  border-radius: 15px;
+
+  background: rgba(255, 255, 255, .92);
+  color: var(--event-brown);
+
+  box-shadow:
+    0 7px 18px rgba(62, 45, 40, .05);
+}
+
+.event-list-notification svg {
+  width: 19px;
+  height: 19px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.event-list-notification > span {
+  position: absolute;
+  top: -5px;
+  right: -4px;
+
+  min-width: 18px;
+  height: 18px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0 4px;
+
+  border: 2px solid var(--event-cream);
+  border-radius: 999px;
+
+  background: var(--event-terracotta);
+  color: white;
+
+  font-size: 7.5px;
+  font-weight: 900;
+}
+
+/* Hero */
+.event-list-hero {
+  position: relative;
+
+  min-height: 126px;
+
+  overflow: hidden;
+
+  margin: 0 -3px 13px;
+  padding: 13px 5px 17px;
+}
+
+.event-list-hero-copy {
+  position: relative;
+  z-index: 3;
+
+  width: 64%;
+}
+
+.event-list-hero h1 {
+  margin: 0 0 7px;
+
+  color: var(--event-brown);
+
+  font-size: 37px;
+  line-height: .98;
+  letter-spacing: -1.5px;
+  font-weight: 850;
+}
+
+.event-list-hero p {
+  margin: 0;
+
+  color: rgba(62, 45, 40, .64);
+
+  font-size: 10.5px;
+  line-height: 1.43;
+  font-weight: 550;
+}
+
+.event-list-hero-art {
+  position: absolute;
+  inset: 0 0 0 47%;
+
+  pointer-events: none;
+}
+
+.event-list-sun {
+  position: absolute;
+  top: 17px;
+  right: 58px;
+
+  width: 77px;
+  height: 77px;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      145deg,
+      #FFD87E,
+      #F6B745
+    );
+
+  opacity: .9;
+
+  box-shadow:
+    0 8px 24px rgba(220, 146, 66, .08);
+}
+
+.event-list-road {
+  position: absolute;
+
+  width: 294px;
+  height: 92px;
+
+  border: 7px solid rgba(204, 107, 55, .88);
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+
+  border-radius: 50%;
+
+  transform: rotate(-10deg);
+}
+
+.event-list-road.road-a {
+  right: -100px;
+  bottom: -18px;
+}
+
+.event-list-road.road-b {
+  right: -84px;
+  bottom: -31px;
+
+  border-color: rgba(220, 146, 66, .82);
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+}
+
+.event-list-road.road-c {
+  right: -69px;
+  bottom: -44px;
+
+  border-color: rgba(251, 209, 133, .92);
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+}
+
+/* Search */
+.event-search-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px;
+  gap: 9px;
+
+  margin-bottom: 11px;
+}
+
+.event-search-box {
+  min-width: 0;
+  min-height: 48px;
+
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 0 13px;
+
+  border: 1px solid rgba(62, 45, 40, .07);
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, .94);
+
+  box-shadow:
+    0 7px 19px rgba(62, 45, 40, .045);
+}
+
+.event-search-box > svg {
+  width: 20px;
+  height: 20px;
+
+  flex: 0 0 20px;
+
+  fill: none;
+  stroke: rgba(62, 45, 40, .62);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.event-search-box input {
+  min-width: 0;
+  width: 100%;
+
+  padding: 0;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+  color: var(--event-brown);
+
+  font: inherit;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.event-search-box input::placeholder {
+  color: rgba(62, 45, 40, .43);
+}
+
+.event-search-clear {
+  width: 25px;
+  height: 25px;
+
+  display: grid;
+  place-items: center;
+
+  flex: 0 0 25px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: rgba(246, 223, 191, .68);
+  color: var(--event-rust);
+
+  font-size: 15px;
+  line-height: 1;
+}
+
+.event-filter-button {
+  width: 48px;
+  height: 48px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+
+  border: 1px solid rgba(62, 45, 40, .07);
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, .94);
+  color: var(--event-brown);
+
+  box-shadow:
+    0 7px 19px rgba(62, 45, 40, .045);
+}
+
+.event-filter-button.active {
+  background: var(--event-sand);
+  color: var(--event-rust);
+}
+
+.event-filter-button svg {
+  width: 21px;
+  height: 21px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.event-filter-note {
+  margin: -3px 0 10px;
+  padding: 9px 12px;
+
+  border: 1px solid rgba(204, 107, 55, .11);
+  border-radius: 13px;
+
+  background: rgba(246, 223, 191, .52);
+  color: rgba(62, 45, 40, .56);
+
+  font-size: 8.2px;
+  line-height: 1.4;
+}
+
+/* Filter tabs */
+.event-filter-tabs {
+  display: grid;
+  grid-template-columns:
+    .92fr
+    1.08fr
+    1.02fr
+    1.12fr;
+  gap: 7px;
+
+  margin-bottom: 14px;
+}
+
+.event-filter-tabs button {
+  min-width: 0;
+  min-height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  padding: 0 7px;
+
+  border: 1px solid rgba(62, 45, 40, .06);
+  border-radius: 15px;
+
+  background: rgba(255, 255, 255, .76);
+  color: rgba(62, 45, 40, .74);
+
+  font: inherit;
+  font-size: 8.8px;
+  font-weight: 780;
+
+  white-space: nowrap;
+
+  box-shadow:
+    0 5px 14px rgba(62, 45, 40, .025);
+}
+
+.event-filter-tabs button.active {
+  border-color: transparent;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--event-gold),
+      var(--event-terracotta)
+    );
+
+  color: #fffaf3;
+
+  box-shadow:
+    0 7px 17px rgba(160, 76, 42, .13);
+}
+
+.event-filter-tabs button svg {
+  width: 13px;
+  height: 13px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Cards */
+.event-card-list {
+  display: grid;
+  gap: 10px;
+}
+
+.event-list-card {
+  position: relative;
+
+  width: 100%;
+  min-height: 129px;
+
+  display: grid;
+  grid-template-columns:
+    101px
+    minmax(0, 1fr)
+    59px
+    12px;
+  align-items: center;
+  gap: 9px;
+
+  padding: 10px 9px 10px 9px;
+
+  border: 1px solid rgba(62, 45, 40, .055);
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, .93);
+  color: var(--event-brown);
+
+  text-align: left;
+
+  box-shadow:
+    0 7px 21px rgba(62, 45, 40, .045);
+
+  cursor: pointer;
+
+  transition:
+    transform .16s ease,
+    box-shadow .16s ease;
+}
+
+.event-list-card:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 9px 25px rgba(62, 45, 40, .06);
+}
+
+.event-list-card:active {
+  transform: scale(.992);
+}
+
+.event-list-image {
+  width: 101px;
+  height: 101px;
+
+  overflow: hidden;
+
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--event-sand),
+      var(--event-gold)
+    );
+}
+
+.event-list-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+.event-list-image-fallback {
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  place-items: center;
+
+  background:
+    linear-gradient(
+      145deg,
+      #FBD185,
+      #DC9242
+    );
+
+  color: white;
+
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -.5px;
+}
+
+.event-list-card-content {
+  min-width: 0;
+}
+
+.event-club-pill {
+  display: inline-flex;
+
+  max-width: 100%;
+
+  overflow: hidden;
+
+  margin-bottom: 5px;
+  padding: 4px 7px;
+
+  border-radius: 999px;
+
+  background: rgba(246, 223, 191, .76);
+  color: var(--event-rust);
+
+  font-size: 7.2px;
+  font-weight: 760;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.event-list-card-content h2 {
+  margin: 0 0 5px;
+
+  overflow: hidden;
+
+  color: var(--event-brown);
+
+  font-size: 12.6px;
+  line-height: 1.18;
+  font-weight: 850;
+  letter-spacing: -.25px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.event-list-location {
+  margin: 0 0 5px;
+
+  overflow: hidden;
+
+  color: rgba(62, 45, 40, .61);
+
+  font-size: 8px;
+  line-height: 1.3;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.event-location-pin {
+  margin-right: 4px;
+
+  color: var(--event-terracotta);
+}
+
+.event-list-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 9px;
+
+  color: rgba(62, 45, 40, .74);
+
+  font-size: 7.7px;
+  line-height: 1.25;
+  font-weight: 650;
+}
+
+.event-list-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.event-list-meta b {
+  color: var(--event-terracotta);
+  font-size: 9px;
+}
+
+.event-list-time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  margin: 5px 0 0;
+
+  color: rgba(62, 45, 40, .69);
+
+  font-size: 8px;
+  font-weight: 650;
+}
+
+.event-list-time > span {
+  color: var(--event-terracotta);
+}
+
+.event-date-card {
+  min-height: 94px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 7px 4px;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(246, 223, 191, .77),
+      rgba(255, 246, 232, .95)
+    );
+
+  text-align: center;
+}
+
+.event-date-card small {
+  color: var(--event-brown);
+
+  font-size: 6.8px;
+  line-height: 1.1;
+  font-weight: 760;
+}
+
+.event-date-card strong {
+  margin: 2px 0;
+
+  color: var(--event-terracotta);
+
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.event-date-card span {
+  color: rgba(62, 45, 40, .61);
+
+  font-size: 6.3px;
+  line-height: 1.25;
+  font-weight: 670;
+
+  white-space: nowrap;
+}
+
+.event-list-chevron {
+  color: var(--event-brown);
+
+  font-size: 24px;
+  line-height: 1;
+}
+
+/* Empty search result */
+.event-list-empty {
+  padding: 37px 18px;
+
+  border: 1px solid rgba(62, 45, 40, .05);
+  border-radius: 21px;
+
+  background: rgba(255, 255, 255, .84);
+
+  text-align: center;
+}
+
+.event-list-empty > div {
+  margin-bottom: 8px;
+
+  color: var(--event-ochre);
+
+  font-size: 28px;
+}
+
+.event-list-empty h2 {
+  margin: 0 0 6px;
+
+  color: var(--event-brown);
+
+  font-size: 15px;
+}
+
+.event-list-empty p {
+  margin: 0 0 13px;
+
+  color: rgba(62, 45, 40, .53);
+
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.event-list-empty button {
+  min-height: 36px;
+
+  padding: 0 14px;
+
+  border: 0;
+  border-radius: 12px;
+
+  background: var(--event-sand);
+  color: var(--event-rust);
+
+  font: inherit;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+/* Thai type balance */
+html[lang="th"] .event-list-hero h1 {
+  font-weight: 800;
+  letter-spacing: -.7px;
+}
+
+html[lang="th"] .event-list-card-content h2 {
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+@media (max-width: 360px) {
+  .runrise-event-list-page {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  .event-list-hero h1 {
+    font-size: 34px;
+  }
+
+  .event-list-hero p {
+    font-size: 9.7px;
+  }
+
+  .event-filter-tabs {
+    gap: 5px;
+  }
+
+  .event-filter-tabs button {
+    min-height: 38px;
+    padding: 0 5px;
+    font-size: 7.9px;
+  }
+
+  .event-list-card {
+    grid-template-columns:
+      87px
+      minmax(0, 1fr)
+      53px
+      9px;
+
+    gap: 7px;
+  }
+
+  .event-list-image {
+    width: 87px;
+    height: 96px;
+  }
+
+  .event-list-card-content h2 {
+    font-size: 11.2px;
+  }
+
+  .event-date-card {
+    min-height: 89px;
+  }
+}
+
+
+/* =========================================================
+   RUNNER PROFILE — REFERENCE LAYOUT + LIVE BOOKINGS
+   Scoped to .runner-profile-reference so other pages stay unchanged.
+========================================================= */
+
+.runner-profile-reference {
+  padding: 24px 18px 108px;
+  background:
+    radial-gradient(circle at 92% 0%, rgba(251, 209, 133, .14), transparent 30%),
+    linear-gradient(180deg, #fffaf0 0%, var(--bg) 100%);
+}
+
+.rp-profile-hero {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.rp-avatar {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #FBD185 0%, #DC9242 48%, #CC6B37 100%);
+  color: #fff;
+  font-size: 28px;
+  font-weight: 900;
+  box-shadow: 0 10px 25px rgba(204, 107, 55, .18);
+}
+
+.rp-profile-name {
+  min-width: 0;
+}
+
+.rp-profile-name h1 {
+  margin: 0 0 2px;
+  color: var(--text);
+  font-size: 25px;
+  line-height: 1.05;
+  letter-spacing: -.9px;
+  overflow-wrap: anywhere;
+}
+
+.rp-profile-name p {
+  margin: 0;
+  color: #9a918c;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.rp-edit-profile-button {
+  min-height: 39px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 12px;
+  border: 1px solid rgba(204, 107, 55, .34);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .84);
+  color: var(--orange);
+  font-size: 10px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.rp-edit-profile-button svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rp-card {
+  margin-top: 14px;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, .9);
+  border-radius: 26px;
+  background: rgba(255, 255, 255, .94);
+  box-shadow: 0 10px 30px rgba(62, 45, 40, .055);
+  backdrop-filter: blur(16px);
+}
+
+.rp-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 15px;
+}
+
+.rp-card-heading h2,
+.rp-language-card h2 {
+  margin: 2px 0 0;
+  color: var(--text);
+  font-size: 21px;
+  line-height: 1.1;
+  letter-spacing: -.6px;
+}
+
+.rp-eyebrow {
+  margin: 0;
+  color: var(--orange);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1.7px;
+  text-transform: uppercase;
+}
+
+.rp-inline-edit {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+  padding: 0 2px 0 10px;
+  border: none;
+  background: transparent;
+  color: var(--orange);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.rp-inline-edit span {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.rp-preference-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid rgba(204, 107, 55, .08);
+  border-radius: 22px;
+  background: #fffdf9;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .9);
+}
+
+.runner-profile-reference .rp-preference-grid .ut-profile-info {
+  min-width: 0;
+  min-height: 98px;
+  display: grid;
+  grid-template-columns: 31px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 9px;
+  padding: 15px 12px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* subtle dividers, like the reference card */
+.runner-profile-reference .rp-preference-grid .ut-profile-info:not(:nth-child(3n)) {
+  border-right: 1px solid rgba(62, 45, 40, .09);
+}
+
+.runner-profile-reference .rp-preference-grid .ut-profile-info:nth-child(-n + 3) {
+  border-bottom: 1px solid rgba(62, 45, 40, .09);
+}
+
+.rp-preference-icon {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  align-self: start;
+  margin-top: 2px;
+  color: var(--orange);
+}
+
+.rp-preference-icon svg {
+  width: 27px;
+  height: 27px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rp-preference-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.runner-profile-reference .rp-preference-grid .ut-profile-info .rp-preference-label {
+  display: block;
+  color: #9d918a;
+  font-size: 8.5px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.runner-profile-reference .rp-preference-grid .ut-profile-info strong {
+  display: block;
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 820;
+  line-height: 1.3;
+  letter-spacing: -.1px;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 365px) {
+  .runner-profile-reference .rp-preference-grid .ut-profile-info {
+    grid-template-columns: 27px minmax(0, 1fr);
+    column-gap: 7px;
+    padding: 13px 9px;
+  }
+
+  .rp-preference-icon,
+  .rp-preference-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .runner-profile-reference .rp-preference-grid .ut-profile-info strong {
+    font-size: 10px;
+  }
+}
+
+.rp-bookings-card {
+  padding-bottom: 20px;
+}
+
+.rp-booking-heading {
+  margin-bottom: 12px;
+}
+
+.rp-calendar-toolbar {
+  display: grid;
+  grid-template-columns: 36px 1fr 36px;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0 10px;
+}
+
+.rp-calendar-toolbar > strong {
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.rp-calendar-arrow {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 50%;
+  background: #fff4e4;
+  color: #8f6c59;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.rp-week-strip {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 5px;
+  margin-bottom: 17px;
+}
+
+.rp-week-day {
+  min-height: 55px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border-radius: 13px;
+  background: #fff8ef;
+  color: #837a76;
+}
+
+.rp-week-day span {
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.rp-week-day strong {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.rp-week-day i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--orange);
+}
+
+.rp-week-day.active {
+  background: linear-gradient(145deg, #FBD185, #CC6B37);
+  color: white;
+  box-shadow: 0 8px 18px rgba(204, 107, 55, .15);
+}
+
+.rp-week-day.active strong,
+.rp-week-day.active span {
+  color: white;
+}
+
+.rp-week-day.active i {
+  background: white;
+}
+
+.rp-booking-list {
+  display: grid;
+  gap: 16px;
+}
+
+.rp-booking-group h3 {
+  margin: 0 0 8px;
+  color: var(--text);
+  font-size: 13px;
+  letter-spacing: -.2px;
+}
+
+.rp-booking-item {
+  width: 100%;
+  min-height: 83px;
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 11px;
+  padding: 8px 10px 8px 8px;
+  border: 1px solid rgba(62, 45, 40, .09);
+  border-radius: 18px;
+  background: #fffdfa;
+  color: var(--text);
+  text-align: left;
+}
+
+.rp-booking-image {
+  width: 74px;
+  height: 65px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: linear-gradient(145deg, #FBD185, #DC9242);
+  color: white;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.rp-booking-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.rp-booking-copy {
+  min-width: 0;
+}
+
+.rp-booked-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  margin-bottom: 4px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: #F6DFBF;
+  color: #b9572e;
+  font-size: 8px;
+  font-weight: 850;
+}
+
+.rp-booking-copy > strong {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.rp-booking-copy p {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  color: #8e8581;
+  font-size: 9px;
+  line-height: 1.3;
+}
+
+.rp-booking-divider {
+  margin: 0 2px;
+  color: rgba(62, 45, 40, .18);
+}
+
+.rp-booking-chevron {
+  color: #8d817b;
+  font-size: 23px;
+  line-height: 1;
+}
+
+.rp-empty-bookings {
+  padding: 24px 12px 8px;
+  text-align: center;
+}
+
+.rp-empty-calendar {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 10px;
+  border-radius: 16px;
+  background: #fff2df;
+  color: var(--orange);
+}
+
+.rp-empty-calendar svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rp-empty-bookings h3 {
+  margin: 0 0 6px;
+  color: var(--text);
+  font-size: 15px;
+}
+
+.rp-empty-bookings p {
+  margin: 0 auto 13px;
+  max-width: 250px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.rp-find-event-button {
+  min-height: 39px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 999px;
+  background: #F6DFBF;
+  color: var(--orange);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.rp-chip-card .ut-display-chips {
+  margin-top: 2px;
+}
+
+.runner-profile-reference .ut-display-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.runner-profile-reference .ut-display-chips span {
+  padding: 8px 11px;
+  border-radius: 999px;
+  background: #F6DFBF;
+  color: var(--orange);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.rp-language-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.rp-settings-card {
+  margin-bottom: 12px;
+}
+
+.rp-settings-list {
+  margin-top: 4px;
+  border: 1px solid rgba(62, 45, 40, .06);
+  border-radius: 18px;
+  box-shadow: none;
+}
+
+.rp-settings-list .settings-row {
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.rp-settings-list .reset-row {
+  color: #b75236;
+}
+
+.rp-edit-card {
+  margin-top: 0;
+  padding: 18px;
+  border-radius: 26px;
+  background: rgba(255, 255, 255, .95);
+  box-shadow: 0 10px 30px rgba(62, 45, 40, .055);
+}
+
+.rp-edit-actions {
+  display: grid;
+  grid-template-columns: 105px 1fr;
+  gap: 9px;
+  margin-top: 14px;
+}
+
+.rp-edit-cancel {
+  min-height: 52px;
+  border: none;
+  border-radius: 17px;
+  background: #f3eee9;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.rp-edit-actions .ut-save-preferences {
+  margin-top: 0;
+}
+
+@media (max-width: 390px) {
+  .rp-profile-hero {
+    grid-template-columns: 64px minmax(0, 1fr);
+  }
+
+  .rp-avatar {
+    width: 64px;
+    height: 64px;
+  }
+
+  .rp-edit-profile-button {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .rp-preference-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+html[lang="th"] .runner-profile-reference .rp-profile-name h1 {
+  font-family: "Noto Sans Thai", sans-serif;
+  font-weight: 700;
+}
+
+html[lang="th"] .runner-profile-reference .rp-card-heading h2,
+html[lang="th"] .runner-profile-reference .rp-language-card h2 {
+  font-family: "Noto Sans Thai", sans-serif;
+  font-weight: 700;
+}
+
+/* =========================================================
+   RUNRISE — PROFILE PREFERENCES POLISH
+   Cleaner reference-style card, Runrise CI, stable typography
+========================================================= */
+
+.runner-profile-reference .rp-preferences-card {
+  padding: 19px 18px 20px !important;
+  border: 1px solid rgba(160, 76, 42, .055) !important;
+  background: rgba(255, 253, 249, .97) !important;
+  box-shadow:
+    0 12px 34px rgba(62, 45, 40, .055) !important;
+}
+
+.runner-profile-reference .rp-preferences-card .rp-card-heading {
+  margin-bottom: 17px !important;
+  padding: 0 2px;
+}
+
+.runner-profile-reference .rp-preferences-card .rp-eyebrow {
+  color: var(--orange) !important;
+  font-size: 8.6px !important;
+  font-weight: 850 !important;
+  letter-spacing: 1.25px !important;
+}
+
+.runner-profile-reference .rp-preferences-card .rp-card-heading h2 {
+  margin-top: 3px !important;
+  color: var(--text) !important;
+  font-size: 20px !important;
+  line-height: 1.12 !important;
+  letter-spacing: -.35px !important;
+}
+
+.runner-profile-reference .rp-preferences-card .rp-inline-edit {
+  min-height: 32px !important;
+  padding: 0 0 0 10px !important;
+  color: var(--orange) !important;
+  font-size: 9.5px !important;
+  font-weight: 800 !important;
+}
+
+.runner-profile-reference .rp-preferences-card .rp-inline-edit span {
+  font-size: 20px !important;
+}
+
+/* One unified warm card — no grey boxes */
+.runner-profile-reference .rp-preference-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  overflow: hidden !important;
+
+  border: 1px solid rgba(160, 76, 42, .08) !important;
+  border-radius: 20px !important;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 252, 247, .98),
+      rgba(249, 242, 224, .46)
+    ) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .92) !important;
+}
+
+/* Each data cell */
+.runner-profile-reference .rp-preference-grid .ut-profile-info {
+  min-width: 0 !important;
+  min-height: 88px !important;
+
+  display: grid !important;
+  grid-template-columns: 26px minmax(0, 1fr) !important;
+  align-items: center !important;
+  column-gap: 8px !important;
+
+  padding: 12px 10px !important;
+
+  border: 0 !important;
+  border-radius: 0 !important;
+
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Reference-like dividers */
+.runner-profile-reference
+  .rp-preference-grid
+  .ut-profile-info:not(:nth-child(3n)) {
+  border-right:
+    1px solid rgba(160, 76, 42, .10) !important;
+}
+
+.runner-profile-reference
+  .rp-preference-grid
+  .ut-profile-info:nth-child(-n + 3) {
+  border-bottom:
+    1px solid rgba(160, 76, 42, .10) !important;
+}
+
+/* Runrise orange icons */
+.runner-profile-reference .rp-preference-icon {
+  width: 25px !important;
+  height: 25px !important;
+
+  display: grid !important;
+  place-items: center !important;
+  align-self: center !important;
+
+  margin: 0 !important;
+
+  color: var(--orange) !important;
+}
+
+.runner-profile-reference .rp-preference-icon svg {
+  width: 24px !important;
+  height: 24px !important;
+
+  stroke: currentColor !important;
+  stroke-width: 1.65 !important;
+}
+
+/* Copy block */
+.runner-profile-reference .rp-preference-copy {
+  min-width: 0 !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 4px !important;
+}
+
+/* Labels */
+.runner-profile-reference
+  .rp-preference-grid
+  .ut-profile-info
+  .rp-preference-label {
+  display: block !important;
+
+  margin: 0 !important;
+
+  color: #9B8F89 !important;
+
+  font-size: 7.7px !important;
+  line-height: 1.15 !important;
+  font-weight: 700 !important;
+
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Values — keep them on one clean line instead of breaking Thai words */
+.runner-profile-reference
+  .rp-preference-grid
+  .ut-profile-info
+  strong {
+  display: block !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+
+  margin: 0 !important;
+
+  color: var(--text) !important;
+
+  font-size: 9.2px !important;
+  line-height: 1.22 !important;
+  font-weight: 800 !important;
+  letter-spacing: -.05px !important;
+
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+}
+
+/* Thai font: cleaner, slightly lighter than before */
+html[lang="th"]
+  .runner-profile-reference
+  .rp-preference-grid
+  .ut-profile-info
+  .rp-preference-label {
+  font-family: "Noto Sans Thai", sans-serif !important;
+  font-size: 7.6px !important;
+  font-weight: 600 !important;
+}
+
+html[lang="th"]
+  .runner-profile-reference
+  .rp-preference-grid
+  .ut-profile-info
+  strong {
+  font-family: "Noto Sans Thai", sans-serif !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+}
+
+/* Slightly more room on narrow phones without changing the 3-column layout */
+@media (max-width: 390px) {
+  .runner-profile-reference .rp-preferences-card {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  .runner-profile-reference .rp-preference-grid .ut-profile-info {
+    grid-template-columns: 22px minmax(0, 1fr) !important;
+    column-gap: 6px !important;
+    padding: 10px 8px !important;
+  }
+
+  .runner-profile-reference .rp-preference-icon,
+  .runner-profile-reference .rp-preference-icon svg {
+    width: 21px !important;
+    height: 21px !important;
+  }
+
+  .runner-profile-reference
+    .rp-preference-grid
+    .ut-profile-info
+    strong {
+    font-size: 8.2px !important;
+  }
+
+  html[lang="th"]
+    .runner-profile-reference
+    .rp-preference-grid
+    .ut-profile-info
+    strong {
+    font-size: 8.1px !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE — JOIN SUCCESS MODAL
+========================================================= */
+
+.join-success-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: grid;
+  place-items: center;
+
+  padding: 22px;
+
+  background: rgba(62, 45, 40, .34);
+
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+
+  animation: joinSuccessFadeIn .18s ease both;
+}
+
+.join-success-modal {
+  position: relative;
+
+  width: min(100%, 350px);
+
+  padding: 28px 24px 22px;
+
+  border: 1px solid rgba(160, 76, 42, .10);
+  border-radius: 28px;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(251, 209, 133, .24),
+      transparent 36%
+    ),
+    #fffdf8;
+
+  box-shadow:
+    0 24px 72px rgba(62, 45, 40, .22);
+
+  text-align: center;
+
+  animation: joinSuccessPop .22s ease both;
+}
+
+.join-success-close {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+
+  width: 32px;
+  height: 32px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: rgba(246, 223, 191, .55);
+  color: rgba(62, 45, 40, .62);
+
+  font-family: inherit;
+  font-size: 19px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.join-success-icon {
+  width: 72px;
+  height: 72px;
+
+  display: grid;
+  place-items: center;
+
+  margin: 2px auto 16px;
+
+  border: 7px solid rgba(255, 255, 255, .82);
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--runrise-gold, #FBD185),
+      var(--runrise-terracotta, #CC6B37)
+    );
+
+  color: #fff;
+
+  font-size: 32px;
+  font-weight: 900;
+
+  box-shadow:
+    0 10px 26px rgba(204, 107, 55, .20);
+}
+
+.join-success-eyebrow {
+  margin: 0 0 6px;
+
+  color: var(--runrise-terracotta, #CC6B37);
+
+  font-size: 9px;
+  line-height: 1.2;
+  font-weight: 900;
+  letter-spacing: 1.1px;
+}
+
+.join-success-modal h2 {
+  margin: 0;
+
+  color: var(--runrise-brown, #3E2D28);
+
+  font-size: 22px;
+  line-height: 1.17;
+  font-weight: 850;
+  letter-spacing: -.4px;
+}
+
+.join-success-copy {
+  max-width: 278px;
+
+  margin: 10px auto 16px;
+
+  color: rgba(62, 45, 40, .58);
+
+  font-size: 10px;
+  line-height: 1.5;
+  font-weight: 550;
+}
+
+.join-success-event {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  margin-bottom: 18px;
+  padding: 13px 15px;
+
+  border: 1px solid rgba(160, 76, 42, .08);
+  border-radius: 16px;
+
+  background: rgba(249, 242, 224, .68);
+}
+
+.join-success-event strong {
+  color: var(--runrise-brown, #3E2D28);
+
+  font-size: 11px;
+  line-height: 1.3;
+  font-weight: 800;
+}
+
+.join-success-event span {
+  color: rgba(62, 45, 40, .50);
+
+  font-size: 8.5px;
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+.join-success-primary {
+  width: 100%;
+  min-height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  padding: 0 18px;
+
+  border: 0;
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--runrise-terracotta, #CC6B37),
+      var(--runrise-rust, #A04C2A)
+    );
+
+  color: #fffaf0;
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 850;
+
+  box-shadow:
+    0 9px 20px rgba(160, 76, 42, .16);
+
+  cursor: pointer;
+}
+
+.join-success-primary span {
+  font-size: 17px;
+  line-height: 1;
+}
+
+.join-success-secondary {
+  width: 100%;
+  min-height: 38px;
+
+  margin-top: 7px;
+
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+  color: rgba(62, 45, 40, .56);
+
+  font-family: inherit;
+  font-size: 9px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+html[lang="th"] .join-success-modal h2,
+html[lang="th"] .join-success-copy,
+html[lang="th"] .join-success-eyebrow,
+html[lang="th"] .join-success-primary,
+html[lang="th"] .join-success-secondary {
+  font-family: "Noto Sans Thai", sans-serif;
+}
+
+@keyframes joinSuccessFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes joinSuccessPop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 390px) {
+  .join-success-backdrop {
+    padding: 18px;
+  }
+
+  .join-success-modal {
+    padding: 25px 20px 19px;
+    border-radius: 24px;
+  }
+
+  .join-success-icon {
+    width: 64px;
+    height: 64px;
+
+    font-size: 28px;
+  }
+
+  .join-success-modal h2 {
+    font-size: 20px;
+  }
+}
+
+/* =========================================================
+   RUNRISE — HOME PROMOTIONAL BANNER CAROUSEL
+========================================================= */
+
+.home-promo-carousel {
+  position: relative;
+
+  width: 100%;
+
+  margin: 13px 0 15px;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(160, 76, 42, .10);
+  border-radius: 22px;
+
+  background: #fff8ee;
+
+  box-shadow:
+    0 10px 28px rgba(62, 45, 40, .065);
+}
+
+.home-promo-viewport {
+  width: 100%;
+
+  overflow: hidden;
+
+  border-radius: inherit;
+}
+
+.home-promo-track {
+  display: flex;
+
+  width: 100%;
+
+  transition:
+    transform .58s cubic-bezier(.22, .61, .36, 1);
+
+  will-change: transform;
+}
+
+.home-promo-slide {
+  position: relative;
+
+  min-width: 100%;
+  width: 100%;
+
+  display: block;
+
+  padding: 0;
+
+  overflow: hidden;
+
+  border: 0;
+
+  background: transparent;
+
+  cursor: pointer;
+}
+
+.home-promo-slide img {
+  width: 100%;
+  aspect-ratio: 1.5 / 1;
+
+  display: block;
+
+  object-fit: cover;
+  object-position: center;
+
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.home-promo-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  padding: 5px 8px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 253, 248, .80);
+
+  box-shadow:
+    0 3px 12px rgba(62, 45, 40, .08);
+
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+
+  transform: translateX(-50%);
+}
+
+.home-promo-dot {
+  width: 7px;
+  height: 7px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: rgba(160, 76, 42, .25);
+
+  cursor: pointer;
+
+  transition:
+    width .22s ease,
+    background .22s ease;
+}
+
+.home-promo-dot.active {
+  width: 20px;
+
+  border-radius: 999px;
+
+  background: var(--runrise-terracotta, #CC6B37);
+}
+
+/* Hide any legacy sponsored pieces if old CSS still exists */
+.home-sponsored-card,
+.home-sponsored-content,
+.home-sponsored-badge,
+.home-sponsored-visual {
+  display: none !important;
+}
+
+@media (max-width: 390px) {
+  .home-promo-carousel {
+    border-radius: 19px;
+  }
+
+  .home-promo-slide img {
+    aspect-ratio: 1.5 / 1;
+  }
+
+  .home-promo-dots {
+    bottom: 8px;
+  }
+}
+
+/* =========================================================
+   RUNRISE — ALL CLUBS PAGE
+   Visual sibling of Compare Select, without selection controls
+========================================================= */
+
+.all-clubs-page {
+  min-height: 100vh;
+
+  padding:
+    26px
+    18px
+    42px !important;
+
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(251, 209, 133, .15),
+      transparent 28%
+    ),
+    var(--runrise-cream, #F9F2E0) !important;
+}
+
+.all-clubs-header {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  align-items: start;
+  gap: 16px;
+
+  margin-bottom: 19px;
+}
+
+.all-clubs-back {
+  width: 48px;
+  height: 48px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: rgba(246, 223, 191, .64);
+  color: var(--runrise-rust, #A04C2A);
+
+  font-family: inherit;
+  font-size: 25px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.all-clubs-header > div {
+  padding-top: 2px;
+
+  text-align: center;
+
+  transform: translateX(-24px);
+}
+
+.all-clubs-header h1 {
+  margin: 0;
+
+  color: var(--runrise-brown, #3E2D28);
+
+  font-size: 29px;
+  line-height: 1.08;
+  font-weight: 850;
+  letter-spacing: -.7px;
+}
+
+.all-clubs-header p {
+  margin: 7px 0 0;
+
+  color: rgba(62, 45, 40, .47);
+
+  font-size: 10px;
+  line-height: 1.4;
+  font-weight: 650;
+}
+
+/* Search */
+.all-clubs-search {
+  min-height: 56px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-bottom: 20px;
+  padding: 0 15px;
+
+  border: 1px solid rgba(62, 45, 40, .07);
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, .94);
+
+  box-shadow:
+    0 8px 22px rgba(62, 45, 40, .045);
+}
+
+.all-clubs-search > svg {
+  width: 21px;
+  height: 21px;
+
+  flex: 0 0 21px;
+
+  fill: none;
+  stroke: rgba(62, 45, 40, .52);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.all-clubs-search input {
+  min-width: 0;
+  width: 100%;
+
+  padding: 0;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+  color: var(--runrise-brown, #3E2D28);
+
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.all-clubs-search input::placeholder {
+  color: rgba(62, 45, 40, .42);
+}
+
+.all-clubs-clear {
+  width: 28px;
+  height: 28px;
+
+  display: grid;
+  place-items: center;
+
+  flex: 0 0 28px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: rgba(246, 223, 191, .6);
+  color: var(--runrise-rust, #A04C2A);
+
+  font-size: 16px;
+}
+
+/* Section head */
+.all-clubs-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin: 0 2px 12px;
+}
+
+.all-clubs-section-head h2 {
+  margin: 0;
+
+  color: var(--runrise-brown, #3E2D28);
+
+  font-size: 16px;
+  font-weight: 850;
+}
+
+.all-clubs-section-head span {
+  color: var(--runrise-terracotta, #CC6B37);
+
+  font-size: 8.8px;
+  font-weight: 800;
+}
+
+/* Grid */
+.all-clubs-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 11px;
+}
+
+.all-club-card {
+  min-width: 0;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(62, 45, 40, .06);
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, .94);
+
+  box-shadow:
+    0 8px 24px rgba(62, 45, 40, .045);
+}
+
+.all-club-image-wrap {
+  position: relative;
+
+  width: 100%;
+  aspect-ratio: 1.18 / 1;
+
+  overflow: hidden;
+
+  background: var(--runrise-sand, #F6DFBF);
+}
+
+.all-club-image-wrap img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+.all-club-score {
+  position: absolute;
+  left: 9px;
+  bottom: 9px;
+
+  display: inline-flex;
+  align-items: center;
+
+  min-height: 28px;
+
+  padding: 0 9px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 253, 248, .93);
+  color: var(--runrise-terracotta, #CC6B37);
+
+  font-size: 7.5px;
+  font-weight: 850;
+
+  box-shadow:
+    0 4px 12px rgba(62, 45, 40, .06);
+}
+
+.all-club-card-body {
+  padding: 11px 11px 12px;
+}
+
+.all-club-card-body h3 {
+  margin: 0 0 6px;
+
+  overflow: hidden;
+
+  color: var(--runrise-brown, #3E2D28);
+
+  font-size: 11.5px;
+  line-height: 1.2;
+  font-weight: 850;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.all-club-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  margin: 0 0 5px;
+
+  overflow: hidden;
+
+  color: rgba(62, 45, 40, .54);
+
+  font-size: 7.8px;
+  line-height: 1.25;
+  font-weight: 650;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.all-club-meta span {
+  color: var(--runrise-terracotta, #CC6B37);
+}
+
+.all-club-tags {
+  min-height: 25px;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+
+  margin-top: 7px;
+}
+
+.all-club-tags span {
+  display: inline-flex;
+  align-items: center;
+
+  min-height: 23px;
+
+  padding: 0 8px;
+
+  border-radius: 999px;
+
+  background: rgba(246, 223, 191, .70);
+  color: var(--runrise-rust, #A04C2A);
+
+  font-size: 6.8px;
+  font-weight: 750;
+
+  white-space: nowrap;
+}
+
+.all-club-detail-button {
+  width: 100%;
+  min-height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  margin-top: 10px;
+  padding: 0 10px;
+
+  border: 1px solid rgba(204, 107, 55, .17);
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(251, 209, 133, .54),
+      rgba(246, 223, 191, .72)
+    );
+
+  color: var(--runrise-rust, #A04C2A);
+
+  font-family: inherit;
+  font-size: 8.3px;
+  font-weight: 850;
+
+  cursor: pointer;
+
+  transition:
+    transform .15s ease,
+    background .15s ease;
+}
+
+.all-club-detail-button:active {
+  transform: scale(.98);
+}
+
+.all-club-detail-button span {
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Empty state */
+.all-clubs-empty {
+  padding: 40px 20px;
+
+  border: 1px solid rgba(62, 45, 40, .06);
+  border-radius: 22px;
+
+  background: rgba(255, 255, 255, .84);
+
+  text-align: center;
+}
+
+.all-clubs-empty strong {
+  display: block;
+
+  color: var(--runrise-brown, #3E2D28);
+
+  font-size: 13px;
+}
+
+.all-clubs-empty p {
+  margin: 7px auto 14px;
+
+  max-width: 270px;
+
+  color: rgba(62, 45, 40, .50);
+
+  font-size: 8.7px;
+  line-height: 1.45;
+}
+
+.all-clubs-empty button {
+  min-height: 36px;
+
+  padding: 0 14px;
+
+  border: 0;
+  border-radius: 12px;
+
+  background: var(--runrise-sand, #F6DFBF);
+  color: var(--runrise-rust, #A04C2A);
+
+  font-family: inherit;
+  font-size: 8.5px;
+  font-weight: 800;
+}
+
+html[lang="th"] .all-clubs-header h1,
+html[lang="th"] .all-clubs-section-head h2,
+html[lang="th"] .all-club-card-body h3 {
+  font-family: "Noto Sans Thai", sans-serif;
+}
+
+@media (max-width: 390px) {
+  .all-clubs-page {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  .all-clubs-header h1 {
+    font-size: 26px;
+  }
+
+  .all-clubs-grid {
+    gap: 9px;
+  }
+
+  .all-club-card-body {
+    padding: 10px;
+  }
+
+  .all-club-card-body h3 {
+    font-size: 10.5px;
+  }
+
+  .all-club-detail-button {
+    min-height: 34px;
+    font-size: 7.8px;
+  }
+}
+
+/* =========================================================
+   RUNRISE — HOME BANNER LARGE PREVIEW
+========================================================= */
+
+.home-promo-slide {
+  position: relative;
+}
+
+.home-promo-expand-hint {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  width: 30px;
+  height: 30px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid rgba(255, 255, 255, .58);
+  border-radius: 10px;
+
+  background: rgba(62, 45, 40, .30);
+  color: #fff;
+
+  font-size: 14px;
+  line-height: 1;
+
+  box-shadow:
+    0 4px 14px rgba(62, 45, 40, .16);
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  opacity: .9;
+}
+
+.home-banner-preview-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+
+  display: grid;
+  place-items: center;
+
+  padding: 20px;
+
+  background: rgba(35, 25, 22, .78);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  animation: homeBannerPreviewFade .18s ease both;
+}
+
+.home-banner-preview-modal {
+  position: relative;
+
+  width: min(94vw, 760px);
+  max-height: 88vh;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 12px;
+
+  border: 1px solid rgba(255, 255, 255, .20);
+  border-radius: 24px;
+
+  background: rgba(255, 250, 240, .98);
+
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, .34);
+
+  animation: homeBannerPreviewPop .20s ease both;
+}
+
+.home-banner-preview-close {
+  position: absolute;
+  top: -13px;
+  right: -13px;
+  z-index: 2;
+
+  width: 38px;
+  height: 38px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+
+  border: 2px solid rgba(255, 255, 255, .88);
+  border-radius: 50%;
+
+  background: var(--runrise-rust, #A04C2A);
+  color: #fff;
+
+  font-family: inherit;
+  font-size: 23px;
+  line-height: 1;
+
+  box-shadow:
+    0 7px 18px rgba(62, 45, 40, .24);
+
+  cursor: pointer;
+}
+
+.home-banner-preview-image-wrap {
+  width: 100%;
+
+  overflow: auto;
+
+  border-radius: 17px;
+
+  background: #f7efe3;
+}
+
+.home-banner-preview-image-wrap img {
+  width: 100%;
+  height: auto;
+
+  display: block;
+
+  object-fit: contain;
+
+  border-radius: 17px;
+
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.home-banner-preview-footer {
+  display: grid;
+  grid-template-columns: 42px 1fr 42px;
+  align-items: center;
+  gap: 10px;
+
+  padding: 11px 4px 1px;
+}
+
+.home-banner-preview-arrow {
+  width: 38px;
+  height: 38px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: rgba(246, 223, 191, .72);
+  color: var(--runrise-rust, #A04C2A);
+
+  font-family: inherit;
+  font-size: 25px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.home-banner-preview-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.home-banner-preview-dot {
+  width: 8px;
+  height: 8px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: rgba(160, 76, 42, .24);
+
+  cursor: pointer;
+
+  transition:
+    width .18s ease,
+    background .18s ease;
+}
+
+.home-banner-preview-dot.active {
+  width: 24px;
+
+  background: var(--runrise-terracotta, #CC6B37);
+}
+
+@keyframes homeBannerPreviewFade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes homeBannerPreviewPop {
+  from {
+    opacity: 0;
+    transform: scale(.96) translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .home-banner-preview-backdrop {
+    padding: 14px;
+  }
+
+  .home-banner-preview-modal {
+    width: 96vw;
+    padding: 9px;
+
+    border-radius: 20px;
+  }
+
+  .home-banner-preview-image-wrap,
+  .home-banner-preview-image-wrap img {
+    border-radius: 14px;
+  }
+
+  .home-banner-preview-close {
+    top: -10px;
+    right: -7px;
+
+    width: 34px;
+    height: 34px;
+
+    font-size: 21px;
+  }
+
+  .home-banner-preview-footer {
+    grid-template-columns: 36px 1fr 36px;
+  }
+
+  .home-banner-preview-arrow {
+    width: 34px;
+    height: 34px;
+
+    font-size: 22px;
+  }
+}
+
+/* =========================================================
+   RUNRISE — CLUB REVIEWS
+========================================================= */
+
+.club-review-section {
+  margin-top: 22px;
+}
+
+.club-review-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+
+  margin-bottom: 14px;
+}
+
+.club-review-heading h2 {
+  margin: 3px 0 0;
+}
+
+.club-review-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  flex: 0 0 auto;
+
+  padding: 8px 10px;
+
+  border-radius: 15px;
+
+  background: rgba(246, 223, 191, .58);
+}
+
+.club-review-summary > strong {
+  color: var(--runrise-rust, #A04C2A);
+
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 850;
+}
+
+.club-review-summary > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.club-review-summary-stars {
+  overflow: hidden;
+
+  color: #E79438;
+
+  font-size: 8px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.club-review-summary span {
+  color: rgba(62, 45, 40, .54);
+
+  font-size: 7.5px;
+  font-weight: 650;
+}
+
+.club-review-scroll {
+  display: flex;
+  gap: 10px;
+
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+
+  margin: 0 -4px;
+  padding: 2px 4px 8px;
+
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.club-review-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.club-review-card {
+  min-width: min(82%, 310px);
+  max-width: 310px;
+
+  flex: 0 0 auto;
+
+  padding: 14px;
+
+  border: 1px solid rgba(160, 76, 42, .07);
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, .92);
+
+  box-shadow:
+    0 7px 20px rgba(62, 45, 40, .04);
+
+  scroll-snap-align: start;
+}
+
+.club-review-card-top {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+
+  margin-bottom: 10px;
+}
+
+.club-review-avatar {
+  width: 34px;
+  height: 34px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--runrise-gold, #FBD185),
+      var(--runrise-terracotta, #CC6B37)
+    );
+
+  color: #fff;
+
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.club-review-author {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.club-review-author strong {
+  overflow: hidden;
+
+  color: var(--runrise-brown, #3E2D28);
+
+  font-size: 10px;
+  font-weight: 800;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.club-review-author span {
+  color: rgba(62, 45, 40, .42);
+
+  font-size: 7.5px;
+  font-weight: 600;
+}
+
+.club-review-stars {
+  display: flex;
+  gap: 1px;
+
+  white-space: nowrap;
+}
+
+.club-review-stars span {
+  color: rgba(160, 76, 42, .18);
+
+  font-size: 10px;
+}
+
+.club-review-stars span.filled {
+  color: #E79438;
+}
+
+.club-review-card > p {
+  margin: 0;
+
+  color: rgba(62, 45, 40, .72);
+
+  font-size: 9.5px;
+  line-height: 1.5;
+  font-weight: 550;
+}
+
+.club-review-empty {
+  padding: 20px 16px;
+
+  border: 1px dashed rgba(160, 76, 42, .18);
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, .55);
+
+  text-align: center;
+}
+
+.club-review-empty strong {
+  color: var(--runrise-brown, #3E2D28);
+
+  font-size: 11px;
+}
+
+.club-review-empty p {
+  max-width: 280px;
+
+  margin: 6px auto 0;
+
+  color: rgba(62, 45, 40, .50);
+
+  font-size: 8.5px;
+  line-height: 1.45;
+}
+
+.club-review-action-area {
+  margin-top: 12px;
+}
+
+.club-review-write-button {
+  width: 100%;
+  min-height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 0 16px;
+
+  border: 1px solid rgba(204, 107, 55, .18);
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(251, 209, 133, .54),
+      rgba(246, 223, 191, .74)
+    );
+
+  color: var(--runrise-rust, #A04C2A);
+
+  font-family: inherit;
+  font-size: 10.5px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.club-review-write-button span {
+  font-size: 15px;
+}
+
+.club-review-locked {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 11px 12px;
+
+  border-radius: 14px;
+
+  background: rgba(246, 223, 191, .36);
+}
+
+.club-review-locked > span {
+  width: 24px;
+  height: 24px;
+
+  display: grid;
+  place-items: center;
+
+  flex: 0 0 24px;
+
+  border-radius: 50%;
+
+  background: rgba(204, 107, 55, .12);
+  color: var(--runrise-terracotta, #CC6B37);
+
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.club-review-locked p {
+  margin: 0;
+
+  color: rgba(62, 45, 40, .54);
+
+  font-size: 8.5px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.club-review-form {
+  padding: 14px;
+
+  border: 1px solid rgba(204, 107, 55, .14);
+  border-radius: 18px;
+
+  background: rgba(255, 253, 248, .96);
+
+  box-shadow:
+    0 8px 24px rgba(62, 45, 40, .05);
+}
+
+.club-review-form-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+
+  margin-bottom: 10px;
+}
+
+.club-review-form-head > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.club-review-form-head strong {
+  color: var(--runrise-brown, #3E2D28);
+
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.club-review-form-head span {
+  color: rgba(62, 45, 40, .48);
+
+  font-size: 7.7px;
+  line-height: 1.35;
+}
+
+.club-review-form-head > button {
+  width: 28px;
+  height: 28px;
+
+  display: grid;
+  place-items: center;
+
+  flex: 0 0 28px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: rgba(246, 223, 191, .55);
+  color: rgba(62, 45, 40, .58);
+
+  font-family: inherit;
+  font-size: 16px;
+}
+
+.club-review-rating-picker {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  margin-bottom: 10px;
+}
+
+.club-review-rating-picker button {
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+  color: rgba(160, 76, 42, .18);
+
+  font-size: 26px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.club-review-rating-picker button.active {
+  color: #E79438;
+}
+
+.club-review-form textarea {
+  width: 100%;
+  min-height: 92px;
+
+  resize: vertical;
+
+  padding: 11px 12px;
+
+  border: 1px solid rgba(62, 45, 40, .09);
+  border-radius: 14px;
+  outline: 0;
+
+  background: rgba(249, 242, 224, .42);
+  color: var(--runrise-brown, #3E2D28);
+
+  font-family: inherit;
+  font-size: 9.5px;
+  line-height: 1.5;
+}
+
+.club-review-form textarea:focus {
+  border-color: rgba(204, 107, 55, .42);
+
+  box-shadow:
+    0 0 0 3px rgba(204, 107, 55, .08);
+}
+
+.club-review-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  margin-top: 9px;
+}
+
+.club-review-form-footer > span {
+  color: rgba(62, 45, 40, .38);
+
+  font-size: 7.5px;
+  font-weight: 600;
+}
+
+.club-review-form-footer button {
+  min-height: 36px;
+
+  padding: 0 14px;
+
+  border: 0;
+  border-radius: 12px;
+
+  background: var(--runrise-terracotta, #CC6B37);
+  color: #fff;
+
+  font-family: inherit;
+  font-size: 9px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.club-review-form-footer button:disabled {
+  opacity: .35;
+
+  cursor: default;
+}
+
+html[lang="th"] .club-review-section,
+html[lang="th"] .club-review-form textarea,
+html[lang="th"] .club-review-write-button {
+  font-family: "Noto Sans Thai", sans-serif;
+}
+
+@media (max-width: 390px) {
+  .club-review-summary {
+    padding: 7px 8px;
+  }
+
+  .club-review-summary > strong {
+    font-size: 18px;
+  }
+
+  .club-review-card {
+    min-width: 86%;
+  }
+}
+
+/* =========================================================
+   RUNRISE — REVIEW SUMMARY REFINEMENT
+========================================================= */
+
+.club-review-heading {
+  align-items: center !important;
+  margin-bottom: 14px !important;
+}
+
+.club-review-heading > div:first-child {
+  display: flex;
+  align-items: center;
+}
+
+.club-review-heading .eyebrow {
+  margin: 0 !important;
+}
+
+.club-review-summary {
+  gap: 10px !important;
+  padding: 10px 13px !important;
+  border-radius: 18px !important;
+}
+
+.club-review-summary > strong {
+  font-size: 24px !important;
+  line-height: 1 !important;
+}
+
+.club-review-summary-stars {
+  font-size: 14px !important;
+  line-height: 1 !important;
+  letter-spacing: 1.5px !important;
+}
+
+.club-review-summary span {
+  margin-top: 3px;
+  font-size: 8.5px !important;
+  line-height: 1.2 !important;
+}
+
+@media (max-width: 390px) {
+  .club-review-summary {
+    padding: 9px 11px !important;
+    gap: 8px !important;
+  }
+
+  .club-review-summary > strong {
+    font-size: 22px !important;
+  }
+
+  .club-review-summary-stars {
+    font-size: 13px !important;
+    letter-spacing: 1px !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE — FOUNDER ONBOARDING
+   Mirrors Runner onboarding while keeping founder setup clear
+========================================================= */
+
+.founder-onboarding .ut-question-card {
+  border-color: rgba(160, 76, 42, .07);
+}
+
+.founder-setup-intro-card .ut-setup-intro-icon {
+  box-shadow: 0 10px 26px rgba(160, 76, 42, .10);
+}
+
+.founder-choice-grid .ut-choice-card {
+  min-height: 82px;
+}
+
+.founder-choice-grid .ut-choice-card strong {
+  line-height: 1.3;
+}
+
+.founder-multi-helper {
+  margin-top: 12px !important;
+  text-align: right;
+}
+
+.founder-schedule-setup {
+  display: grid;
+  gap: 18px;
+}
+
+.founder-schedule-block {
+  padding: 16px;
+  border: 1px solid rgba(160, 76, 42, .08);
+  border-radius: 20px;
+  background: rgba(255, 253, 249, .58);
+}
+
+.founder-schedule-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.founder-schedule-heading strong {
+  color: var(--runrise-brown, #3E2D28);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.founder-schedule-heading span {
+  color: rgba(62, 45, 40, .45);
+  font-size: 9px;
+  font-weight: 650;
+}
+
+.founder-day-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+
+.founder-day-grid .ut-choice-card {
+  min-height: 58px !important;
+  padding: 10px 7px !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+.founder-day-grid .ut-choice-card strong {
+  font-size: 11px;
+}
+
+html[lang="th"] .founder-onboarding,
+html[lang="th"] .founder-onboarding button {
+  font-family: "Noto Sans Thai", sans-serif;
+}
+
+@media (max-width: 390px) {
+  .founder-choice-grid .ut-choice-card {
+    min-height: 76px;
+  }
+
+  .founder-schedule-block {
+    padding: 13px;
+  }
+
+  .founder-day-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE — FOUNDER ONBOARDING V2
+   Cleaner spacing + Runner-like choice cards
+========================================================= */
+
+.founder-onboarding .founder-question-card {
+  padding-left: 26px;
+  padding-right: 26px;
+}
+
+.founder-answer-area {
+  margin-top: 18px;
+}
+
+.founder-choice-grid {
+  display: grid !important;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+}
+
+.founder-choice-grid .ut-choice-card {
+  position: relative;
+
+  min-height: 102px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 12px;
+
+  padding: 20px 22px !important;
+
+  border: 1px solid transparent !important;
+  border-radius: 22px !important;
+
+  background: rgba(241, 229, 208, .84) !important;
+  color: var(--runrise-brown, #3E2D28) !important;
+
+  text-align: left !important;
+
+  box-shadow: none !important;
+
+  transition:
+    transform .16s ease,
+    border-color .16s ease,
+    background .16s ease;
+}
+
+.founder-choice-grid .ut-choice-card:hover {
+  transform: translateY(-1px);
+}
+
+.founder-choice-grid .ut-choice-card.selected {
+  border-color:
+    rgba(204, 107, 55, .55) !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(251, 209, 133, .46),
+      rgba(246, 223, 191, .88)
+    ) !important;
+
+  color:
+    var(--runrise-rust, #A04C2A) !important;
+
+  box-shadow:
+    inset 0 0 0 1px
+    rgba(204, 107, 55, .08) !important;
+}
+
+.founder-choice-grid .ut-choice-card strong {
+  min-width: 0;
+
+  color: inherit !important;
+
+  font-size: 14px !important;
+  line-height: 1.35 !important;
+  font-weight: 750 !important;
+}
+
+.founder-choice-grid .ut-choice-card > span {
+  margin-left: auto;
+
+  flex: 0 0 auto;
+
+  color:
+    var(--runrise-terracotta, #CC6B37);
+
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.founder-single-grid {
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr)) !important;
+}
+
+.founder-single-grid .ut-choice-card:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.founder-activity-grid .ut-choice-card {
+  min-height: 116px !important;
+}
+
+.founder-multi-helper {
+  margin-top: 14px !important;
+
+  color: rgba(62, 45, 40, .46) !important;
+
+  font-size: 10px !important;
+  line-height: 1.35 !important;
+
+  text-align: right;
+}
+
+/* Club identity form */
+.founder-club-profile-form {
+  display: grid;
+  gap: 16px;
+}
+
+.founder-profile-field {
+  display: grid;
+  gap: 8px;
+}
+
+.founder-profile-field > span {
+  color:
+    var(--runrise-brown, #3E2D28);
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.founder-profile-field input,
+.founder-profile-field textarea {
+  width: 100%;
+
+  border: 1px solid
+    rgba(62, 45, 40, .10);
+  border-radius: 18px;
+  outline: none;
+
+  background:
+    rgba(247, 246, 248, .88);
+
+  color:
+    var(--runrise-brown, #3E2D28);
+
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.founder-profile-field input {
+  min-height: 58px;
+
+  padding: 0 17px;
+}
+
+.founder-profile-field textarea {
+  min-height: 118px;
+
+  resize: vertical;
+
+  padding: 15px 17px;
+}
+
+.founder-profile-field input:focus,
+.founder-profile-field textarea:focus {
+  border-color:
+    rgba(204, 107, 55, .52);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(204, 107, 55, .07);
+}
+
+.founder-profile-field input::placeholder,
+.founder-profile-field textarea::placeholder {
+  color: rgba(62, 45, 40, .39);
+}
+
+.founder-profile-field small {
+  margin-top: -3px;
+
+  color: rgba(62, 45, 40, .38);
+
+  font-size: 9px;
+
+  text-align: right;
+}
+
+/* Mock profile-image uploader */
+.founder-club-image-mock {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  align-items: center;
+  gap: 16px;
+
+  padding: 15px;
+
+  border: 1px dashed
+    rgba(204, 107, 55, .26);
+  border-radius: 22px;
+
+  background:
+    rgba(249, 242, 224, .48);
+}
+
+.founder-club-image-preview {
+  aspect-ratio: 1 / 1;
+
+  display: grid;
+  place-items: center;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fffdf8,
+      #f6dfbf
+    );
+
+  box-shadow:
+    0 8px 22px
+    rgba(62, 45, 40, .07);
+}
+
+.founder-club-image-preview img {
+  width: 66%;
+  height: 66%;
+
+  object-fit: contain;
+}
+
+.founder-club-image-copy {
+  min-width: 0;
+}
+
+.founder-club-image-copy strong {
+  color:
+    var(--runrise-brown, #3E2D28);
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.founder-club-image-copy p {
+  margin: 5px 0 10px;
+
+  color:
+    rgba(62, 45, 40, .50);
+
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.founder-club-image-copy button {
+  min-height: 36px;
+
+  padding: 0 13px;
+
+  border: 1px solid
+    rgba(204, 107, 55, .18);
+  border-radius: 12px;
+
+  background:
+    rgba(246, 223, 191, .72);
+
+  color:
+    var(--runrise-rust, #A04C2A);
+
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+/* Location section */
+.founder-location-setup {
+  display: grid;
+  gap: 16px;
+}
+
+.founder-province-step {
+  padding: 16px;
+
+  border: 1px solid
+    rgba(160, 76, 42, .08);
+  border-radius: 20px;
+
+  background:
+    rgba(255, 253, 249, .58);
+}
+
+.founder-location-empty {
+  padding: 18px;
+
+  border: 1px dashed
+    rgba(160, 76, 42, .18);
+  border-radius: 18px;
+
+  color:
+    rgba(62, 45, 40, .48);
+
+  font-size: 11px;
+  line-height: 1.45;
+
+  text-align: center;
+}
+
+/* Schedule spacing */
+.founder-schedule-setup {
+  gap: 20px !important;
+}
+
+.founder-schedule-block {
+  padding: 18px !important;
+
+  border-radius: 22px !important;
+}
+
+.founder-day-grid {
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+
+.founder-day-grid .ut-choice-card {
+  min-height: 64px !important;
+
+  justify-content: center !important;
+
+  padding: 10px !important;
+
+  text-align: center !important;
+}
+
+.founder-day-grid .ut-choice-card strong {
+  font-size: 12px !important;
+}
+
+/* Thai typography */
+html[lang="th"]
+  .founder-profile-field input,
+html[lang="th"]
+  .founder-profile-field textarea,
+html[lang="th"]
+  .founder-club-image-copy,
+html[lang="th"]
+  .founder-choice-grid .ut-choice-card {
+  font-family:
+    "Noto Sans Thai",
+    sans-serif;
+}
+
+@media (max-width: 390px) {
+  .founder-onboarding .founder-question-card {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .founder-choice-grid {
+    gap: 11px !important;
+  }
+
+  .founder-choice-grid .ut-choice-card {
+    min-height: 92px !important;
+
+    padding: 17px 16px !important;
+
+    border-radius: 20px !important;
+  }
+
+  .founder-choice-grid .ut-choice-card strong {
+    font-size: 13px !important;
+  }
+
+  .founder-activity-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .founder-activity-grid .ut-choice-card {
+    min-height: 78px !important;
+  }
+
+  .founder-club-image-mock {
+    grid-template-columns: 86px 1fr;
+    gap: 13px;
+  }
+
+  .founder-day-grid {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE — FOUNDER ONBOARDING V3
+========================================================= */
+
+.founder-onboarding .founder-question-card {
+  padding: 30px 28px 34px !important;
+}
+
+.founder-onboarding .ut-question-prompt {
+  margin-top: 8px !important;
+}
+
+.founder-onboarding .ut-question-explainer {
+  margin-top: 18px !important;
+}
+
+.founder-answer-area {
+  margin-top: 22px !important;
+}
+
+.founder-choice-grid {
+  gap: 16px !important;
+}
+
+.founder-choice-grid .ut-choice-card {
+  min-height: 112px !important;
+  padding: 22px 22px !important;
+  border-radius: 24px !important;
+
+  background: rgba(241, 229, 208, .82) !important;
+
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, .72) inset !important;
+
+  transform: none !important;
+}
+
+.founder-choice-grid .ut-choice-card:hover {
+  transform: none !important;
+}
+
+.founder-choice-grid .ut-choice-card.selected {
+  border-color: rgba(204, 107, 55, .48) !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(251, 209, 133, .52),
+      rgba(246, 223, 191, .90)
+    ) !important;
+
+  box-shadow:
+    0 8px 20px rgba(204, 107, 55, .06),
+    inset 0 0 0 1px rgba(204, 107, 55, .07) !important;
+}
+
+.founder-choice-grid .ut-choice-card strong {
+  font-size: 14px !important;
+  line-height: 1.42 !important;
+}
+
+.founder-single-grid .ut-choice-card {
+  min-height: 98px !important;
+}
+
+.founder-activity-grid {
+  grid-template-columns: 1fr !important;
+}
+
+.founder-activity-grid .ut-choice-card {
+  min-height: 82px !important;
+}
+
+.founder-club-profile-form {
+  gap: 20px !important;
+}
+
+.founder-profile-field {
+  gap: 9px !important;
+}
+
+.founder-profile-field input {
+  min-height: 62px !important;
+}
+
+.founder-profile-field textarea {
+  min-height: 126px !important;
+}
+
+.founder-club-image-mock {
+  padding: 18px !important;
+  gap: 18px !important;
+}
+
+.founder-multi-helper {
+  margin-top: 18px !important;
+}
+
+@media (max-width: 520px) {
+  .founder-onboarding .founder-question-card {
+    padding: 26px 20px 30px !important;
+  }
+
+  .founder-choice-grid {
+    gap: 12px !important;
+  }
+
+  .founder-choice-grid .ut-choice-card {
+    min-height: 96px !important;
+    padding: 18px 17px !important;
+    border-radius: 21px !important;
+  }
+
+  .founder-choice-grid .ut-choice-card strong {
+    font-size: 13px !important;
+    line-height: 1.38 !important;
+  }
+
+  .founder-activity-grid .ut-choice-card {
+    min-height: 76px !important;
+  }
+
+  .founder-club-image-mock {
+    grid-template-columns: 82px minmax(0, 1fr) !important;
+    padding: 14px !important;
+    gap: 13px !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE — FOUNDER CHOICE LAYOUT FINAL
+   Unified, stable choice-card system
+========================================================= */
+
+/* ---------- Main choice grid ---------- */
+.founder-onboarding .founder-choice-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+/* ---------- Every normal choice card ---------- */
+.founder-onboarding .founder-choice-grid .ut-choice-card {
+  position: relative !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 104px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+
+  margin: 0 !important;
+  padding: 20px 48px 20px 20px !important;
+
+  border: 1.5px solid transparent !important;
+  border-radius: 22px !important;
+
+  background: rgba(241, 229, 208, 0.88) !important;
+  color: var(--runrise-brown, #3E2D28) !important;
+
+  text-align: left !important;
+
+  box-sizing: border-box !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
+
+  transform: none !important;
+}
+
+/* Text always stays in a predictable area */
+.founder-onboarding .founder-choice-grid .ut-choice-card strong {
+  display: block !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+
+  margin: 0 !important;
+
+  color: inherit !important;
+
+  font-size: 14px !important;
+  line-height: 1.38 !important;
+  font-weight: 750 !important;
+
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+}
+
+/* Checkmark gets its own fixed position.
+   It no longer pushes text or moves the card. */
+.founder-onboarding .founder-choice-grid .ut-choice-card > span {
+  position: absolute !important;
+  top: 50% !important;
+  right: 18px !important;
+
+  margin: 0 !important;
+
+  transform: translateY(-50%) !important;
+
+  color: var(--runrise-terracotta, #CC6B37) !important;
+
+  font-size: 18px !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+}
+
+/* Selected card keeps EXACTLY the same dimensions */
+.founder-onboarding .founder-choice-grid .ut-choice-card.selected {
+  border-color: rgba(204, 107, 55, 0.55) !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(251, 209, 133, 0.56),
+      rgba(246, 223, 191, 0.94)
+    ) !important;
+
+  color: var(--runrise-rust, #A04C2A) !important;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(204, 107, 55, 0.05),
+    0 7px 18px rgba(160, 76, 42, 0.05) !important;
+
+  transform: none !important;
+}
+
+.founder-onboarding .founder-choice-grid .ut-choice-card:hover,
+.founder-onboarding .founder-choice-grid .ut-choice-card:active,
+.founder-onboarding .founder-choice-grid .ut-choice-card:focus {
+  transform: none !important;
+}
+
+/* =========================================================
+   SINGLE-SELECT QUESTIONS
+   Role / Base location
+========================================================= */
+
+/* Remove the old behavior where the third card became full width */
+.founder-onboarding
+  .founder-single-grid
+  .ut-choice-card:last-child:nth-child(odd) {
+  grid-column: auto !important;
+}
+
+/* All options remain the same size */
+.founder-onboarding .founder-single-grid .ut-choice-card {
+  min-height: 104px !important;
+}
+
+/* =========================================================
+   LONG-TEXT ACTIVITY OPTIONS
+   One clean row per choice
+========================================================= */
+
+.founder-onboarding .founder-activity-grid {
+  grid-template-columns: 1fr !important;
+  gap: 12px !important;
+}
+
+.founder-onboarding .founder-activity-grid .ut-choice-card {
+  min-height: 74px !important;
+
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+}
+
+.founder-onboarding .founder-activity-grid .ut-choice-card strong {
+  font-size: 13.5px !important;
+}
+
+/* =========================================================
+   DAYS OF WEEK
+   Compact, equal-sized grid
+========================================================= */
+
+.founder-onboarding .founder-day-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+
+  width: 100% !important;
+}
+
+.founder-onboarding .founder-day-grid .ut-choice-card {
+  min-height: 72px !important;
+  height: 72px !important;
+
+  justify-content: center !important;
+
+  padding: 12px 30px 12px 12px !important;
+
+  border-radius: 18px !important;
+
+  text-align: center !important;
+}
+
+.founder-onboarding .founder-day-grid .ut-choice-card strong {
+  text-align: center !important;
+
+  font-size: 13px !important;
+  line-height: 1 !important;
+}
+
+.founder-onboarding .founder-day-grid .ut-choice-card > span {
+  right: 10px !important;
+
+  font-size: 14px !important;
+}
+
+/* =========================================================
+   SCHEDULE BLOCKS
+========================================================= */
+
+.founder-onboarding .founder-schedule-setup {
+  display: grid !important;
+  gap: 18px !important;
+}
+
+.founder-onboarding .founder-schedule-block {
+  padding: 18px !important;
+
+  border: 1px solid rgba(160, 76, 42, 0.08) !important;
+  border-radius: 22px !important;
+
+  background: rgba(255, 253, 249, 0.56) !important;
+}
+
+.founder-onboarding .founder-schedule-heading {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+
+  margin-bottom: 14px !important;
+}
+
+.founder-onboarding .founder-schedule-heading strong {
+  margin: 0 !important;
+
+  color: var(--runrise-brown, #3E2D28) !important;
+
+  font-size: 13px !important;
+  font-weight: 800 !important;
+}
+
+.founder-onboarding .founder-schedule-heading span {
+  margin: 0 !important;
+
+  color: rgba(62, 45, 40, 0.42) !important;
+
+  font-size: 9px !important;
+  font-weight: 650 !important;
+
+  text-align: right !important;
+}
+
+/* =========================================================
+   PROVINCE / AREA CHOICES
+========================================================= */
+
+.founder-onboarding .province-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.founder-onboarding .province-grid .ut-choice-card {
+  min-height: 92px !important;
+}
+
+/* =========================================================
+   MULTI-SELECT HELPER
+========================================================= */
+
+.founder-onboarding .founder-multi-helper {
+  width: 100% !important;
+
+  margin: 14px 0 0 !important;
+
+  color: rgba(62, 45, 40, 0.43) !important;
+
+  font-size: 9.5px !important;
+  line-height: 1.4 !important;
+
+  text-align: right !important;
+}
+
+/* =========================================================
+   CLUB PROFILE FORM
+========================================================= */
+
+.founder-onboarding .founder-club-profile-form {
+  display: grid !important;
+  gap: 18px !important;
+}
+
+.founder-onboarding .founder-profile-field {
+  display: grid !important;
+  gap: 8px !important;
+
+  margin: 0 !important;
+}
+
+.founder-onboarding .founder-profile-field input,
+.founder-onboarding .founder-profile-field textarea {
+  box-sizing: border-box !important;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 520px) {
+  .founder-onboarding .founder-choice-grid {
+    gap: 11px !important;
+  }
+
+  .founder-onboarding .founder-choice-grid .ut-choice-card {
+    min-height: 94px !important;
+
+    padding:
+      17px
+      42px
+      17px
+      17px !important;
+
+    border-radius: 20px !important;
+  }
+
+  .founder-onboarding .founder-choice-grid .ut-choice-card strong {
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+  }
+
+  .founder-onboarding .founder-choice-grid .ut-choice-card > span {
+    right: 15px !important;
+
+    font-size: 16px !important;
+  }
+
+  .founder-onboarding .founder-activity-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .founder-onboarding .founder-activity-grid .ut-choice-card {
+    min-height: 70px !important;
+  }
+
+  .founder-onboarding .founder-day-grid {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr)) !important;
+
+    gap: 8px !important;
+  }
+
+  .founder-onboarding .founder-day-grid .ut-choice-card {
+    min-height: 64px !important;
+    height: 64px !important;
+
+    padding:
+      10px
+      25px
+      10px
+      8px !important;
+
+    border-radius: 17px !important;
+  }
+
+  .founder-onboarding .founder-day-grid .ut-choice-card strong {
+    font-size: 12px !important;
+  }
+
+  .founder-onboarding .founder-day-grid .ut-choice-card > span {
+    right: 8px !important;
+
+    font-size: 13px !important;
+  }
+
+  .founder-onboarding .founder-schedule-block {
+    padding: 15px !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE — FOUNDER MATCH RUNNER UI FINAL
+   Founder onboarding now uses the same visual language
+   as Runner onboarding.
+========================================================= */
+
+/* ---------------------------------------------------------
+   1) Question card = Runner question card
+--------------------------------------------------------- */
+.founder-onboarding .founder-question-card {
+  padding: 17px 15px 18px !important;
+
+  border: 1px solid rgba(160, 76, 42, .07) !important;
+  border-radius: 28px !important;
+
+  background: #fffaf0 !important;
+
+  box-shadow:
+    0 14px 36px rgba(30, 30, 35, .055) !important;
+}
+
+/* Number badge */
+.founder-onboarding .ut-question-number {
+  width: fit-content !important;
+
+  margin: 0 0 12px !important;
+  padding: 7px 10px !important;
+
+  border-radius: 11px !important;
+
+  background: #F6DFBF !important;
+  color: #CC6B37 !important;
+
+  font-size: 11px !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+}
+
+/* Question title */
+.founder-onboarding .founder-question-card h1 {
+  margin: 0 !important;
+
+  color: #3E2D28 !important;
+
+  font-size: 24px !important;
+  line-height: 1.12 !important;
+  letter-spacing: -0.02em !important;
+  font-weight: 800 !important;
+}
+
+/* Subtitle / prompt */
+.founder-onboarding .ut-question-prompt,
+.founder-onboarding
+  .founder-question-card
+  > p:not(.ut-question-number) {
+  margin: 8px 0 0 !important;
+
+  color: #929298 !important;
+
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+  font-weight: 500 !important;
+}
+
+/* Why we ask box */
+.founder-onboarding .ut-question-explainer {
+  margin: 12px 0 16px !important;
+  padding: 11px 13px !important;
+
+  border: 0 !important;
+  border-radius: 15px !important;
+
+  background: #F8EBD6 !important;
+
+  box-shadow: none !important;
+}
+
+.founder-onboarding .ut-question-explainer span {
+  display: block !important;
+
+  margin: 0 0 5px !important;
+
+  color: #CC6B37 !important;
+
+  font-size: 11px !important;
+  line-height: 1.2 !important;
+  font-weight: 850 !important;
+  letter-spacing: .08em !important;
+}
+
+.founder-onboarding .ut-question-explainer p {
+  margin: 0 !important;
+
+  color: rgba(62, 45, 40, .56) !important;
+
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+  font-weight: 500 !important;
+}
+
+.founder-onboarding .founder-answer-area {
+  margin-top: 14px !important;
+}
+
+/* ---------------------------------------------------------
+   2) Founder choices = Runner choices
+--------------------------------------------------------- */
+.founder-onboarding .founder-choice-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+
+  width: 100% !important;
+
+  gap: 12px !important;
+  margin: 0 !important;
+
+  align-items: stretch !important;
+}
+
+.founder-onboarding
+  .founder-choice-grid
+  .ut-choice-card {
+  position: relative !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 64px !important;
+  height: auto !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+
+  margin: 0 !important;
+  padding: 12px 38px 12px 13px !important;
+
+  box-sizing: border-box !important;
+
+  border: 1px solid transparent !important;
+  border-radius: 17px !important;
+
+  background: #F3E8D6 !important;
+  color: #6C5952 !important;
+
+  text-align: left !important;
+
+  box-shadow: none !important;
+
+  transform: none !important;
+  transition:
+    border-color .16s ease,
+    background .16s ease,
+    color .16s ease !important;
+}
+
+.founder-onboarding
+  .founder-choice-grid
+  .ut-choice-card strong {
+  display: block !important;
+
+  min-width: 0 !important;
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  color: inherit !important;
+
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+  font-weight: 650 !important;
+
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+}
+
+/* Checkmark stays fixed exactly like Runner selected state */
+.founder-onboarding
+  .founder-choice-grid
+  .ut-choice-card > span {
+  position: absolute !important;
+  top: 50% !important;
+  right: 13px !important;
+
+  margin: 0 !important;
+
+  transform: translateY(-50%) !important;
+
+  color: #CC6B37 !important;
+
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+}
+
+/* Selected = same palette as Runner */
+.founder-onboarding
+  .founder-choice-grid
+  .ut-choice-card.selected {
+  border-color: rgba(204, 107, 55, .45) !important;
+
+  background: #F6DFBF !important;
+  color: #A04C2A !important;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(204, 107, 55, .05),
+    0 6px 16px rgba(160, 76, 42, .07) !important;
+
+  transform: none !important;
+}
+
+.founder-onboarding
+  .founder-choice-grid
+  .ut-choice-card.selected strong {
+  color: #A04C2A !important;
+}
+
+.founder-onboarding
+  .founder-choice-grid
+  .ut-choice-card:hover,
+.founder-onboarding
+  .founder-choice-grid
+  .ut-choice-card:active,
+.founder-onboarding
+  .founder-choice-grid
+  .ut-choice-card:focus {
+  transform: none !important;
+}
+
+/* ---------------------------------------------------------
+   3) Single-select questions
+   Keep every card aligned — no random full-width last card
+--------------------------------------------------------- */
+.founder-onboarding
+  .founder-single-grid
+  .ut-choice-card:last-child:nth-child(odd) {
+  grid-column: auto !important;
+}
+
+.founder-onboarding
+  .founder-single-grid
+  .ut-choice-card {
+  min-height: 64px !important;
+}
+
+/* ---------------------------------------------------------
+   4) Activity type
+   Long labels need a little more room, but same Runner look
+--------------------------------------------------------- */
+.founder-onboarding .founder-activity-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+}
+
+.founder-onboarding
+  .founder-activity-grid
+  .ut-choice-card {
+  min-height: 78px !important;
+
+  padding:
+    13px
+    38px
+    13px
+    13px !important;
+}
+
+.founder-onboarding
+  .founder-activity-grid
+  .ut-choice-card strong {
+  font-size: 11.5px !important;
+  line-height: 1.4 !important;
+}
+
+/* ---------------------------------------------------------
+   5) Province / Area = Runner grid
+--------------------------------------------------------- */
+.founder-onboarding .province-grid {
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr)) !important;
+
+  gap: 12px !important;
+}
+
+.founder-onboarding
+  .province-grid
+  .ut-choice-card {
+  min-height: 64px !important;
+}
+
+/* ---------------------------------------------------------
+   6) Schedule cards
+   Use the same neutral cream surface as Runner
+--------------------------------------------------------- */
+.founder-onboarding .founder-schedule-setup {
+  display: grid !important;
+  gap: 16px !important;
+}
+
+.founder-onboarding .founder-schedule-block {
+  padding: 14px !important;
+
+  border: 1px solid rgba(160, 76, 42, .07) !important;
+  border-radius: 20px !important;
+
+  background: #fffaf0 !important;
+
+  box-shadow: none !important;
+}
+
+.founder-onboarding .founder-schedule-heading {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+
+  gap: 10px !important;
+  margin: 0 0 12px !important;
+}
+
+.founder-onboarding
+  .founder-schedule-heading strong {
+  margin: 0 !important;
+
+  color: #3E2D28 !important;
+
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+  font-weight: 800 !important;
+}
+
+.founder-onboarding
+  .founder-schedule-heading span {
+  margin: 0 !important;
+
+  color: #99999F !important;
+
+  font-size: 9px !important;
+  line-height: 1.3 !important;
+  font-weight: 650 !important;
+
+  text-align: right !important;
+}
+
+/* Days are choices too — same visual style */
+.founder-onboarding .founder-day-grid {
+  display: grid !important;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr)) !important;
+
+  width: 100% !important;
+
+  gap: 8px !important;
+}
+
+.founder-onboarding
+  .founder-day-grid
+  .ut-choice-card {
+  min-height: 58px !important;
+  height: 58px !important;
+
+  justify-content: center !important;
+
+  padding:
+    10px
+    23px
+    10px
+    8px !important;
+
+  border-radius: 17px !important;
+
+  text-align: center !important;
+}
+
+.founder-onboarding
+  .founder-day-grid
+  .ut-choice-card strong {
+  text-align: center !important;
+
+  font-size: 11.5px !important;
+  line-height: 1 !important;
+}
+
+.founder-onboarding
+  .founder-day-grid
+  .ut-choice-card > span {
+  right: 8px !important;
+
+  font-size: 12px !important;
+}
+
+/* ---------------------------------------------------------
+   7) Multi-select note
+--------------------------------------------------------- */
+.founder-onboarding .founder-multi-helper {
+  width: 100% !important;
+
+  margin: 12px 0 0 !important;
+
+  color: #99999F !important;
+
+  font-size: 9px !important;
+  line-height: 1.4 !important;
+  font-weight: 600 !important;
+
+  text-align: right !important;
+}
+
+/* ---------------------------------------------------------
+   8) Club profile form matches Runner surfaces
+--------------------------------------------------------- */
+.founder-onboarding .founder-club-profile-form {
+  display: grid !important;
+
+  gap: 16px !important;
+}
+
+.founder-onboarding .founder-profile-field {
+  display: grid !important;
+
+  gap: 7px !important;
+  margin: 0 !important;
+}
+
+.founder-onboarding .founder-profile-field > span {
+  color: #3E2D28 !important;
+
+  font-size: 11px !important;
+  font-weight: 800 !important;
+}
+
+.founder-onboarding
+  .founder-profile-field input,
+.founder-onboarding
+  .founder-profile-field textarea {
+  width: 100% !important;
+
+  box-sizing: border-box !important;
+
+  border: 1px solid rgba(60, 60, 67, .12) !important;
+  border-radius: 17px !important;
+  outline: none !important;
+
+  background: #F5F5F8 !important;
+  color: #3E2D28 !important;
+
+  font-family: inherit !important;
+  font-size: 12px !important;
+}
+
+.founder-onboarding
+  .founder-profile-field input {
+  min-height: 56px !important;
+
+  padding: 0 14px !important;
+}
+
+.founder-onboarding
+  .founder-profile-field textarea {
+  min-height: 104px !important;
+
+  padding: 13px 14px !important;
+
+  resize: vertical !important;
+}
+
+.founder-onboarding
+  .founder-profile-field input:focus,
+.founder-onboarding
+  .founder-profile-field textarea:focus {
+  border-color: rgba(204, 107, 55, .42) !important;
+
+  box-shadow:
+    0 0 0 3px rgba(204, 107, 55, .07) !important;
+}
+
+.founder-onboarding
+  .founder-profile-field small {
+  color: #99999F !important;
+
+  font-size: 8.5px !important;
+
+  text-align: right !important;
+}
+
+/* Mock image box = same rounded Runner card feeling */
+.founder-onboarding .founder-club-image-mock {
+  display: grid !important;
+  grid-template-columns: 86px minmax(0, 1fr) !important;
+
+  align-items: center !important;
+
+  gap: 13px !important;
+
+  padding: 14px !important;
+
+  border: 1px solid rgba(160, 76, 42, .08) !important;
+  border-radius: 19px !important;
+
+  background: #F8EBD6 !important;
+
+  box-shadow: none !important;
+}
+
+.founder-onboarding
+  .founder-club-image-preview {
+  border-radius: 17px !important;
+
+  background: #fffaf0 !important;
+
+  box-shadow:
+    0 5px 14px rgba(30, 30, 35, .035) !important;
+}
+
+.founder-onboarding
+  .founder-club-image-copy strong {
+  color: #3E2D28 !important;
+
+  font-size: 11px !important;
+}
+
+.founder-onboarding
+  .founder-club-image-copy p {
+  color: rgba(62, 45, 40, .56) !important;
+
+  font-size: 9px !important;
+  line-height: 1.45 !important;
+}
+
+.founder-onboarding
+  .founder-club-image-copy button {
+  min-height: 34px !important;
+
+  padding: 0 12px !important;
+
+  border: 1px solid rgba(204, 107, 55, .20) !important;
+  border-radius: 12px !important;
+
+  background: #F6DFBF !important;
+  color: #A04C2A !important;
+
+  font-size: 9px !important;
+  font-weight: 800 !important;
+}
+
+/* ---------------------------------------------------------
+   9) Thai typography = Runner
+--------------------------------------------------------- */
+html[lang="th"]
+  .founder-onboarding
+  .founder-question-card h1 {
+  font-size: 24px !important;
+  line-height: 1.22 !important;
+  letter-spacing: -0.015em !important;
+}
+
+html[lang="th"]
+  .founder-onboarding
+  .ut-question-prompt,
+html[lang="th"]
+  .founder-onboarding
+  .ut-question-explainer p {
+  line-height: 1.55 !important;
+}
+
+html[lang="th"]
+  .founder-onboarding
+  .founder-choice-grid
+  .ut-choice-card strong {
+  font-family:
+    "Noto Sans Thai",
+    sans-serif !important;
+
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+  font-weight: 650 !important;
+}
+
+/* ---------------------------------------------------------
+   10) Mobile
+--------------------------------------------------------- */
+@media (max-width: 390px) {
+  .founder-onboarding .founder-question-card {
+    padding: 17px 15px 18px !important;
+  }
+
+  .founder-onboarding .founder-choice-grid {
+    gap: 10px !important;
+  }
+
+  .founder-onboarding
+    .founder-choice-grid
+    .ut-choice-card {
+    min-height: 60px !important;
+
+    padding:
+      10px
+      34px
+      10px
+      11px !important;
+
+    border-radius: 17px !important;
+  }
+
+  .founder-onboarding
+    .founder-choice-grid
+    .ut-choice-card strong {
+    font-size: 11.5px !important;
+  }
+
+  html[lang="th"]
+    .founder-onboarding
+    .founder-choice-grid
+    .ut-choice-card strong {
+    font-size: 12px !important;
+  }
+
+  .founder-onboarding
+    .founder-choice-grid
+    .ut-choice-card > span {
+    right: 11px !important;
+  }
+
+  .founder-onboarding
+    .founder-activity-grid
+    .ut-choice-card {
+    min-height: 72px !important;
+  }
+
+  .founder-onboarding
+    .founder-activity-grid
+    .ut-choice-card strong {
+    font-size: 11px !important;
+  }
+
+  .founder-onboarding .founder-day-grid {
+    gap: 7px !important;
+  }
+
+  .founder-onboarding
+    .founder-day-grid
+    .ut-choice-card {
+    min-height: 54px !important;
+    height: 54px !important;
+
+    padding:
+      8px
+      20px
+      8px
+      6px !important;
+  }
+
+  .founder-onboarding
+    .founder-day-grid
+    .ut-choice-card strong {
+    font-size: 11px !important;
+  }
+}
