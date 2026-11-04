@@ -32,6 +32,9 @@ type Page =
   | "compare"
   | "event"
   | "myruns"
+  | "friends"
+  | "friends-chat"
+  | "friend-qr"
   | "runner-profile"
   | "notifications"
   | "founder-dashboard"
@@ -105,6 +108,70 @@ type NotificationItem = {
   detail: string;
   read: boolean;
 };
+
+type FriendThread = {
+  id: number;
+  name: string;
+  type: "group" | "direct";
+  preview: string;
+  time: string;
+  initials: string;
+  accent: string;
+};
+
+type FriendChatMessage = {
+  id: number;
+  from: "me" | "them";
+  text: string;
+};
+
+function getInitialFriendMessages(
+  thread: FriendThread
+): FriendChatMessage[] {
+  return [
+    {
+      id: 1,
+      from: "them",
+      text: thread.preview,
+    },
+  ];
+}
+
+function getFriendThreadPreview(
+  thread: FriendThread
+): FriendThread {
+  const storageKey =
+    `runrise-friend-chat-${thread.id}`;
+
+  const messages =
+    readStorage<FriendChatMessage[]>(
+      storageKey,
+      getInitialFriendMessages(thread)
+    );
+
+  const latestMessage =
+    messages[messages.length - 1];
+
+  const latestTime =
+    latestMessage &&
+    latestMessage.id > 1_000_000_000_000
+      ? new Date(latestMessage.id).toLocaleTimeString(
+          [],
+          {
+            hour: "2-digit",
+            minute: "2-digit",
+          }
+        )
+      : thread.time;
+
+  return {
+    ...thread,
+    preview:
+      latestMessage?.text ||
+      thread.preview,
+    time: latestTime,
+  };
+}
 
 const defaultProfile: RunnerProfile = {
   name: "",
@@ -633,6 +700,232 @@ const RUNNING_TIMES = [
   "Evening",
   "Flexible",
 ];
+
+
+const PROFILE_VALUE_TH: Record<string, string> = {
+  // Running experience
+  "Never trained seriously": "ยังไม่เคยวิ่งจริงจัง",
+  "Less than 3 months": "น้อยกว่า 3 เดือน",
+  "3–6 months": "3–6 เดือน",
+  "6–12 months": "6–12 เดือน",
+  "1–2 years": "1–2 ปี",
+  "More than 2 years": "มากกว่า 2 ปี",
+
+  // Preferred distance
+  "3K": "3 กม.",
+  "5K": "5 กม.",
+  "10K": "10 กม.",
+  "Half Marathon 21K": "Half Marathon 21 กม.",
+  "Marathon 42K": "Marathon 42 กม.",
+
+  // Province
+  "Bangkok": "กรุงเทพมหานคร",
+  "Nonthaburi": "นนทบุรี",
+  "Pathum Thani": "ปทุมธานี",
+  "Samut Prakan": "สมุทรปราการ",
+  "Nakhon Pathom": "นครปฐม",
+  "Samut Sakhon": "สมุทรสาคร",
+
+  // Bangkok districts
+  "Phra Nakhon": "พระนคร",
+  "Dusit": "ดุสิต",
+  "Nong Chok": "หนองจอก",
+  "Bang Rak": "บางรัก",
+  "Bang Khen": "บางเขน",
+  "Bang Kapi": "บางกะปิ",
+  "Pathum Wan": "ปทุมวัน",
+  "Pom Prap Sattru Phai": "ป้อมปราบศัตรูพ่าย",
+  "Phra Khanong": "พระโขนง",
+  "Min Buri": "มีนบุรี",
+  "Lat Krabang": "ลาดกระบัง",
+  "Yan Nawa": "ยานนาวา",
+  "Samphanthawong": "สัมพันธวงศ์",
+  "Phaya Thai": "พญาไท",
+  "Thon Buri": "ธนบุรี",
+  "Bangkok Yai": "บางกอกใหญ่",
+  "Huai Khwang": "ห้วยขวาง",
+  "Khlong San": "คลองสาน",
+  "Taling Chan": "ตลิ่งชัน",
+  "Bangkok Noi": "บางกอกน้อย",
+  "Bang Khun Thian": "บางขุนเทียน",
+  "Phasi Charoen": "ภาษีเจริญ",
+  "Nong Khaem": "หนองแขม",
+  "Rat Burana": "ราษฎร์บูรณะ",
+  "Bang Phlat": "บางพลัด",
+  "Din Daeng": "ดินแดง",
+  "Bueng Kum": "บึงกุ่ม",
+  "Sathon": "สาทร",
+  "Bang Sue": "บางซื่อ",
+  "Chatuchak": "จตุจักร",
+  "Bang Kho Laem": "บางคอแหลม",
+  "Prawet": "ประเวศ",
+  "Khlong Toei": "คลองเตย",
+  "Suan Luang": "สวนหลวง",
+  "Chom Thong": "จอมทอง",
+  "Don Mueang": "ดอนเมือง",
+  "Ratchathewi": "ราชเทวี",
+  "Lat Phrao": "ลาดพร้าว",
+  "Watthana": "วัฒนา",
+  "Bang Khae": "บางแค",
+  "Lak Si": "หลักสี่",
+  "Sai Mai": "สายไหม",
+  "Khan Na Yao": "คันนายาว",
+  "Saphan Sung": "สะพานสูง",
+  "Wang Thonglang": "วังทองหลาง",
+  "Khlong Sam Wa": "คลองสามวา",
+  "Bang Na": "บางนา",
+  "Thawi Watthana": "ทวีวัฒนา",
+  "Thung Khru": "ทุ่งครุ",
+  "Bang Bon": "บางบอน",
+
+  // Nonthaburi
+  "Mueang Nonthaburi": "เมืองนนทบุรี",
+  "Bang Kruai": "บางกรวย",
+  "Bang Yai": "บางใหญ่",
+  "Bang Bua Thong": "บางบัวทอง",
+  "Sai Noi": "ไทรน้อย",
+  "Pak Kret": "ปากเกร็ด",
+
+  // Pathum Thani
+  "Mueang Pathum Thani": "เมืองปทุมธานี",
+  "Khlong Luang": "คลองหลวง",
+  "Thanyaburi": "ธัญบุรี",
+  "Nong Suea": "หนองเสือ",
+  "Lat Lum Kaeo": "ลาดหลุมแก้ว",
+  "Lam Luk Ka": "ลำลูกกา",
+  "Sam Khok": "สามโคก",
+
+  // Samut Prakan
+  "Mueang Samut Prakan": "เมืองสมุทรปราการ",
+  "Bang Bo": "บางบ่อ",
+  "Bang Phli": "บางพลี",
+  "Phra Pradaeng": "พระประแดง",
+  "Phra Samut Chedi": "พระสมุทรเจดีย์",
+  "Bang Sao Thong": "บางเสาธง",
+
+  // Nakhon Pathom
+  "Mueang Nakhon Pathom": "เมืองนครปฐม",
+  "Kamphaeng Saen": "กำแพงแสน",
+  "Nakhon Chai Si": "นครชัยศรี",
+  "Don Tum": "ดอนตูม",
+  "Bang Len": "บางเลน",
+  "Sam Phran": "สามพราน",
+  "Phutthamonthon": "พุทธมณฑล",
+
+  // Samut Sakhon
+  "Mueang Samut Sakhon": "เมืองสมุทรสาคร",
+  "Krathum Baen": "กระทุ่มแบน",
+  "Ban Phaeo": "บ้านแพ้ว",
+
+  // Parks
+  "Benjakitti Park": "สวนเบญจกิติ",
+  "Benchasiri Park": "สวนเบญจสิริ",
+  "Benchasiri Park (Phrom Phong)": "สวนเบญจสิริ (พร้อมพงษ์)",
+  "Lumphini Park": "สวนลุมพินี",
+  "Lumphini Park (Silom side)": "สวนลุมพินี (ฝั่งสีลม)",
+  "Lumphini Park (nearby)": "สวนลุมพินี (บริเวณใกล้เคียง)",
+  "Chatuchak Park": "สวนจตุจักร",
+  "Wachirabenchathat Park (Rod Fai Park)": "สวนวชิรเบญจทัศ (สวนรถไฟ)",
+  "Queen Sirikit Park": "สวนสมเด็จพระนางเจ้าสิริกิติ์ฯ",
+  "Saranrom Park": "สวนสราญรมย์",
+  "Santichaiprakarn Park": "สวนสันติชัยปราการ",
+  "Sanam Luang": "สนามหลวง",
+  "Thonburirom Park (nearby)": "สวนธนบุรีรมย์ (บริเวณใกล้เคียง)",
+  "80th Birthday Anniversary Park (Sathon)": "สวนเฉลิมพระเกียรติ 80 พรรษา (สาทร)",
+  "Suan Luang Rama IX": "สวนหลวง ร.9",
+  "Wachiratham Sathit Park": "สวนวชิรธรรมสาธิต",
+  "Seri Thai Park": "สวนเสรีไทย",
+  "Bang Bua Canal Park": "สวนคลองบางบัว",
+  "Thung Si Kan Park": "สวนทุ่งสีกัน",
+  "Chaloem Kanchanaphisek Park": "อุทยานเฉลิมกาญจนาภิเษก",
+  "Suan Somdet Phra Srinagarindra Nonthaburi": "สวนสมเด็จพระศรีนครินทร์ นนทบุรี",
+  "Thammasat University Rangsit Sports Area": "พื้นที่กีฬามหาวิทยาลัยธรรมศาสตร์ ศูนย์รังสิต",
+  "Bang Pu Recreation Center": "สถานตากอากาศบางปู",
+  "Sri Nakhon Khuean Khan Park": "สวนศรีนครเขื่อนขันธ์",
+  "Sanam Chan Palace Park": "สวนพระราชวังสนามจันทร์",
+  "Phutthamonthon Park": "สวนพุทธมณฑล",
+  "Saphan Daeng Recreation Area": "พื้นที่นันทนาการสะพานแดง",
+
+  // Running time
+  "Morning": "ช่วงเช้า",
+  "Evening": "ช่วงเย็น",
+  "Flexible": "ยืดหยุ่น",
+
+  // Goals
+  "Health & Fitness": "สุขภาพและความฟิต",
+  "Social / Meet People": "พบปะและทำความรู้จักผู้คน",
+  "Improve Pace": "พัฒนาเพซ",
+  "Race Training": "ฝึกซ้อมเพื่อการแข่งขัน",
+  "Build Endurance": "เพิ่มความอึด",
+  "Just Getting Started": "เพิ่งเริ่มต้น",
+
+  // Community style
+  "Social": "เน้นสังคม",
+  "Beginner Friendly": "เหมาะสำหรับมือใหม่",
+  "Training Focused": "เน้นการฝึกซ้อม",
+  "Relaxed": "สบาย ๆ",
+  "Networking": "สร้างคอนเนกชัน",
+};
+
+const PROFILE_VALUE_EN: Record<string, string> = Object.fromEntries(
+  Object.entries(PROFILE_VALUE_TH).map(([english, thai]) => [
+    thai,
+    english,
+  ])
+);
+
+function profileValueForLanguage(
+  value: string,
+  language: AppLanguage
+) {
+  if (!value) return "—";
+
+  // Normalize values saved by older Thai-mode prototypes back to canonical English.
+  const canonicalEnglish =
+    PROFILE_VALUE_EN[value] || value;
+
+  if (language === "th") {
+    return (
+      PROFILE_VALUE_TH[canonicalEnglish] ||
+      translateDynamicSystemText(canonicalEnglish)
+    );
+  }
+
+  return canonicalEnglish;
+}
+
+function profileValuesForLanguage(
+  values: string[],
+  language: AppLanguage
+) {
+  if (!values || values.length === 0) {
+    return "—";
+  }
+
+  return values
+    .map((value) =>
+      profileValueForLanguage(value, language)
+    )
+    .join(", ");
+}
+
+function profileDistanceForLanguage(
+  value: string,
+  language: AppLanguage
+) {
+  return profileValueForLanguage(value, language);
+}
+
+function profilePaceForLanguage(
+  pace: string,
+  language: AppLanguage
+) {
+  if (!pace) return "—";
+
+  return language === "th"
+    ? `${pace} / กม.`
+    : `${pace} / km`;
+}
 
 
 function experienceToLegacyLevel(experience: string) {
@@ -1316,6 +1609,8 @@ const THAI_TEXT: Record<string, string> = {
   "Active": "ใช้งานอยู่",
   "New": "ใหม่",
   "Home": "หน้าหลัก",
+  "Event": "อีเวนต์",
+  "Friends": "เพื่อนวิ่ง",
   "Discover": "ค้นหา",
   "DISCOVER": "ค้นหา",
   "My Runs": "การวิ่งของฉัน",
@@ -2174,218 +2469,80 @@ function LanguageSettings({
   language: AppLanguage;
   onChange: (language: AppLanguage) => void;
 }) {
-  const styles = {
-    section: {
-      margin: "28px 0 32px",
-    } as React.CSSProperties,
-
-    eyebrow: {
-      margin: "0 0 10px",
-      color: "#f56632",
-      fontSize: "12px",
-      fontWeight: 800,
-      letterSpacing: "0.18em",
-      lineHeight: 1.2,
-    } as React.CSSProperties,
-
-    title: {
-      margin: 0,
-      color: "#19191b",
-      fontSize: "25px",
-      fontWeight: 800,
-      lineHeight: 1.15,
-      letterSpacing: "-0.03em",
-    } as React.CSSProperties,
-
-    description: {
-      margin: "10px 0 20px",
-      color: "#929298",
-      fontSize: "15px",
-      fontWeight: 500,
-      lineHeight: 1.45,
-    } as React.CSSProperties,
-
-    container: {
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr",
-      gap: "8px",
-      width: "100%",
-      padding: "6px",
-      borderRadius: "22px",
-      background: "#eeeeF2",
-      boxSizing: "border-box",
-    } as React.CSSProperties,
-
-    button: {
-      minWidth: 0,
-      minHeight: "64px",
-
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      gap: "10px",
-
-      padding: "10px 13px",
-
-      border: "1.5px solid transparent",
-      borderRadius: "17px",
-
-      background: "transparent",
-      color: "#86868d",
-
-      fontFamily: "inherit",
-      cursor: "pointer",
-
-      boxSizing: "border-box",
-    } as React.CSSProperties,
-
-    activeButton: {
-      background: "#ffffff",
-      color: "#f56632",
-      border: "1.5px solid #ffc8b3",
-      boxShadow: "0 6px 18px rgba(245, 102, 50, 0.10)",
-    } as React.CSSProperties,
-
-    left: {
-      display: "flex",
-      alignItems: "center",
-      gap: "9px",
-      minWidth: 0,
-    } as React.CSSProperties,
-
-    code: {
-      width: "36px",
-      height: "36px",
-      flexShrink: 0,
-
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-
-      borderRadius: "12px",
-
-      background: "#e2e2e7",
-      color: "#77777e",
-
-      fontSize: "11px",
-      fontWeight: 800,
-      letterSpacing: "0.04em",
-    } as React.CSSProperties,
-
-    activeCode: {
-      background: "#ffe7dc",
-      color: "#f56632",
-    } as React.CSSProperties,
-
-    languageName: {
-      fontSize: "14px",
-      fontWeight: 800,
-      lineHeight: 1,
-      whiteSpace: "nowrap",
-    } as React.CSSProperties,
-
-    check: {
-      width: "23px",
-      height: "23px",
-      flexShrink: 0,
-
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-
-      borderRadius: "50%",
-
-      background: "#f56632",
-      color: "#ffffff",
-
-      fontSize: "12px",
-      fontWeight: 900,
-    } as React.CSSProperties,
-  };
-
   return (
-    <section style={styles.section}>
-      <p style={styles.eyebrow}>LANGUAGE</p>
+    <section
+      className="profile-language-compact"
+      data-no-translate="true"
+    >
+      <div className="profile-language-copy">
+        <p className="small-label">
+          {language === "th" ? "ภาษา" : "LANGUAGE"}
+        </p>
 
-      <h2 style={styles.title}>App Language</h2>
-
-      <p style={styles.description}>
-        Choose the language used throughout Runrise.
-      </p>
-
-      <div
-        style={styles.container}
-        role="group"
-        aria-label="App language"
-        data-no-translate="true"
-      >
-        {/* ENGLISH */}
-        <button
-          type="button"
-          onClick={() => onChange("en")}
-          aria-pressed={language === "en"}
-          style={{
-            ...styles.button,
-            ...(language === "en" ? styles.activeButton : {}),
-          }}
-        >
-          <span style={styles.left}>
-            <span
-              style={{
-                ...styles.code,
-                ...(language === "en" ? styles.activeCode : {}),
-              }}
-            >
-              EN
-            </span>
-
-            <span style={styles.languageName}>
-              English
-            </span>
-          </span>
-
-          {language === "en" && (
-            <span style={styles.check}>
-              ✓
-            </span>
-          )}
-        </button>
-
-        {/* THAI */}
-        <button
-          type="button"
-          onClick={() => onChange("th")}
-          aria-pressed={language === "th"}
-          style={{
-            ...styles.button,
-            ...(language === "th" ? styles.activeButton : {}),
-          }}
-        >
-          <span style={styles.left}>
-            <span
-              style={{
-                ...styles.code,
-                ...(language === "th" ? styles.activeCode : {}),
-              }}
-            >
-              TH
-            </span>
-
-            <span style={styles.languageName}>
-              ไทย
-            </span>
-          </span>
-
-          {language === "th" && (
-            <span style={styles.check}>
-              ✓
-            </span>
-          )}
-        </button>
+        <h2>
+          {language === "th"
+            ? "ภาษาของแอป"
+            : "App Language"}
+        </h2>
       </div>
+
+      <LanguageQuickSwitch
+        language={language}
+        onChange={onChange}
+        compact
+      />
     </section>
   );
 }
+
+
+const initialFriendThreads: FriendThread[] = [
+  {
+    id: 1,
+    name: "Thammasat Runners",
+    type: "group",
+    preview: "วันนี้มีซ้อมวิ่งที่สนามเวลา 17:30 น.",
+    time: "17:30",
+    initials: "TU",
+    accent: "gold",
+  },
+  {
+    id: 2,
+    name: "6am Run Club BKK",
+    type: "group",
+    preview: "พรุ่งนี้เช้า 6 โมง เจอกันที่จุดเดิม!",
+    time: "13:29",
+    initials: "6A",
+    accent: "terracotta",
+  },
+  {
+    id: 3,
+    name: "Runrise Friends",
+    type: "direct",
+    preview: "พรุ่งนี้เจอกันกี่โมงดี?",
+    time: "13:00",
+    initials: "RF",
+    accent: "sand",
+  },
+  {
+    id: 4,
+    name: "Mitrmiles Crew",
+    type: "group",
+    preview: "Long Run สุดสัปดาห์นี้ ใครไปบ้าง?",
+    time: "12:13",
+    initials: "MM",
+    accent: "ochre",
+  },
+  {
+    id: 5,
+    name: "Roadlaan Morning Crew",
+    type: "direct",
+    preview: "รวมตัววิ่งครึ่งทางวันนี้ไหม?",
+    time: "11:36",
+    initials: "RL",
+    accent: "rust",
+  },
+];
 
 function App() {
   const [language, setLanguage] = useState<AppLanguage>(() => {
@@ -2487,6 +2644,7 @@ const [clubs, setClubs] = useState<Club[]>(() => {
 
   const [selectedClubId, setSelectedClubId] = useState(1);
   const [selectedEventId, setSelectedEventId] = useState(101);
+  const [selectedFriendThreadId, setSelectedFriendThreadId] = useState(1);
 
   const [search, setSearch] = useState("");
   const [locationFilter, setLocationFilter] = useState("All");
@@ -2969,6 +3127,40 @@ const [clubs, setClubs] = useState<Club[]>(() => {
               setPage("club");
             }}
             onNav={setPage}
+          />
+        )}
+
+        {page === "friends" && (
+          <FriendForRun
+            language={language}
+            threads={initialFriendThreads}
+            onOpenChat={(id: number) => {
+              setSelectedFriendThreadId(id);
+              setPage("friends-chat");
+            }}
+            onAddFriend={() => setPage("friend-qr")}
+            onNav={setPage}
+          />
+        )}
+
+        {page === "friends-chat" && (
+          <FriendChat
+            language={language}
+            thread={
+              initialFriendThreads.find(
+                (item) => item.id === selectedFriendThreadId
+              ) || initialFriendThreads[0]
+            }
+            onBack={() => setPage("friends")}
+          />
+        )}
+
+        {page === "friend-qr" && (
+          <FriendQr
+            language={language}
+            user={user}
+            profile={profile}
+            onBack={() => setPage("friends")}
           />
         )}
 
@@ -4055,7 +4247,10 @@ function RunnerOnboarding({
           <span>{stepRemainingLabel}</span>
         </div>
 
-        <section className="ut-question-card">
+        <section
+          key={`onboarding-question-${step}-${language}`}
+          className="ut-question-card"
+        >
           <p
             className="ut-question-number"
             data-no-translate="true"
@@ -4071,7 +4266,10 @@ function RunnerOnboarding({
             <p>{questions[step].helper}</p>
           </div>
 
-          <div className="ut-answer-area">
+          <div
+            key={`onboarding-answer-${step}-${language}`}
+            className="ut-answer-area"
+          >
             {step === 0 && (
               <div className="ut-choice-grid experience-grid">
                 {RUNNING_EXPERIENCE_OPTIONS.map((option) => (
@@ -5487,6 +5685,467 @@ function MyRuns({
   );
 }
 
+
+function FriendForRun({
+  language,
+  threads,
+  onOpenChat,
+  onAddFriend,
+  onNav,
+}: {
+  language: AppLanguage;
+  threads: FriendThread[];
+  onOpenChat: (id: number) => void;
+  onAddFriend: () => void;
+  onNav: (page: Page) => void;
+}) {
+  const [query, setQuery] = useState("");
+
+  const threadsWithLatestMessage =
+    threads.map(getFriendThreadPreview);
+
+  const filteredThreads =
+    threadsWithLatestMessage.filter((thread) => {
+      const keyword =
+        query.trim().toLowerCase();
+
+      if (!keyword) return true;
+
+      return (
+        thread.name
+          .toLowerCase()
+          .includes(keyword) ||
+        thread.preview
+          .toLowerCase()
+          .includes(keyword)
+      );
+    });
+
+  return (
+    <main
+      className="screen with-nav friends-page"
+      data-no-translate="true"
+    >
+      <header className="friends-header">
+        <div className="friends-heading">
+          <p className="friends-eyebrow">RUNRISE FRIENDS</p>
+          <h1>
+            {language === "th"
+              ? "เพื่อนวิ่ง"
+              : "Friend for Run"}
+          </h1>
+          <p>
+            {language === "th"
+              ? "ค้นหาเพื่อน กลุ่มวิ่ง และพูดคุยก่อนออกไปวิ่งด้วยกัน"
+              : "Find friends, running groups, and chat before your next run."}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          className="friends-add-button"
+          onClick={onAddFriend}
+          aria-label={
+            language === "th"
+              ? "เพิ่มเพื่อน"
+              : "Add friend"
+          }
+        >
+          <span className="friends-add-qr" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 4h6v6H4z" />
+              <path d="M14 4h6v6h-6z" />
+              <path d="M4 14h6v6H4z" />
+
+              <path d="M14 14h2v2h-2z" />
+              <path d="M18 14h2v2h-2z" />
+              <path d="M14 18h2v2h-2z" />
+              <path d="M18 18h2v2h-2z" />
+              <path d="M16 16h2v2h-2z" />
+            </svg>
+          </span>
+          <small>
+            {language === "th" ? "เพิ่มเพื่อน" : "Add Friend"}
+          </small>
+        </button>
+      </header>
+
+      <div className="friends-search-wrap">
+        <span aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <circle cx="10.5" cy="10.5" r="6.5" />
+            <path d="m15.5 15.5 5 5" />
+          </svg>
+        </span>
+
+        <input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder={
+            language === "th"
+              ? "ค้นหาเพื่อนหรือกลุ่มวิ่ง"
+              : "Search friends or running groups"
+          }
+        />
+      </div>
+
+      <section className="friends-list">
+        {filteredThreads.length > 0 ? (
+          filteredThreads.map((thread) => (
+            <button
+              type="button"
+              className="friend-thread"
+              key={thread.id}
+              onClick={() => onOpenChat(thread.id)}
+            >
+              <span
+                className={`friend-avatar friend-avatar-${thread.accent}`}
+                aria-hidden="true"
+              >
+                {thread.initials}
+              </span>
+
+              <span className="friend-thread-main">
+                <span className="friend-thread-top">
+                  <strong>{thread.name}</strong>
+                  <time>{thread.time}</time>
+                </span>
+
+                <span className="friend-thread-preview">
+                  {thread.preview}
+                </span>
+
+                <span className="friend-thread-type">
+                  {thread.type === "group"
+                    ? language === "th"
+                      ? "กลุ่มวิ่ง"
+                      : "Group"
+                    : language === "th"
+                      ? "แชทส่วนตัว"
+                      : "Direct"}
+                </span>
+              </span>
+
+              <span className="friend-thread-chevron" aria-hidden="true">
+                ›
+              </span>
+            </button>
+          ))
+        ) : (
+          <div className="friends-empty">
+            <strong>
+              {language === "th"
+                ? "ไม่พบเพื่อนหรือกลุ่มวิ่ง"
+                : "No friends or groups found"}
+            </strong>
+            <p>
+              {language === "th"
+                ? "ลองค้นหาด้วยชื่ออื่น"
+                : "Try another search term."}
+            </p>
+          </div>
+        )}
+      </section>
+
+      <RunnerNav
+        active="friends"
+        onNav={onNav}
+      />
+    </main>
+  );
+}
+
+function FriendChat({
+  language,
+  thread,
+  onBack,
+}: {
+  language: AppLanguage;
+  thread: FriendThread;
+  onBack: () => void;
+}) {
+  const storageKey =
+    `runrise-friend-chat-${thread.id}`;
+
+  const [messages, setMessages] =
+    useState<FriendChatMessage[]>(() =>
+      readStorage<FriendChatMessage[]>(
+        storageKey,
+        getInitialFriendMessages(thread)
+      )
+    );
+
+  const [draft, setDraft] = useState("");
+
+  useEffect(() => {
+    localStorage.setItem(storageKey, JSON.stringify(messages));
+  }, [messages, storageKey]);
+
+  const sendMessage = () => {
+    const text = draft.trim();
+
+    if (!text) return;
+
+    const nextMessage: FriendChatMessage = {
+      id: Date.now(),
+      from: "me",
+      text,
+    };
+
+    setMessages((previous) => {
+      const nextMessages = [
+        ...previous,
+        nextMessage,
+      ];
+
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify(nextMessages)
+      );
+
+      return nextMessages;
+    });
+
+    setDraft("");
+  };
+
+  return (
+    <main
+      className="screen friend-chat-page"
+      data-no-translate="true"
+    >
+      <header className="friend-chat-header">
+        <button
+          className="friend-chat-back"
+          type="button"
+          onClick={onBack}
+          aria-label={language === "th" ? "ย้อนกลับ" : "Back"}
+        >
+          ←
+        </button>
+
+        <span
+          className={`friend-avatar friend-avatar-${thread.accent}`}
+          aria-hidden="true"
+        >
+          {thread.initials}
+        </span>
+
+        <div>
+          <strong>{thread.name}</strong>
+          <small>
+            {thread.type === "group"
+              ? language === "th"
+                ? "กลุ่มวิ่ง"
+                : "Running group"
+              : language === "th"
+                ? "เพื่อนวิ่ง"
+                : "Running friend"}
+          </small>
+        </div>
+      </header>
+
+      <section className="friend-chat-messages">
+        <div className="friend-chat-date">
+          {language === "th" ? "วันนี้" : "Today"}
+        </div>
+
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            className={
+              message.from === "me"
+                ? "friend-message-row mine"
+                : "friend-message-row"
+            }
+          >
+            <div className="friend-message-bubble">
+              {message.text}
+            </div>
+          </div>
+        ))}
+      </section>
+
+      <div className="friend-chat-composer">
+        <input
+          value={draft}
+          onChange={(event) => setDraft(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              sendMessage();
+            }
+          }}
+          placeholder={
+            language === "th"
+              ? "พิมพ์ข้อความ..."
+              : "Type a message..."
+          }
+        />
+
+        <button
+          type="button"
+          onClick={sendMessage}
+          disabled={!draft.trim()}
+          aria-label={language === "th" ? "ส่งข้อความ" : "Send"}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m4 4 16 8-16 8 3-8-3-8Z" />
+            <path d="M7 12h13" />
+          </svg>
+        </button>
+      </div>
+    </main>
+  );
+}
+
+function FriendQr({
+  language,
+  user,
+  profile,
+  onBack,
+}: {
+  language: AppLanguage;
+  user: UserAccount | null;
+  profile: RunnerProfile;
+  onBack: () => void;
+}) {
+  const displayName =
+    profile.name ||
+    user?.name ||
+    "Runrise Runner";
+
+  const idBase =
+    user?.email?.split("@")[0] ||
+    displayName.toLowerCase().replace(/\s+/g, ".");
+
+  const runnerId = `@${idBase || "runner"}`;
+
+  const shareUrl =
+    `https://primsupitsara.github.io/runrise/?friend=${encodeURIComponent(
+      idBase || "runner"
+    )}`;
+
+  const qrUrl =
+    `https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=8&data=${encodeURIComponent(
+      shareUrl
+    )}`;
+
+  const shareProfile = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: `${displayName} · Runrise`,
+          text:
+            language === "th"
+              ? "เพิ่มฉันเป็นเพื่อนวิ่งบน Runrise"
+              : "Add me as a running friend on Runrise",
+          url: shareUrl,
+        });
+
+        return;
+      }
+
+      await navigator.clipboard.writeText(shareUrl);
+      alert(
+        language === "th"
+          ? "คัดลอกลิงก์โปรไฟล์แล้ว"
+          : "Profile link copied"
+      );
+    } catch {
+      // User cancelled sharing or the browser blocked it.
+    }
+  };
+
+  return (
+    <main
+      className="screen friend-qr-page"
+      data-no-translate="true"
+    >
+      <header className="friend-qr-top">
+        <button
+          type="button"
+          className="friend-qr-back"
+          onClick={onBack}
+        >
+          ←
+        </button>
+
+        <div>
+          <h1>
+            {language === "th"
+              ? "QR Code ของฉัน"
+              : "My QR Code"}
+          </h1>
+          <p>
+            {language === "th"
+              ? "ให้เพื่อนสแกนเพื่อเพิ่มคุณเป็นเพื่อนวิ่ง"
+              : "Let another runner scan this to add you."}
+          </p>
+        </div>
+      </header>
+
+      <section className="friend-qr-card">
+        <div className="friend-qr-avatar">
+          {displayName.charAt(0).toUpperCase()}
+        </div>
+
+        <h2>{displayName}</h2>
+        <p className="friend-qr-id">ID: {runnerId}</p>
+
+        <div className="friend-qr-code-wrap">
+          <img
+            src={qrUrl}
+            alt={`Runrise QR code for ${displayName}`}
+          />
+
+          <img
+            className="friend-qr-logo"
+            src={runriseLogo}
+            alt=""
+            aria-hidden="true"
+          />
+        </div>
+
+        <p className="friend-qr-caption">
+          {language === "th"
+            ? "สแกนเพื่อเชื่อมต่อและออกวิ่งไปด้วยกัน"
+            : "Scan to connect and run together."}
+        </p>
+      </section>
+
+      <div className="friend-qr-actions">
+        <button
+          type="button"
+          className="friend-qr-primary"
+          onClick={() => {
+            alert(
+              language === "th"
+                ? "เปิดกล้องเพื่อสแกน QR Code ในเวอร์ชันทดสอบ"
+                : "QR scanner opened in prototype mode"
+            );
+          }}
+        >
+          <span aria-hidden="true">⌗</span>
+          {language === "th"
+            ? "สแกน QR Code"
+            : "Scan QR Code"}
+        </button>
+
+        <button
+          type="button"
+          className="friend-qr-secondary"
+          onClick={shareProfile}
+        >
+          <span aria-hidden="true">↗</span>
+          {language === "th"
+            ? "แชร์โปรไฟล์"
+            : "Share Profile"}
+        </button>
+      </div>
+    </main>
+  );
+}
+
 function RunnerProfile({
   profile,
   setProfile,
@@ -5552,7 +6211,9 @@ function RunnerProfile({
 
         <div className="ut-profile-identity">
           <h1>{profile.name || "Runner"}</h1>
-          <p>Runner</p>
+          <p data-no-translate="true">
+            {language === "th" ? "นักวิ่ง" : "Runner"}
+          </p>
         </div>
 
         <button
@@ -5752,80 +6413,180 @@ function RunnerProfile({
         </section>
       ) : (
         <>
-          <section className="ut-profile-section">
+          <section
+            className="ut-profile-section"
+            data-no-translate="true"
+          >
             <div className="ut-profile-section-head">
-              <p className="eyebrow">RUNNING PROFILE</p>
-              <h2>Your preferences</h2>
+              <p className="eyebrow">
+                {language === "th"
+                  ? "โปรไฟล์การวิ่ง"
+                  : "RUNNING PROFILE"}
+              </p>
+              <h2>
+                {language === "th"
+                  ? "ความต้องการของคุณ"
+                  : "Your preferences"}
+              </h2>
             </div>
 
             <div className="ut-profile-row-grid">
               <ProfileInfo
-                label="Running experience"
-                value={profile.runningExperience || "—"}
-              />
-              <ProfileInfo
-                label="Pace (min/km)"
-                value={`${profile.pace} / km`}
-              />
-              <ProfileInfo
-                label="Favorite distance"
-                value={profile.preferredDistance || "—"}
-              />
-              <ProfileInfo
-                label="Province"
-                value={profile.province || "—"}
-              />
-              <ProfileInfo
-                label="District / Amphoe"
-                value={
-                  profile.location.length > 0
-                    ? profile.location.join(", ")
-                    : "—"
+                label={
+                  language === "th"
+                    ? "ประสบการณ์การวิ่ง"
+                    : "Running experience"
                 }
+                value={profileValueForLanguage(
+                  profile.runningExperience,
+                  language
+                )}
               />
 
               <ProfileInfo
-                label="Preferred Park"
-                value={
-                  profile.parks.length > 0
-                    ? profile.parks.join(", ")
-                    : "—"
+                label={
+                  language === "th"
+                    ? "Pace (นาที/กม.)"
+                    : "Pace (min/km)"
                 }
+                value={profilePaceForLanguage(
+                  profile.pace,
+                  language
+                )}
               />
 
               <ProfileInfo
-                label="Preferred Running Time"
-                value={profile.time || "—"}
+                label={
+                  language === "th"
+                    ? "ระยะที่สนใจ"
+                    : "Favorite distance"
+                }
+                value={profileDistanceForLanguage(
+                  profile.preferredDistance,
+                  language
+                )}
+              />
+
+              <ProfileInfo
+                label={
+                  language === "th"
+                    ? "จังหวัด"
+                    : "Province"
+                }
+                value={profileValueForLanguage(
+                  profile.province,
+                  language
+                )}
+              />
+
+              <ProfileInfo
+                label={
+                  language === "th"
+                    ? "เขต / อำเภอ"
+                    : "District / Amphoe"
+                }
+                value={profileValuesForLanguage(
+                  profile.location,
+                  language
+                )}
+              />
+
+              <ProfileInfo
+                label={
+                  language === "th"
+                    ? "สวนที่ต้องการ"
+                    : "Preferred Park"
+                }
+                value={profileValuesForLanguage(
+                  profile.parks,
+                  language
+                )}
+              />
+
+              <ProfileInfo
+                label={
+                  language === "th"
+                    ? "ช่วงเวลาที่ต้องการวิ่ง"
+                    : "Preferred Running Time"
+                }
+                value={profileValueForLanguage(
+                  profile.time,
+                  language
+                )}
               />
             </div>
           </section>
 
-          <section className="ut-profile-section">
+          <section
+            className="ut-profile-section"
+            data-no-translate="true"
+          >
             <div className="ut-profile-section-head">
-              <p className="eyebrow">RUNNING GOALS</p>
-              <h2>What you’re running for</h2>
+              <p className="eyebrow">
+                {language === "th"
+                  ? "เป้าหมายการวิ่ง"
+                  : "RUNNING GOALS"}
+              </p>
+              <h2>
+                {language === "th"
+                  ? "เป้าหมายของคุณ"
+                  : "What you’re running for"}
+              </h2>
             </div>
 
             <div className="ut-display-chips">
-              {profile.goal.map((goal: string) => (
-                <span key={goal}>{goal}</span>
-              ))}
+              {profile.goal.length > 0 ? (
+                profile.goal.map((goal: string) => (
+                  <span key={goal}>
+                    {profileValueForLanguage(
+                      goal,
+                      language
+                    )}
+                  </span>
+                ))
+              ) : (
+                <span>
+                  {language === "th"
+                    ? "ยังไม่ได้เลือก"
+                    : "Not selected"}
+                </span>
+              )}
             </div>
           </section>
 
-          <section className="ut-profile-section">
+          <section
+            className="ut-profile-section"
+            data-no-translate="true"
+          >
             <div className="ut-profile-section-head">
-              <p className="eyebrow">COMMUNITY PREFERENCE</p>
-              <h2>Your preferred vibe</h2>
+              <p className="eyebrow">
+                {language === "th"
+                  ? "สไตล์คอมมูนิตี้"
+                  : "COMMUNITY PREFERENCE"}
+              </p>
+              <h2>
+                {language === "th"
+                  ? "บรรยากาศที่คุณชอบ"
+                  : "Your preferred vibe"}
+              </h2>
             </div>
 
             <div className="ut-display-chips">
               {profile.vibe.length > 0 ? (
                 profile.vibe.map((vibe: string) => (
-                  <span key={vibe}>{vibe}</span>
+                  <span key={vibe}>
+                    {profileValueForLanguage(
+                      vibe,
+                      language
+                    )}
+                  </span>
                 ))
               ) : (
-                <span>Not selected</span>
+                <span>
+                  {language === "th"
+                    ? "ยังไม่ได้เลือก"
+                    : "Not selected"}
+                </span>
               )}
             </div>
           </section>
@@ -7586,10 +8347,10 @@ function RunnerNav({
   onNav,
 }: any) {
   return (
-    <nav className="bottom-nav">
+    <nav className="bottom-nav runner-nav">
       <NavButton
         label="Home"
-        icon="⌂"
+        icon={<RunnerNavIcon name="home" />}
         active={
           active === "home"
         }
@@ -7601,20 +8362,8 @@ function RunnerNav({
       />
 
       <NavButton
-        label="Discover"
-        icon="⌕"
-        active={
-          active ===
-          "discover"
-        }
-        onClick={() =>
-          onNav("discover")
-        }
-      />
-
-      <NavButton
-        label="My Runs"
-        icon="◎"
+        label="Event"
+        icon={<RunnerNavIcon name="event" />}
         active={
           active === "myruns"
         }
@@ -7624,8 +8373,20 @@ function RunnerNav({
       />
 
       <NavButton
+        label="Friends"
+        icon={<RunnerNavIcon name="friends" />}
+        active={
+          active ===
+          "friends"
+        }
+        onClick={() =>
+          onNav("friends")
+        }
+      />
+
+      <NavButton
         label="Profile"
-        icon="○"
+        icon={<RunnerNavIcon name="profile" />}
         active={
           active === "profile"
         }
@@ -7636,6 +8397,64 @@ function RunnerNav({
         }
       />
     </nav>
+  );
+}
+
+function RunnerNavIcon({
+  name,
+}: {
+  name: "home" | "event" | "friends" | "profile";
+}) {
+  if (name === "home") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path d="M3.5 10.7 12 3.8l8.5 6.9v9.1a.9.9 0 0 1-.9.9h-5.1v-6.3h-5v6.3H4.4a.9.9 0 0 1-.9-.9v-9.1Z" />
+      </svg>
+    );
+  }
+
+  if (name === "event") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <rect x="3.5" y="5.5" width="17" height="15" rx="2.2" />
+        <path d="M7.5 3.5v4M16.5 3.5v4M3.5 9.3h17" />
+        <path d="M7.5 12.7h.01M12 12.7h.01M16.5 12.7h.01M7.5 16.6h.01M12 16.6h.01" />
+      </svg>
+    );
+  }
+
+  if (name === "friends") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <circle cx="9" cy="8.2" r="3.2" />
+        <path d="M3.8 19.5v-1.1c0-3 2.3-5.2 5.2-5.2s5.2 2.2 5.2 5.2v1.1" />
+        <circle cx="17.1" cy="9.3" r="2.4" />
+        <path d="M15.2 14.4c.6-.3 1.3-.5 2.1-.5 2.2 0 3.9 1.7 3.9 4v.8" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <circle cx="12" cy="8" r="3.5" />
+      <path d="M5.2 20.2v-1.3c0-3.6 2.8-6.1 6.8-6.1s6.8 2.5 6.8 6.1v1.3" />
+    </svg>
   );
 }
 
