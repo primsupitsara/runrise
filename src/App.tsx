@@ -302,20 +302,6 @@ const initialClubs: Club[] = [
     founder: "Sabai Run Club Bangkok",
   },
   {
-    id: 6,
-    name: "Founders Run Club Bangkok",
-    location: "Watthana",
-    pace: "Any Pace",
-    distance: "3K",
-    schedule: "Weekly · Morning",
-    level: "All Levels",
-    vibe: ["Social", "Networking"],
-    description:
-      "A weekly running community for founders, investors and friends, usually followed by coffee.",
-    members: 0,
-    founder: "Founders Run Club Bangkok",
-  },
-  {
     id: 7,
     name: "Roadlaan Runclub",
     location: "Bangkok",
@@ -454,21 +440,6 @@ const initialEvents: RunEvent[] = [
     meetingPoint: "Benjakitti Park",
     route: "Social park loop",
     whatToBring: "Running shoes and water.",
-  },
-  {
-    id: 601,
-    clubId: 6,
-    name: "Founders Morning 3K",
-    date: "1 Nov",
-    time: "08:00",
-    location: "Watthana",
-    distance: "3K",
-    pace: "Any Pace",
-    capacity: 40,
-    participants: 18,
-    meetingPoint: "Benchasiri Park",
-    route: "3K community route",
-    whatToBring: "Running shoes and coffee energy.",
   },
 ];
 
@@ -924,6 +895,7 @@ const FOUNDER_LABEL_TH: Record<string, string> = {
   "Serious Training": "ระดับจริงจัง",
   Competitive: "เน้นการแข่งขัน",
   "All Levels": "ทุกระดับ",
+  Advanced: "ระดับสูง",
 
   "Under 5:00 min/km": "ต่ำกว่า 5:00 นาที/กม.",
   "5:00–5:59 min/km": "5:00–5:59 นาที/กม.",
@@ -953,6 +925,7 @@ const FOUNDER_LABEL_TH: Record<string, string> = {
   Relaxed: "สบาย ๆ",
   "Training Focused": "จริงจังกับการฝึกซ้อม",
   "Fun & Energetic": "สนุกและมีพลัง",
+  Networking: "สร้างเครือข่าย",
 };
 
 function founderLabel(value: string, language: AppLanguage) {
@@ -1709,6 +1682,7 @@ function LocationParkSelector({
   selectedParks,
   onChangeProvince,
   onChange,
+  language = "en",
 }: {
   province: string;
   districtOptions: string[];
@@ -1716,6 +1690,7 @@ function LocationParkSelector({
   selectedParks: string[];
   onChangeProvince: () => void;
   onChange: (districts: string[], parks: string[]) => void;
+  language?: AppLanguage;
 }) {
   const availableParks = getAvailableParksForLocations(selectedDistricts);
 
@@ -1752,24 +1727,32 @@ function LocationParkSelector({
   return (
     <div className="ut-area-park-selector">
       <div className="ut-location-context">
-        <span>Province</span>
-        <strong>{province}</strong>
+        <span>{language === "th" ? "จังหวัด" : "Province"}</span>
+        <strong>{profileValueForLanguage(province, language)}</strong>
         <button type="button" onClick={onChangeProvince}>
-          Change
+          {language === "th" ? "เปลี่ยน" : "Change"}
         </button>
       </div>
 
       <section className="ut-area-park-group">
         <div className="ut-subcategory-heading">
           <div>
-            <span>AREA</span>
-            <strong>Choose your running areas</strong>
+            <span>{language === "th" ? "พื้นที่" : "AREA"}</span>
+            <strong>
+              {language === "th"
+                ? "เลือกพื้นที่ที่ต้องการวิ่ง"
+                : "Choose your running areas"}
+            </strong>
           </div>
 
           <small>
             {selectedDistricts.length > 0
-              ? `${selectedDistricts.length} selected`
-              : "Select one or more"}
+              ? language === "th"
+                ? `เลือกแล้ว ${selectedDistricts.length} พื้นที่`
+                : `${selectedDistricts.length} selected`
+              : language === "th"
+                ? "เลือกได้มากกว่า 1 พื้นที่"
+                : "Select one or more"}
           </small>
         </div>
 
@@ -1788,7 +1771,7 @@ function LocationParkSelector({
                 }
                 onClick={() => toggleDistrict(district)}
               >
-                <strong>{district}</strong>
+                <strong>{profileValueForLanguage(district, language)}</strong>
                 {selected && <span>✓</span>}
               </button>
             );
@@ -1798,31 +1781,45 @@ function LocationParkSelector({
 
       {!clubsInSelectedArea && selectedDistricts.length > 0 && (
         <div className="ut-area-availability-note">
-          No Run Clubs are available in this area yet, but you can still explore nearby areas.
+          {language === "th"
+            ? "ยังไม่มี Run Club ในพื้นที่นี้ แต่คุณยังสามารถเลือกพื้นที่ใกล้เคียงได้"
+            : "No Run Clubs are available in this area yet, but you can still explore nearby areas."}
         </div>
       )}
 
       <section className="ut-area-park-group park-group">
         <div className="ut-subcategory-heading">
           <div>
-            <span>PARK</span>
-            <strong>Choose your preferred parks</strong>
+            <span>{language === "th" ? "สวน" : "PARK"}</span>
+            <strong>
+              {language === "th"
+                ? "เลือกสวนหรือจุดวิ่งที่ต้องการ"
+                : "Choose your preferred parks"}
+            </strong>
           </div>
 
           <small>
             {selectedParks.length > 0
-              ? `${selectedParks.length} selected`
-              : "Select one or more"}
+              ? language === "th"
+                ? `เลือกแล้ว ${selectedParks.length} แห่ง`
+                : `${selectedParks.length} selected`
+              : language === "th"
+                ? "เลือกได้มากกว่า 1 แห่ง"
+                : "Select one or more"}
           </small>
         </div>
 
         {selectedDistricts.length === 0 ? (
           <div className="ut-park-empty">
-            Select at least one Area first to see park choices.
+            {language === "th"
+              ? "เลือกพื้นที่อย่างน้อย 1 แห่งก่อน เพื่อดูตัวเลือกสวนและจุดวิ่ง"
+              : "Select at least one Area first to see park choices."}
           </div>
         ) : availableParks.length === 0 ? (
           <div className="ut-park-empty">
-            No park suggestions are available for the selected area yet, but you can still continue.
+            {language === "th"
+              ? "ยังไม่มีคำแนะนำสวนสำหรับพื้นที่ที่เลือก แต่คุณสามารถดำเนินการต่อได้"
+              : "No park suggestions are available for the selected area yet, but you can still continue."}
           </div>
         ) : (
           <div className="ut-choice-grid area-park park-choices">
@@ -1840,7 +1837,7 @@ function LocationParkSelector({
                   }
                   onClick={() => togglePark(park)}
                 >
-                  <strong>{park}</strong>
+                  <strong>{profileValueForLanguage(park, language)}</strong>
                   {selected && <span>✓</span>}
                 </button>
               );
@@ -2204,7 +2201,6 @@ const THAI_TEXT: Record<string, string> = {
   // Runner home / discovery
   "Good morning,": "สวัสดีตอนเช้า",
   "Ready to find your next run?": "พร้อมค้นหาการวิ่งครั้งต่อไปหรือยัง?",
-  "SMART MATCHING": "จับคู่คลับที่เหมาะกับคุณ",
   "Recommended for you": "แนะนำสำหรับคุณ",
   "Find your club": "ค้นหาคลับที่ใช่",
   "Find your community": "ค้นหาคอมมูนิตี้ที่ใช่",
@@ -2892,7 +2888,7 @@ const [clubs, setClubs] = useState<Club[]>(() => {
   const storedClubs = readStorage<Club[]>(
     "runrise-clubs",
     initialClubs
-  );
+  ).filter((club) => club.id !== 6);
 
   const updatedStoredClubs = storedClubs.map((club) => {
     if (club.id === 7) {
@@ -2940,18 +2936,24 @@ const [clubs, setClubs] = useState<Club[]>(() => {
 });
 
   const [events, setEvents] = useState<RunEvent[]>(() =>
-    readStorage<RunEvent[]>("runrise-events", initialEvents).map((event) => ({
-      ...event,
-      location: normalizeDistrict(event.location),
-    }))
+    readStorage<RunEvent[]>("runrise-events", initialEvents)
+      .filter((event) => event.clubId !== 6)
+      .map((event) => ({
+        ...event,
+        location: normalizeDistrict(event.location),
+      }))
   );
 
   const [savedClubs, setSavedClubs] = useState<number[]>(() =>
-    readStorage("runrise-saved", [])
+    readStorage<number[]>("runrise-saved", []).filter(
+      (clubId) => clubId !== 6
+    )
   );
 
   const [joinedEvents, setJoinedEvents] = useState<number[]>(() =>
-    readStorage("runrise-joined", [])
+    readStorage<number[]>("runrise-joined", []).filter(
+      (eventId) => eventId !== 601
+    )
   );
 
 
@@ -3690,6 +3692,7 @@ const [clubs, setClubs] = useState<Club[]>(() => {
         {page === "founder-dashboard" && (
           <FounderDashboard
             language={language}
+            setLanguage={setLanguage}
             club={clubs[0]}
             events={events.filter(
               (event) => event.clubId === 1
@@ -4951,26 +4954,26 @@ function FounderOnboarding({
     language === "th"
       ? [
           {
-            title: "บทบาทของคุณใน Run Club",
-            subtitle: "คุณมีบทบาทอะไรใน Run Club?",
+            title: "บทบาทของคุณในคลับวิ่ง",
+            subtitle: "คุณมีบทบาทอะไรในคลับวิ่ง?",
             helper:
               "ข้อมูลนี้ช่วยให้ Runrise ปรับเครื่องมือและฟีเจอร์ให้เหมาะกับหน้าที่ของคุณ",
           },
           {
-            title: "โปรไฟล์ Run Club",
+            title: "โปรไฟล์คลับวิ่ง",
             subtitle: "บอกข้อมูลพื้นฐานของคลับให้เรารู้จัก",
             helper:
               "ชื่อ คำอธิบาย และรูปคลับจะเป็นข้อมูลหลักที่นักวิ่งเห็นเมื่อเปิดดูโปรไฟล์คลับของคุณ",
           },
           {
-            title: "Run Club ของคุณอยู่ที่ไหน?",
-            subtitle: "Run Club ของคุณจัดกิจกรรมในพื้นที่ใดเป็นหลัก?",
+            title: "คลับวิ่งของคุณอยู่ที่ไหน?",
+            subtitle: "คลับวิ่งของคุณจัดกิจกรรมในพื้นที่ใดเป็นหลัก?",
             helper:
               "ข้อมูลนี้ช่วยให้ Runrise แนะนำคลับให้กับนักวิ่งที่อยู่ในพื้นที่ใกล้เคียง",
           },
           {
             title: "ประเภทกิจกรรมวิ่ง",
-            subtitle: "Run Club ของคุณจัดกิจกรรมวิ่งรูปแบบใดบ้าง?",
+            subtitle: "คลับวิ่งของคุณจัดกิจกรรมวิ่งรูปแบบใดบ้าง?",
             helper:
               "เลือกประเภทที่สะท้อนกิจกรรมหลักของคลับ เพื่อให้นักวิ่งเข้าใจลักษณะการวิ่งก่อนเข้าร่วม",
           },
@@ -4982,7 +4985,7 @@ function FounderOnboarding({
           },
           {
             title: "เพซที่รองรับ",
-            subtitle: "โดยทั่วไปคลับของคุณรองรับ Pace ช่วงไหน?",
+            subtitle: "โดยทั่วไปคลับของคุณรองรับเพซช่วงไหน?",
             helper:
               "ช่วยให้นักวิ่งรู้ว่าความเร็วของคลับเหมาะกับตัวเองหรือไม่",
           },
@@ -5006,7 +5009,7 @@ function FounderOnboarding({
           },
           {
             title: "สไตล์คอมมูนิตี้",
-            subtitle: "บรรยากาศของ Run Club คุณเป็นแบบไหน?",
+            subtitle: "บรรยากาศของคลับวิ่งคุณเป็นแบบไหน?",
             helper:
               "เลือกสไตล์ที่สะท้อนบรรยากาศจริงของคลับ เพื่อให้นักวิ่งรู้ว่าคลับนี้เหมาะกับเขาหรือไม่",
           },
@@ -5272,8 +5275,8 @@ function FounderOnboarding({
   if (!started) {
     return (
       <main
-        className="ut-onboarding ut-onboarding-intro founder-onboarding"
         data-no-translate="true"
+        className="ut-onboarding ut-onboarding-intro founder-onboarding"
       >
         <div className="ut-onboarding-scroll">
           <div className="ut-onboarding-top intro-top">
@@ -5310,7 +5313,7 @@ function FounderOnboarding({
 
             <h1>
               {language === "th"
-                ? "สร้างโปรไฟล์ Run Club ของคุณ"
+                ? "สร้างโปรไฟล์คลับวิ่งของคุณ"
                 : "Build your Run Club profile"}
             </h1>
 
@@ -5372,8 +5375,8 @@ function FounderOnboarding({
 
   return (
     <main
-      className="ut-onboarding founder-onboarding"
       data-no-translate="true"
+      className="ut-onboarding founder-onboarding"
     >
       <div className="ut-onboarding-scroll">
         <div className="ut-onboarding-top">
@@ -5457,7 +5460,7 @@ function FounderOnboarding({
                 <label className="founder-profile-field">
                   <span>
                     {language === "th"
-                      ? "ชื่อ Run Club"
+                      ? "ชื่อคลับวิ่ง"
                       : "Run Club name"}
                   </span>
 
@@ -5472,7 +5475,7 @@ function FounderOnboarding({
                     }
                     placeholder={
                       language === "th"
-                        ? "กรอกชื่อ Run Club ของคุณ"
+                        ? "กรอกชื่อคลับวิ่งของคุณ"
                         : "Enter your Run Club name"
                     }
                     maxLength={60}
@@ -5627,6 +5630,7 @@ function FounderOnboarding({
 
                 {profile.province ? (
                   <LocationParkSelector
+                    language={language}
                     province={profile.province}
                     districtOptions={districtOptions}
                     selectedDistricts={profile.locations}
@@ -6183,7 +6187,6 @@ function RunnerHome({
         className="section-row home-club-list-anchor"
       >
         <div>
-          <p className="eyebrow">SMART MATCHING</p>
           <h2>Recommended for you</h2>
           <p className="ut-recommendation-helper">
             Based on your pace, preferred distance, area and goals.
@@ -7158,93 +7161,99 @@ function RunnerEventsPage({
                   onEvent(event.id)
                 }
               >
-                <div className="event-list-image">
-                  {image ? (
-                    <img
-                      src={image}
-                      alt={club?.name || event.name}
-                    />
-                  ) : (
-                    <div className="event-list-image-fallback">
-                      {club?.name
-                        ?.slice(0, 2)
-                        .toUpperCase() ||
-                        "RR"}
-                    </div>
-                  )}
-                </div>
-
-                <div className="event-list-card-content">
-                  <span className="event-club-pill">
-                    {club?.name ||
-                      "Runrise Run Club"}
-                  </span>
-
-                  <h2>
-                    {eventTitle(
-                      event,
-                      language
-                    )}
-                  </h2>
-
-                  <p className="event-list-location">
-                    <span
-                      className="event-location-pin"
-                      aria-hidden="true"
-                    >
-                      ●
-                    </span>
-
-                    {profileValueForLanguage(
-                      event.meetingPoint ||
-                        event.location,
-                      language
-                    )}
-
-                    {event.location && (
-                      <>
-                        {" · "}
-                        {profileValueForLanguage(
-                          event.location,
+                <div className="event-list-main">
+                  <div className="event-list-body">
+                    <div className="event-list-image-column">
+                      <h3 className="event-list-club-heading">
+                        {eventTitle(
+                          event,
                           language
                         )}
-                      </>
-                    )}
-                  </p>
+                      </h3>
 
-                  <div className="event-list-meta">
-                    <span>
-                      <b aria-hidden="true">
-                        ↟
-                      </b>
+                      <div className="event-list-image">
+                        {image ? (
+                          <img
+                            src={image}
+                            alt={club?.name || event.name}
+                          />
+                        ) : (
+                          <div className="event-list-image-fallback">
+                            {club?.name
+                              ?.slice(0, 2)
+                              .toUpperCase() ||
+                              "RR"}
+                          </div>
+                        )}
+                      </div>
+                    </div>
 
-                      {profileValueForLanguage(
-                        event.distance,
-                        language
-                      )}
-                    </span>
+                    <div className="event-list-card-content">
+                      <h2 className="event-list-event-title">
+                        {club?.name ||
+                          "Runrise Run Club"}
+                      </h2>
 
-                    <span>
-                      <b aria-hidden="true">
-                        ◷
-                      </b>
-                      Pace {event.pace}
-                      {language === "th"
-                        ? " / กม."
-                        : " / km"}
-                    </span>
+                      <p className="event-list-location">
+                        <span
+                          className="event-location-pin"
+                          aria-hidden="true"
+                        >
+                          ●
+                        </span>
+
+                        {profileValueForLanguage(
+                          event.meetingPoint ||
+                            event.location,
+                          language
+                        )}
+
+                        {event.location && (
+                          <>
+                            {" · "}
+                            {profileValueForLanguage(
+                              event.location,
+                              language
+                            )}
+                          </>
+                        )}
+                      </p>
+
+                      <div className="event-list-meta">
+                        <span>
+                          <b aria-hidden="true">
+                            ↟
+                          </b>
+
+                          {profileValueForLanguage(
+                            event.distance,
+                            language
+                          )}
+                        </span>
+
+                        <span>
+                          <b aria-hidden="true">
+                            ◷
+                          </b>
+                          Pace {event.pace}
+                          {language === "th"
+                            ? " / กม."
+                            : " / km"}
+                        </span>
+                      </div>
+
+                      <p className="event-list-time">
+                        <span aria-hidden="true">
+                          ◷
+                        </span>
+
+                        {event.time}
+                        {language === "th"
+                          ? " น."
+                          : ""}
+                      </p>
+                    </div>
                   </div>
-
-                  <p className="event-list-time">
-                    <span aria-hidden="true">
-                      ◷
-                    </span>
-
-                    {event.time}
-                    {language === "th"
-                      ? " น."
-                      : ""}
-                  </p>
                 </div>
 
                 <div className="event-date-card">
@@ -7263,11 +7272,14 @@ function RunnerEventsPage({
                     {monthLabel(
                       date.getMonth(),
                       language
-                    )}{" "}
+                    )}
+                  </span>
+
+                  <em>
                     {language === "th"
                       ? "2569"
                       : "2026"}
-                  </span>
+                  </em>
                 </div>
 
                 <span
@@ -7516,7 +7528,9 @@ function ClubDetail({
 
         {events.length === 0 && (
           <p className="muted">
-            No upcoming runs yet.
+            {language === "th"
+              ? "ยังไม่มีกิจกรรมวิ่งที่กำลังจะมาถึง"
+              : "No upcoming runs yet."}
           </p>
         )}
 
@@ -9936,6 +9950,7 @@ function Notifications({
 
 function FounderDashboard({
   language,
+  setLanguage,
   club,
   events,
   members,
@@ -9950,27 +9965,67 @@ function FounderDashboard({
   );
 
   return (
-    <main className="screen with-nav founder-screen">
-      <div className="founder-welcome">
-        <div>
-          <p className="eyebrow">FOUNDER DASHBOARD</p>
-          <h1>Good morning 👋</h1>
-          <p className="muted">
-            Here's what's happening with your community.
+    <main data-no-translate="true" className="screen with-nav founder-screen">
+      <div className="founder-home-header">
+        <div className="founder-brand-row">
+          <p className="eyebrow">
+            {language === "th"
+              ? "แดชบอร์ดผู้จัดกิจกรรม"
+              : "FOUNDER DASHBOARD"}
           </p>
+
+          <div className="founder-top-actions">
+            <LanguageQuickSwitch
+              language={language}
+              onChange={setLanguage}
+              compact
+            />
+
+            <div className="founder-avatar">A</div>
+          </div>
         </div>
 
-        <div className="founder-avatar">A</div>
+        <h1 className="founder-home-greeting">
+          {language === "th"
+            ? "สวัสดีตอนเช้า"
+            : "Good morning"}{" "}
+          <span className="founder-wave">👋</span>
+        </h1>
+
+        <p className="founder-home-subtitle">
+          {language === "th"
+            ? "ภาพรวมคอมมูนิตี้ของคุณในวันนี้"
+            : "Here's what's happening with your community today."}
+        </p>
       </div>
 
       <div className="founder-club-banner">
-        <div className={`founder-club-cover cover-${club.id}`} />
+        <div className="founder-club-cover">
+          <img
+            src={club6amImage}
+            alt={club.name}
+            className="founder-club-cover-image"
+          />
+        </div>
 
         <div className="founder-club-banner-info">
-          <small>YOUR RUN CLUB</small>
+          <small>
+            {language === "th"
+              ? "คลับวิ่งของคุณ"
+              : "YOUR RUN CLUB"}
+          </small>
+
           <h2>{club.name}</h2>
+
           <p>
-            📍 {club.location} · {club.schedule}
+            📍 {profileValueForLanguage(
+              club.location,
+              language
+            )} ·{" "}
+            {profileValueForLanguage(
+              club.schedule,
+              language
+            )}
           </p>
         </div>
       </div>
@@ -9983,39 +10038,41 @@ function FounderDashboard({
               ? club.members.toLocaleString()
               : "—"
           }
-          label="Total Members"
-          detail="Growing"
+          label={language === "th" ? "สมาชิกทั้งหมด" : "Total Members"}
+          detail={language === "th" ? "กำลังเติบโต" : "Growing"}
           positive
         />
 
         <FounderMetric
           type="new"
           value="28"
-          label="New Members"
-          detail="This month"
+          label={language === "th" ? "สมาชิกใหม่" : "New Members"}
+          detail={language === "th" ? "เดือนนี้" : "This month"}
           positive
         />
 
         <FounderMetric
           type="runs"
           value={events.length}
-          label="Upcoming Runs"
-          detail="Scheduled"
+          label={language === "th" ? "กิจกรรมวิ่งที่กำลังจะมาถึง" : "Upcoming Runs"}
+          detail={language === "th" ? "กำหนดไว้แล้ว" : "Scheduled"}
         />
 
         <FounderMetric
           type="signups"
           value={totalSignups}
-          label="Event Sign-ups"
-          detail="Total runners"
+          label={language === "th" ? "ผู้ลงทะเบียนกิจกรรม" : "Event Sign-ups"}
+          detail={language === "th" ? "นักวิ่งทั้งหมด" : "Total runners"}
         />
       </div>
 
       <section className="founder-section">
         <div className="founder-section-title">
           <div>
-            <p className="eyebrow">COMMUNITY GROWTH</p>
-            <h2>Growing this month</h2>
+            <p className="eyebrow">
+              {language === "th" ? "การเติบโตของคอมมูนิตี้" : "COMMUNITY GROWTH"}
+            </p>
+            <h2>{language === "th" ? "การเติบโตในเดือนนี้" : "Growing this month"}</h2>
           </div>
 
           <span className="growth-pill">+12%</span>
@@ -10038,16 +10095,17 @@ function FounderDashboard({
         </div>
 
         <div className="growth-labels">
-          {["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"].map(
-            (month) => (
-              <span key={month}>{month}</span>
-            )
-          )}
+          {(language === "th"
+            ? ["เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค."]
+            : ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"]
+          ).map((month) => (
+            <span key={month}>{month}</span>
+          ))}
         </div>
       </section>
 
       <section className="founder-section">
-        <h2>Quick Actions</h2>
+        <h2>{language === "th" ? "เมนูลัด" : "Quick Actions"}</h2>
 
         <div className="founder-actions">
           <button
@@ -10057,8 +10115,8 @@ function FounderDashboard({
             <div>＋</div>
 
             <span>
-              <strong>Create Run</strong>
-              <small>Add a new event</small>
+              <strong>{language === "th" ? "สร้างกิจกรรมวิ่ง" : "Create Run"}</strong>
+              <small>{language === "th" ? "เพิ่มกิจกรรมใหม่" : "Add a new event"}</small>
             </span>
           </button>
 
@@ -10069,8 +10127,8 @@ function FounderDashboard({
             <div>✎</div>
 
             <span>
-              <strong>Edit Club</strong>
-              <small>Update club profile</small>
+              <strong>{language === "th" ? "แก้ไขคลับ" : "Edit Club"}</strong>
+              <small>{language === "th" ? "อัปเดตโปรไฟล์คลับ" : "Update club profile"}</small>
             </span>
           </button>
         </div>
@@ -10078,13 +10136,13 @@ function FounderDashboard({
 
       <section className="founder-section">
         <div className="founder-section-title">
-          <h2>Upcoming Runs</h2>
+          <h2>{language === "th" ? "กิจกรรมวิ่งที่กำลังจะมาถึง" : "Upcoming Runs"}</h2>
 
           <button
             className="link"
             onClick={onCreateEvent}
           >
-            Manage
+            {language === "th" ? "จัดการ" : "Manage"}
           </button>
         </div>
 
@@ -10116,7 +10174,8 @@ function FounderDashboard({
                 </p>
 
                 <small>
-                  {event.participants}/{event.capacity} joined
+                  {event.participants}/{event.capacity}{" "}
+                  {language === "th" ? "คนเข้าร่วม" : "joined"}
                 </small>
               </div>
 
@@ -10130,7 +10189,7 @@ function FounderDashboard({
 
       <section className="founder-section">
         <div className="founder-section-title">
-          <h2>Recent Members</h2>
+          <h2>{language === "th" ? "สมาชิกล่าสุด" : "Recent Members"}</h2>
 
           <button
             className="link"
@@ -10138,7 +10197,7 @@ function FounderDashboard({
               onNav("founder-members")
             }
           >
-            See all
+            {language === "th" ? "ดูทั้งหมด" : "See all"}
           </button>
         </div>
 
@@ -10154,7 +10213,10 @@ function FounderDashboard({
             <div className="grow">
               <strong>{member.name}</strong>
 
-              <p>Joined {member.joined}</p>
+              <p>
+                {language === "th" ? "เข้าร่วมเมื่อ " : "Joined "}
+                {member.joined}
+              </p>
             </div>
 
             <span
@@ -10164,7 +10226,13 @@ function FounderDashboard({
                   : ""
               }`}
             >
-              {member.status}
+              {language === "th"
+                ? member.status === "New"
+                  ? "ใหม่"
+                  : member.status === "Active"
+                    ? "ใช้งานอยู่"
+                    : member.status
+                : member.status}
             </span>
           </div>
         ))}
@@ -10224,6 +10292,7 @@ function FounderClub({
 
   return (
     <main
+      data-no-translate="true"
       className="screen with-nav founder-screen founder-club-page"
       onClick={() => {
         if (levelOpen) {
@@ -10233,13 +10302,15 @@ function FounderClub({
     >
       <header className="fcm-header">
         <p className="fcm-eyebrow">
-          CLUB MANAGEMENT
+          {language === "th" ? "จัดการคลับ" : "CLUB MANAGEMENT"}
         </p>
 
-        <h1>Manage your club</h1>
+        <h1>{language === "th" ? "จัดการคลับของคุณ" : "Manage your club"}</h1>
 
         <p className="fcm-subtitle">
-          Keep your club profile clear and up to date.
+          {language === "th"
+            ? "อัปเดตข้อมูลคลับให้ชัดเจนและเป็นปัจจุบันอยู่เสมอ"
+            : "Keep your club profile clear and up to date."}
         </p>
       </header>
 
@@ -10254,13 +10325,13 @@ function FounderClub({
       <section className="fcm-main-card">
         <div className="fcm-text-field">
           <span className="fcm-label">
-            CLUB NAME
+            {language === "th" ? "ชื่อคลับ" : "CLUB NAME"}
           </span>
 
           <input
             className="fcm-input"
             value={draft.name}
-            placeholder="Enter your club name"
+            placeholder={language === "th" ? "กรอกชื่อคลับ" : "Enter your club name"}
             onChange={(event) =>
               updateField(
                 "name",
@@ -10272,14 +10343,18 @@ function FounderClub({
 
         <div className="fcm-text-field">
           <span className="fcm-label">
-            DESCRIPTION
+            {language === "th" ? "คำอธิบายคลับ" : "DESCRIPTION"}
           </span>
 
           <textarea
             className="fcm-textarea"
             rows={4}
             value={draft.description}
-            placeholder="Tell runners about your club"
+            placeholder={
+              language === "th"
+                ? "บอกนักวิ่งเกี่ยวกับคลับของคุณ"
+                : "Tell runners about your club"
+            }
             onChange={(event) =>
               updateField(
                 "description",
@@ -10293,13 +10368,13 @@ function FounderClub({
       <div className="fcm-grid">
         <div className="fcm-field">
           <span className="fcm-label">
-            LOCATION
+            {language === "th" ? "พื้นที่" : "LOCATION"}
           </span>
 
           <input
             className="fcm-input"
             value={draft.location}
-            placeholder="e.g. Lumpini"
+            placeholder={language === "th" ? "เช่น ปทุมวัน" : "e.g. Lumpini"}
             onChange={(event) =>
               updateField(
                 "location",
@@ -10311,13 +10386,13 @@ function FounderClub({
 
         <div className="fcm-field">
           <span className="fcm-label">
-            DISTANCE
+            {language === "th" ? "ระยะทาง" : "DISTANCE"}
           </span>
 
           <input
             className="fcm-input"
             value={draft.distance}
-            placeholder="e.g. 3K"
+            placeholder={language === "th" ? "เช่น 3 กม." : "e.g. 3K"}
             onChange={(event) =>
               updateField(
                 "distance",
@@ -10329,7 +10404,7 @@ function FounderClub({
 
         <div className="fcm-field">
           <span className="fcm-label">
-            PACE
+            {language === "th" ? "เพซ" : "PACE"}
           </span>
 
           <input
@@ -10352,7 +10427,7 @@ function FounderClub({
           }
         >
           <span className="fcm-label">
-            LEVEL
+            {language === "th" ? "ระดับนักวิ่ง" : "LEVEL"}
           </span>
 
           <button
@@ -10367,7 +10442,7 @@ function FounderClub({
             }
           >
             <span className="fcm-dropdown-value">
-              {draft.level}
+              {founderLabel(draft.level, language)}
             </span>
 
             <span
@@ -10413,7 +10488,7 @@ function FounderClub({
                       setLevelOpen(false);
                     }}
                   >
-                    <span>{option}</span>
+                    <span>{founderLabel(option, language)}</span>
 
                     {draft.level === option && (
                       <span className="fcm-selected-dot" />
@@ -10428,13 +10503,17 @@ function FounderClub({
 
       <div className="fcm-field">
         <span className="fcm-label">
-          SCHEDULE
+          {language === "th" ? "ตารางวิ่ง" : "SCHEDULE"}
         </span>
 
         <input
           className="fcm-input"
           value={draft.schedule}
-          placeholder="e.g. Sat / Sun · Morning"
+          placeholder={
+            language === "th"
+              ? "เช่น ส. / อา. · ช่วงเช้า"
+              : "e.g. Sat / Sun · Morning"
+          }
           onChange={(event) =>
             updateField(
               "schedule",
@@ -10446,7 +10525,7 @@ function FounderClub({
 
       <section className="fcm-community-card">
         <span className="fcm-label">
-          COMMUNITY STYLE
+          {language === "th" ? "สไตล์คอมมูนิตี้" : "COMMUNITY STYLE"}
         </span>
 
         <div className="fcm-vibes">
@@ -10506,8 +10585,12 @@ function FounderClub({
         onClick={saveChanges}
       >
         {saved
-          ? "Changes Saved"
-          : "Save Changes"}
+          ? language === "th"
+            ? "บันทึกแล้ว"
+            : "Changes Saved"
+          : language === "th"
+            ? "บันทึกการเปลี่ยนแปลง"
+            : "Save Changes"}
       </button>
 
       <FounderNav
@@ -10553,7 +10636,9 @@ function FounderEvents({
     meetingPoint: "",
     route: "",
     whatToBring:
-      "Running shoes and water.",
+      language === "th"
+        ? "รองเท้าวิ่งและน้ำดื่ม"
+        : "Running shoes and water.",
   };
 
   const [draft, setDraft] =
@@ -10569,7 +10654,9 @@ function FounderEvents({
   const createEvent = () => {
     if (!draft.name.trim()) {
       alert(
-        "Please enter an event name."
+        language === "th"
+          ? "กรุณากรอกชื่อกิจกรรม"
+          : "Please enter an event name."
       );
       return;
     }
@@ -10579,7 +10666,8 @@ function FounderEvents({
       clubId: 1,
       name: draft.name,
       date:
-        draft.date || "TBA",
+        draft.date ||
+        (language === "th" ? "รอประกาศ" : "TBA"),
       time: draft.time,
       location: draft.location,
       distance: draft.distance,
@@ -10590,10 +10678,14 @@ function FounderEvents({
       participants: 0,
       meetingPoint:
         draft.meetingPoint ||
-        `${draft.location} Meeting Point`,
+        (language === "th"
+          ? `จุดนัดพบ ${profileValueForLanguage(draft.location, "th")}`
+          : `${draft.location} Meeting Point`),
       route:
         draft.route ||
-        "Route will be announced.",
+        (language === "th"
+          ? "จะแจ้งเส้นทางภายหลัง"
+          : "Route will be announced."),
       whatToBring:
         draft.whatToBring,
     };
@@ -10654,7 +10746,9 @@ function FounderEvents({
     id: number
   ) => {
     const confirmed = confirm(
-      "Cancel this run?"
+      language === "th"
+        ? "ยกเลิกกิจกรรมนี้หรือไม่?"
+        : "Cancel this run?"
     );
 
     if (!confirmed) return;
@@ -10670,6 +10764,7 @@ function FounderEvents({
 
   return (
     <main
+      data-no-translate="true"
       className="screen with-nav founder-screen"
       onClick={() => {
         if (distanceOpen) {
@@ -10680,13 +10775,15 @@ function FounderEvents({
       <div className="founder-page-top">
         <div>
           <p className="eyebrow">
-            EVENT MANAGEMENT
+            {language === "th" ? "จัดการกิจกรรม" : "EVENT MANAGEMENT"}
           </p>
 
-          <h1>Your Runs</h1>
+          <h1>{language === "th" ? "กิจกรรมของคุณ" : "Your Runs"}</h1>
 
           <p className="muted">
-            Create and manage upcoming community runs.
+            {language === "th"
+              ? "สร้างและจัดการกิจกรรมวิ่งของคอมมูนิตี้"
+              : "Create and manage upcoming community runs."}
           </p>
         </div>
 
@@ -10710,14 +10807,14 @@ function FounderEvents({
             <div>
               <p className="eyebrow">
                 {editingId
-                  ? "EDIT RUN"
-                  : "NEW RUN"}
+                  ? language === "th" ? "แก้ไขกิจกรรม" : "EDIT RUN"
+                  : language === "th" ? "กิจกรรมใหม่" : "NEW RUN"}
               </p>
 
               <h2>
                 {editingId
-                  ? "Update Run"
-                  : "Create a Run"}
+                  ? language === "th" ? "อัปเดตกิจกรรม" : "Update Run"
+                  : language === "th" ? "สร้างกิจกรรมวิ่ง" : "Create a Run"}
               </h2>
             </div>
 
@@ -10730,10 +10827,10 @@ function FounderEvents({
           </div>
 
           <label>
-            EVENT NAME
+            {language === "th" ? "ชื่อกิจกรรม" : "EVENT NAME"}
 
             <input
-              placeholder="e.g. Sunday Easy 5K"
+              placeholder={language === "th" ? "เช่น Sunday Easy 5K" : "e.g. Sunday Easy 5K"}
               value={draft.name}
               onChange={(e) =>
                 setDraft({
@@ -10747,10 +10844,10 @@ function FounderEvents({
 
           <div className="founder-form-two">
             <label>
-              DATE
+              {language === "th" ? "วันที่" : "DATE"}
 
               <input
-                placeholder="25 Oct"
+                placeholder={language === "th" ? "25 ต.ค." : "25 Oct"}
                 value={draft.date}
                 onChange={(e) =>
                   setDraft({
@@ -10763,7 +10860,7 @@ function FounderEvents({
             </label>
 
             <label>
-              TIME
+              {language === "th" ? "เวลา" : "TIME"}
 
               <input
                 type="time"
@@ -10789,7 +10886,7 @@ function FounderEvents({
               }
             >
               <span className="event-field-label">
-                DISTANCE
+                {language === "th" ? "ระยะทาง" : "DISTANCE"}
               </span>
 
               <button
@@ -10872,7 +10969,7 @@ function FounderEvents({
             </div>
 
             <label>
-              CAPACITY
+              {language === "th" ? "จำนวนผู้เข้าร่วมสูงสุด" : "CAPACITY"}
 
               <input
                 type="number"
@@ -10893,7 +10990,7 @@ function FounderEvents({
           </div>
 
           <label>
-            PACE
+            {language === "th" ? "เพซ" : "PACE"}
 
             <input
               value={draft.pace}
@@ -10908,7 +11005,7 @@ function FounderEvents({
           </label>
 
           <label>
-            LOCATION
+            {language === "th" ? "พื้นที่" : "LOCATION"}
 
             <input
               value={
@@ -10925,10 +11022,14 @@ function FounderEvents({
           </label>
 
           <label>
-            MEETING POINT
+            {language === "th" ? "จุดนัดพบ" : "MEETING POINT"}
 
             <input
-              placeholder="Where should runners meet?"
+              placeholder={
+                language === "th"
+                  ? "นักวิ่งควรนัดพบกันที่ไหน?"
+                  : "Where should runners meet?"
+              }
               value={
                 draft.meetingPoint
               }
@@ -10943,11 +11044,15 @@ function FounderEvents({
           </label>
 
           <label>
-            ROUTE
+            {language === "th" ? "เส้นทาง" : "ROUTE"}
 
             <textarea
               rows={3}
-              placeholder="Describe the running route"
+              placeholder={
+                language === "th"
+                  ? "อธิบายเส้นทางวิ่ง"
+                  : "Describe the running route"
+              }
               value={draft.route}
               onChange={(e) =>
                 setDraft({
@@ -10960,7 +11065,7 @@ function FounderEvents({
           </label>
 
           <label>
-            WHAT TO BRING
+            {language === "th" ? "สิ่งที่ควรเตรียม" : "WHAT TO BRING"}
 
             <textarea
               rows={2}
@@ -10986,8 +11091,8 @@ function FounderEvents({
             }
           >
             {editingId
-              ? "Save Changes"
-              : "Publish Run"}
+              ? language === "th" ? "บันทึกการเปลี่ยนแปลง" : "Save Changes"
+              : language === "th" ? "เผยแพร่กิจกรรม" : "Publish Run"}
           </button>
         </div>
       )}
@@ -11029,7 +11134,7 @@ function FounderEvents({
 
                   <div className="grow">
                     <p className="eyebrow">
-                      UPCOMING
+                      {language === "th" ? "กำลังจะมาถึง" : "UPCOMING"}
                     </p>
 
                     <h3>
@@ -11038,7 +11143,10 @@ function FounderEvents({
 
                     <p className="muted">
                       {event.time} ·{" "}
-                      {event.location}
+                      {profileValueForLanguage(
+                        event.location,
+                        language
+                      )}
                     </p>
                   </div>
 
@@ -11054,7 +11162,10 @@ function FounderEvents({
 
                 <div className="founder-event-tags">
                   <span>
-                    {event.distance}
+                    {profileValueForLanguage(
+                      event.distance,
+                      language
+                    )}
                   </span>
 
                   <span>
@@ -11064,8 +11175,10 @@ function FounderEvents({
 
                 <div className="capacity-row">
                   <span>
-                    {event.participants} of{" "}
-                    {event.capacity} joined
+                    {event.participants}{" "}
+                    {language === "th" ? "จาก" : "of"}{" "}
+                    {event.capacity}{" "}
+                    {language === "th" ? "คนเข้าร่วม" : "joined"}
                   </span>
 
                   <strong>
@@ -11091,7 +11204,7 @@ function FounderEvents({
                       startEdit(event)
                     }
                   >
-                    Edit Run
+                    {language === "th" ? "แก้ไขกิจกรรม" : "Edit Run"}
                   </button>
 
                   <button
@@ -11102,7 +11215,7 @@ function FounderEvents({
                       )
                     }
                   >
-                    Cancel
+                    {language === "th" ? "ยกเลิก" : "Cancel"}
                   </button>
                 </div>
               </article>
@@ -11150,33 +11263,37 @@ function FounderMembers({
   );
 
   return (
-    <main className="screen with-nav founder-screen">
+    <main data-no-translate="true" className="screen with-nav founder-screen">
       <Header
-        eyebrow="MEMBER MANAGEMENT"
-        title="Your community"
-        subtitle="See who's joining and staying active."
+        eyebrow={language === "th" ? "จัดการสมาชิก" : "MEMBER MANAGEMENT"}
+        title={language === "th" ? "คอมมูนิตี้ของคุณ" : "Your community"}
+        subtitle={
+          language === "th"
+            ? "ดูสมาชิกที่เข้าร่วมและยังคงมีส่วนร่วมกับคอมมูนิตี้"
+            : "See who's joining and staying active."
+        }
       />
 
       <div className="member-summary">
         <div>
           <strong>{totalMembers}</strong>
-          <span>Total Members</span>
+          <span>{language === "th" ? "สมาชิกทั้งหมด" : "Total Members"}</span>
         </div>
 
         <div>
           <strong>{newMembers}</strong>
-          <span>New Members</span>
+          <span>{language === "th" ? "สมาชิกใหม่" : "New Members"}</span>
         </div>
 
         <div>
           <strong>{totalRunJoins}</strong>
-          <span>Run Joins</span>
+          <span>{language === "th" ? "การเข้าร่วมกิจกรรม" : "Run Joins"}</span>
         </div>
       </div>
 
       <input
         className="search"
-        placeholder="Search member"
+        placeholder={language === "th" ? "ค้นหาสมาชิก" : "Search member"}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
@@ -11192,13 +11309,19 @@ function FounderMembers({
               )
             }
           >
-            {item}
+            {language === "th"
+              ? item === "All"
+                ? "ทั้งหมด"
+                : item === "New"
+                  ? "ใหม่"
+                  : "ใช้งานอยู่"
+              : item}
           </button>
         ))}
       </div>
 
       <p className="small-label">
-        RECENT MEMBER RECORDS
+        {language === "th" ? "รายชื่อสมาชิกล่าสุด" : "RECENT MEMBER RECORDS"}
       </p>
 
       <div className="founder-member-list">
@@ -11220,14 +11343,24 @@ function FounderMembers({
                     member.status === "New" ? "new" : ""
                   }`}
                 >
-                  {member.status}
+                  {language === "th"
+                    ? member.status === "New"
+                      ? "ใหม่"
+                      : member.status === "Active"
+                        ? "ใช้งานอยู่"
+                        : member.status
+                    : member.status}
                 </span>
               </div>
 
-              <p>Joined {member.joined}</p>
+              <p>
+                {language === "th" ? "เข้าร่วมเมื่อ " : "Joined "}
+                {member.joined}
+              </p>
 
               <small>
-                {member.events} runs joined
+                {member.events}{" "}
+                {language === "th" ? "กิจกรรมที่เข้าร่วม" : "runs joined"}
               </small>
             </div>
           </article>
@@ -11237,8 +11370,12 @@ function FounderMembers({
       {filteredMembers.length === 0 && (
         <Empty
           icon="⌕"
-          title="No members found"
-          description="Try another name or filter."
+          title={language === "th" ? "ไม่พบสมาชิก" : "No members found"}
+          description={
+            language === "th"
+              ? "ลองค้นหาด้วยชื่ออื่นหรือเปลี่ยนตัวกรอง"
+              : "Try another name or filter."
+          }
         />
       )}
 
@@ -11270,7 +11407,9 @@ function FounderProfile({
   const requestReset = () => {
     if (
       confirm(
-        "Reset Runrise for the next tester? This clears your account, preferences, club edits, events, saved clubs and joined runs."
+        language === "th"
+          ? "รีเซ็ต Runrise สำหรับผู้ทดสอบคนถัดไปหรือไม่? ข้อมูลบัญชี การตั้งค่า การแก้ไขคลับ กิจกรรม คลับที่บันทึก และกิจกรรมที่เข้าร่วมจะถูกล้างทั้งหมด"
+          : "Reset Runrise for the next tester? This clears your account, preferences, club edits, events, saved clubs and joined runs."
       )
     ) {
       onReset();
@@ -11278,7 +11417,7 @@ function FounderProfile({
   };
 
   return (
-    <main className="screen with-nav founder-screen">
+    <main data-no-translate="true" className="screen with-nav founder-screen">
       <div className="founder-profile-header">
         <div className="founder-profile-avatar">
           {founderName?.[0] || "F"}
@@ -11287,35 +11426,35 @@ function FounderProfile({
         <h1>{founderName || "Founder"}</h1>
 
         <p className="muted">
-          Founder · {club?.name || "Run Club"}
+          {language === "th" ? "ผู้จัดคลับ" : "Founder"} · {club?.name || "Run Club"}
         </p>
       </div>
 
       <div className="founder-profile-stats">
         <div>
           <strong>1</strong>
-          <span>Run Club</span>
+          <span>{language === "th" ? "คลับวิ่ง" : "Run Club"}</span>
         </div>
 
         <div>
           <strong>{newMembers}</strong>
-          <span>New Members</span>
+          <span>{language === "th" ? "สมาชิกใหม่" : "New Members"}</span>
         </div>
 
         <div>
           <strong>{runsHosted}</strong>
-          <span>Runs Hosted</span>
+          <span>{language === "th" ? "กิจกรรมที่จัด" : "Runs Hosted"}</span>
         </div>
       </div>
 
       <section className="founder-profile-section">
         <p className="small-label">
-          PREFERENCES
+          {language === "th" ? "การตั้งค่า" : "PREFERENCES"}
         </p>
 
         <div className="settings-card">
           <div className="settings-row">
-            <span>Notifications</span>
+            <span>{language === "th" ? "การแจ้งเตือน" : "Notifications"}</span>
 
             <button
               className={
@@ -11328,7 +11467,11 @@ function FounderProfile({
                   !notificationsEnabled
                 )
               }
-              aria-label="Toggle notifications"
+              aria-label={
+                language === "th"
+                  ? "เปิดหรือปิดการแจ้งเตือน"
+                  : "Toggle notifications"
+              }
             >
               <span />
             </button>
@@ -11346,7 +11489,7 @@ function FounderProfile({
             className="settings-row"
             onClick={onSwitchRole}
           >
-            <span>Switch to Runner</span>
+            <span>{language === "th" ? "สลับเป็นนักวิ่ง" : "Switch to Runner"}</span>
             <span>›</span>
           </button>
 
@@ -11354,7 +11497,7 @@ function FounderProfile({
             className="settings-row reset-row"
             onClick={requestReset}
           >
-            <span>Reset Prototype</span>
+            <span>{language === "th" ? "รีเซ็ตต้นแบบ" : "Reset Prototype"}</span>
             <span>↻</span>
           </button>
         </div>

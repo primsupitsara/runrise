@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Kanit:wght@500;600;700;800&display=swap");
 
 :root {
 
@@ -17297,4 +17297,2118 @@ html[lang="th"]
     .ut-choice-card strong {
     font-size: 11px !important;
   }
+}
+
+/* =========================================================
+   RUNRISE — GLOBAL TYPOGRAPHY SYSTEM
+   Heading: Kanit
+   Body: Anuphan
+   Applied across Thai + English UI
+========================================================= */
+
+:root {
+  --font-heading: "Kanit", sans-serif;
+  --font-body: "Anuphan", sans-serif;
+
+  font-family: var(--font-body) !important;
+}
+
+/* ---------------------------------------------------------
+   BODY / GENERAL UI
+--------------------------------------------------------- */
+html,
+body,
+#root,
+.app-shell,
+.phone,
+.screen {
+  font-family: var(--font-body) !important;
+}
+
+body,
+p,
+span,
+small,
+label,
+input,
+textarea,
+select,
+option,
+button,
+a,
+li,
+div {
+  font-family: var(--font-body);
+}
+
+/* Form controls must inherit Anuphan everywhere */
+button,
+input,
+textarea,
+select {
+  font-family: var(--font-body) !important;
+}
+
+/* ---------------------------------------------------------
+   MAIN HEADINGS
+--------------------------------------------------------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading) !important;
+}
+
+/* Large / prominent text used as headings even when
+   the component is not rendered as h1-h6 */
+.hero-title,
+.page-header h1,
+.home-top h1,
+.club-title,
+.event-hero h1,
+.profile-head h1,
+.founder-welcome h1,
+.founder-header h1,
+.founder-page-top h1,
+.fcm-header h1,
+.ut-question-title,
+.ut-question-card h1,
+.founder-question-card h1,
+.auth-title,
+.role-title,
+.runner-profile-name,
+.profile-name,
+.friend-page-title,
+.friend-chat-title,
+.event-page-title,
+.event-detail-title,
+.event-list-title,
+.all-clubs-title,
+.compare-title,
+.compare-result-title,
+.home-greeting,
+.home-recommend-title,
+.club-detail-title,
+.profile-section-title,
+.profile-card-title,
+.booking-title,
+.founder-section-title h2,
+.founder-club-banner-info h2,
+.dashboard-event-info strong,
+.founder-metric-value {
+  font-family: var(--font-heading) !important;
+}
+
+/* ---------------------------------------------------------
+   BUTTON EMPHASIS
+   Use Kanit only for primary CTA / stronger navigation copy.
+   Small UI controls stay Anuphan for readability.
+--------------------------------------------------------- */
+.primary,
+.secondary,
+.danger,
+.hero-join-button,
+.founder-save-button,
+.fcm-save-button,
+.small-primary,
+.compare-banner,
+.compare-select-sticky button,
+.home-action-button,
+.event-primary-button,
+.booking-primary-button,
+.profile-edit-button,
+.auth-primary-button,
+.ut-continue-button,
+.onboarding-continue,
+.sticky-action button {
+  font-family: var(--font-heading) !important;
+}
+
+/* ---------------------------------------------------------
+   EYEBROWS / LABELS / META
+--------------------------------------------------------- */
+.eyebrow,
+.small-label,
+.fcm-eyebrow,
+.fcm-label,
+.event-field-label,
+.compare-label,
+.ut-question-number,
+.ut-question-explainer span,
+.profile-card-eyebrow,
+.profile-section-eyebrow,
+.home-section-eyebrow,
+.event-section-eyebrow,
+.founder-section-eyebrow {
+  font-family: var(--font-body) !important;
+}
+
+/* ---------------------------------------------------------
+   RUNNER ONBOARDING
+--------------------------------------------------------- */
+.ut-question-prompt,
+.ut-question-explainer p,
+.ut-choice-card,
+.ut-choice-card strong,
+.ut-chip,
+.ut-picker-unit,
+.ut-subcategory-heading,
+.ut-location-context,
+.ut-area-availability-note,
+.ut-park-empty,
+.ut-multi-helper {
+  font-family: var(--font-body) !important;
+}
+
+.ut-question-card h1,
+.ut-question-card h2,
+.ut-question-card h3 {
+  font-family: var(--font-heading) !important;
+}
+
+/* ---------------------------------------------------------
+   FOUNDER ONBOARDING
+--------------------------------------------------------- */
+.founder-onboarding,
+.founder-onboarding p,
+.founder-onboarding span,
+.founder-onboarding small,
+.founder-onboarding label,
+.founder-onboarding button,
+.founder-onboarding input,
+.founder-onboarding textarea,
+.founder-onboarding select,
+.founder-onboarding .ut-choice-card,
+.founder-onboarding .ut-choice-card strong {
+  font-family: var(--font-body) !important;
+}
+
+.founder-onboarding h1,
+.founder-onboarding h2,
+.founder-onboarding h3,
+.founder-onboarding .founder-question-card h1 {
+  font-family: var(--font-heading) !important;
+}
+
+/* ---------------------------------------------------------
+   HOME / CLUB / EVENT / COMPARE
+--------------------------------------------------------- */
+.club-card,
+.club-body,
+.club-body p,
+.club-body span,
+.meta,
+.tags,
+.stat,
+.info-row,
+.event-row,
+.event-mini-detail,
+.compare-section,
+.easy-compare,
+.easy-compare-values,
+.best-match-card,
+.personalized-filter,
+.chips,
+.chip {
+  font-family: var(--font-body) !important;
+}
+
+.club-body h3,
+.compare-section h3,
+.best-match-card h3,
+.next-run-info h2,
+.run-list-card h3,
+.saved-club-info h3 {
+  font-family: var(--font-heading) !important;
+}
+
+/* ---------------------------------------------------------
+   PROFILE / FRIENDS / BOOKINGS
+--------------------------------------------------------- */
+.settings-card,
+.form-card,
+.settings-row,
+.profile-preference-grid,
+.profile-preference-item,
+.profile-bookings,
+.booking-card,
+.friend-list,
+.friend-row,
+.friend-chat,
+.friend-message,
+.friend-search,
+.bottom-nav,
+.nav-button,
+.nav-button small {
+  font-family: var(--font-body) !important;
+}
+
+/* ---------------------------------------------------------
+   FOUNDER DASHBOARD / FORMS
+--------------------------------------------------------- */
+.founder-screen,
+.founder-screen p,
+.founder-screen span,
+.founder-screen small,
+.founder-screen button,
+.founder-screen input,
+.founder-screen textarea,
+.founder-screen select,
+.founder-form-card,
+.event-editor,
+.fcm-input,
+.fcm-textarea,
+.fcm-dropdown-trigger,
+.fcm-dropdown-option,
+.fcm-vibe {
+  font-family: var(--font-body) !important;
+}
+
+.founder-metric strong,
+.founder-action strong,
+.founder-event-card h3,
+.founder-profile-header h1,
+.founder-profile-stats strong {
+  font-family: var(--font-heading) !important;
+}
+
+/* ---------------------------------------------------------
+   LANGUAGE-SPECIFIC OLD FONT OVERRIDES
+   These intentionally override previous SF Pro / Noto rules.
+--------------------------------------------------------- */
+html[lang="en"] body,
+html[lang="en"] button,
+html[lang="en"] input,
+html[lang="en"] textarea,
+html[lang="en"] select,
+html[lang="th"] body,
+html[lang="th"] button,
+html[lang="th"] input,
+html[lang="th"] textarea,
+html[lang="th"] select {
+  font-family: var(--font-body) !important;
+}
+
+html[lang="en"] h1,
+html[lang="en"] h2,
+html[lang="en"] h3,
+html[lang="en"] h4,
+html[lang="th"] h1,
+html[lang="th"] h2,
+html[lang="th"] h3,
+html[lang="th"] h4 {
+  font-family: var(--font-heading) !important;
+}
+
+/* ---------------------------------------------------------
+   TYPE WEIGHT TUNING
+   Kanit can look heavy quickly, so keep hierarchy controlled.
+--------------------------------------------------------- */
+h1 {
+  font-weight: 700 !important;
+}
+
+h2 {
+  font-weight: 600 !important;
+}
+
+h3,
+h4 {
+  font-weight: 600 !important;
+}
+
+body,
+p,
+input,
+textarea,
+select {
+  font-weight: 400;
+}
+
+button {
+  font-weight: 600;
+}
+
+/* Keep Thai body comfortable to read */
+html[lang="th"] body,
+html[lang="th"] p,
+html[lang="th"] label,
+html[lang="th"] input,
+html[lang="th"] textarea,
+html[lang="th"] select,
+html[lang="th"] small {
+  font-family: var(--font-body) !important;
+  line-height: 1.5;
+}
+
+/* Thai headings: Kanit needs slightly more vertical room */
+html[lang="th"] h1,
+html[lang="th"] h2,
+html[lang="th"] h3,
+html[lang="th"] h4,
+html[lang="th"] .hero-title,
+html[lang="th"] .ut-question-title,
+html[lang="th"] .founder-question-card h1 {
+  font-family: var(--font-heading) !important;
+  letter-spacing: -0.015em !important;
+  line-height: 1.2;
+}
+
+/* English headings can stay tighter */
+html[lang="en"] h1,
+html[lang="en"] h2,
+html[lang="en"] h3,
+html[lang="en"] h4 {
+  letter-spacing: -0.025em;
+}
+
+/* ---------------------------------------------------------
+   FINAL SAFETY OVERRIDE
+   Removes remaining Noto Sans Thai overrides appearing earlier
+   in this long stylesheet without changing component layout.
+--------------------------------------------------------- */
+html[lang="th"] .phone,
+html[lang="th"] .screen,
+html[lang="th"] .with-nav {
+  font-family: var(--font-body) !important;
+}
+
+/* =========================================================
+   RUNRISE — TYPOGRAPHY SPACING REFINEMENT
+   Slightly more breathing room for Kanit + Anuphan
+========================================================= */
+
+/* Body copy / labels / controls */
+body,
+p,
+span,
+small,
+label,
+button,
+input,
+textarea,
+select,
+option,
+a,
+li {
+  letter-spacing: 0.012em;
+}
+
+/* Main headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.hero-title,
+.page-header h1,
+.home-top h1,
+.club-title,
+.event-hero h1,
+.profile-head h1,
+.founder-welcome h1,
+.founder-header h1,
+.founder-page-top h1,
+.fcm-header h1,
+.ut-question-title,
+.auth-title,
+.role-title,
+.runner-profile-name,
+.profile-name,
+.friend-page-title,
+.event-page-title,
+.all-clubs-title,
+.compare-title,
+.compare-result-title,
+.home-greeting,
+.home-recommend-title,
+.club-detail-title,
+.profile-section-title,
+.profile-card-title,
+.booking-title {
+  letter-spacing: 0.004em !important;
+}
+
+/* Eyebrows / uppercase labels can breathe a little more */
+.eyebrow,
+.small-label,
+.fcm-eyebrow,
+.fcm-label,
+.event-field-label,
+.compare-label,
+.profile-card-eyebrow,
+.profile-section-eyebrow,
+.home-section-eyebrow,
+.event-section-eyebrow,
+.founder-section-eyebrow {
+  letter-spacing: 0.07em !important;
+}
+
+/* Thai needs slightly more spacing than before, but still natural */
+html[lang="th"] body,
+html[lang="th"] p,
+html[lang="th"] span,
+html[lang="th"] small,
+html[lang="th"] label,
+html[lang="th"] button,
+html[lang="th"] input,
+html[lang="th"] textarea,
+html[lang="th"] select {
+  letter-spacing: 0.014em;
+}
+
+html[lang="th"] h1,
+html[lang="th"] h2,
+html[lang="th"] h3,
+html[lang="th"] h4,
+html[lang="th"] .hero-title,
+html[lang="th"] .ut-question-title,
+html[lang="th"] .founder-question-card h1 {
+  letter-spacing: 0.006em !important;
+}
+
+/* English headings slightly open, without looking tracked out */
+html[lang="en"] h1,
+html[lang="en"] h2,
+html[lang="en"] h3,
+html[lang="en"] h4 {
+  letter-spacing: 0.002em !important;
+}
+
+/* Preserve tighter spacing for numbers / compact stats */
+.founder-metric-value,
+.event-spots strong,
+.calendar-block strong,
+.profile-booking-date strong,
+.booking-date-number,
+.compare-score,
+.match {
+  letter-spacing: 0 !important;
+}
+
+/* =========================================================
+   RUNRISE — EVENT CARD LAYOUT REFINEMENT
+   Event title on top, smaller image, clearer details/date
+========================================================= */
+
+.event-list-card {
+  min-height: 150px !important;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    74px
+    13px !important;
+
+  align-items: center !important;
+  gap: 10px !important;
+
+  padding: 12px 10px 12px 12px !important;
+}
+
+.event-list-main {
+  min-width: 0;
+
+  display: grid;
+  gap: 10px;
+}
+
+.event-list-event-title {
+  margin: 0 !important;
+
+  overflow: hidden;
+
+  color: var(--event-brown) !important;
+
+  font-family: var(--font-heading, "Kanit", sans-serif) !important;
+  font-size: 15px !important;
+  line-height: 1.2 !important;
+  font-weight: 650 !important;
+  letter-spacing: .01em !important;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.event-list-body {
+  min-width: 0;
+
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  align-items: center;
+  gap: 11px;
+}
+
+.event-list-image {
+  width: 76px !important;
+  height: 76px !important;
+
+  border-radius: 14px !important;
+}
+
+.event-list-image-fallback {
+  font-size: 17px !important;
+}
+
+.event-list-card-content {
+  min-width: 0;
+}
+
+.event-list-club-name {
+  margin: 0 0 7px !important;
+
+  overflow: hidden;
+
+  color: var(--event-brown) !important;
+
+  font-family: var(--font-heading, "Kanit", sans-serif) !important;
+  font-size: 13.5px !important;
+  line-height: 1.25 !important;
+  font-weight: 600 !important;
+  letter-spacing: .01em !important;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Hide old pill if an old cached render/class is encountered */
+.event-club-pill {
+  display: none !important;
+}
+
+.event-list-location {
+  margin: 0 0 6px !important;
+
+  color: rgba(62, 45, 40, .66) !important;
+
+  font-size: 9.6px !important;
+  line-height: 1.35 !important;
+  font-weight: 500 !important;
+}
+
+.event-location-pin {
+  margin-right: 5px !important;
+}
+
+.event-list-meta {
+  gap: 5px 11px !important;
+
+  color: rgba(62, 45, 40, .78) !important;
+
+  font-size: 9.5px !important;
+  line-height: 1.35 !important;
+  font-weight: 600 !important;
+}
+
+.event-list-meta b {
+  font-size: 10.5px !important;
+}
+
+.event-list-time {
+  gap: 5px !important;
+
+  margin: 6px 0 0 !important;
+
+  color: rgba(62, 45, 40, .74) !important;
+
+  font-size: 9.7px !important;
+  line-height: 1.25 !important;
+  font-weight: 600 !important;
+}
+
+/* Date card — make day/month/year obvious at a glance */
+.event-date-card {
+  min-height: 112px !important;
+
+  padding: 9px 5px !important;
+
+  border-radius: 18px !important;
+}
+
+.event-date-card small {
+  margin-bottom: 2px;
+
+  color: var(--event-brown) !important;
+
+  font-size: 9px !important;
+  line-height: 1.1 !important;
+  font-weight: 700 !important;
+}
+
+.event-date-card strong {
+  margin: 3px 0 4px !important;
+
+  font-size: 31px !important;
+  line-height: .95 !important;
+  font-weight: 800 !important;
+}
+
+.event-date-card span {
+  color: rgba(62, 45, 40, .72) !important;
+
+  font-size: 8.6px !important;
+  line-height: 1.1 !important;
+  font-weight: 650 !important;
+
+  white-space: nowrap;
+}
+
+.event-date-card em {
+  margin-top: 2px;
+
+  color: rgba(62, 45, 40, .57);
+
+  font-family: var(--font-body, "Anuphan", sans-serif);
+  font-size: 8px;
+  line-height: 1.1;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.event-list-chevron {
+  font-size: 26px !important;
+}
+
+/* Thai gets slightly more breathing room */
+html[lang="th"] .event-list-event-title {
+  font-size: 15.5px !important;
+  line-height: 1.3 !important;
+}
+
+html[lang="th"] .event-list-club-name {
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+}
+
+html[lang="th"] .event-list-location,
+html[lang="th"] .event-list-meta,
+html[lang="th"] .event-list-time {
+  line-height: 1.45 !important;
+}
+
+@media (max-width: 390px) {
+  .event-list-card {
+    grid-template-columns:
+      minmax(0, 1fr)
+      68px
+      11px !important;
+
+    gap: 8px !important;
+
+    padding:
+      11px
+      8px
+      11px
+      10px !important;
+  }
+
+  .event-list-body {
+    grid-template-columns:
+      70px
+      minmax(0, 1fr);
+
+    gap: 9px;
+  }
+
+  .event-list-image {
+    width: 70px !important;
+    height: 70px !important;
+  }
+
+  .event-list-event-title {
+    font-size: 14px !important;
+  }
+
+  .event-list-club-name {
+    font-size: 12.8px !important;
+  }
+
+  .event-date-card {
+    min-height: 104px !important;
+  }
+
+  .event-date-card strong {
+    font-size: 28px !important;
+  }
+
+  .event-date-card span {
+    font-size: 8px !important;
+  }
+
+  .event-date-card em {
+    font-size: 7.4px !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE — EVENT CARD ALIGNMENT FINAL
+   Image aligns from Event title to Time row
+========================================================= */
+
+.event-list-card {
+  grid-template-columns:
+    minmax(0, 1fr)
+    70px
+    13px !important;
+
+  gap: 10px !important;
+}
+
+.event-list-main {
+  display: block !important;
+  min-width: 0 !important;
+}
+
+.event-list-body {
+  display: grid !important;
+  grid-template-columns:
+    78px
+    minmax(0, 1fr) !important;
+
+  align-items: stretch !important;
+  gap: 12px !important;
+
+  min-width: 0 !important;
+}
+
+.event-list-image {
+  width: 78px !important;
+  height: 100% !important;
+  min-height: 116px !important;
+
+  align-self: stretch !important;
+
+  border-radius: 14px !important;
+  overflow: hidden !important;
+}
+
+.event-list-image img,
+.event-list-image-fallback {
+  width: 100% !important;
+  height: 100% !important;
+
+  object-fit: cover !important;
+}
+
+.event-list-card-content {
+  min-width: 0 !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+}
+
+.event-list-event-title {
+  margin: 0 0 7px !important;
+
+  color: var(--event-brown) !important;
+
+  font-family:
+    var(--font-heading, "Kanit", sans-serif) !important;
+
+  font-size: 15.5px !important;
+  line-height: 1.18 !important;
+  font-weight: 650 !important;
+  letter-spacing: .01em !important;
+}
+
+.event-list-club-name {
+  margin: 0 0 7px !important;
+
+  color: var(--event-brown) !important;
+
+  font-size: 13.5px !important;
+  line-height: 1.25 !important;
+  font-weight: 600 !important;
+}
+
+/* Make information text easier to read */
+.event-list-location,
+.event-list-meta,
+.event-list-time {
+  color: rgba(62, 45, 40, .76) !important;
+
+  font-size: 10.2px !important;
+  line-height: 1.4 !important;
+  font-weight: 600 !important;
+}
+
+.event-list-location {
+  margin: 0 0 6px !important;
+}
+
+.event-list-meta {
+  gap: 5px 12px !important;
+}
+
+.event-list-time {
+  margin: 6px 0 0 !important;
+
+  margin-top: auto !important;
+
+  padding-top: 6px !important;
+}
+
+/* Bigger icons, visually balanced with the description */
+.event-location-pin,
+.event-list-meta b,
+.event-list-time > span {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  min-width: 15px !important;
+
+  margin-right: 5px !important;
+
+  color: #CC6B37 !important;
+
+  font-size: 13.5px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+}
+
+/* Date card becomes more compact overall */
+.event-date-card {
+  width: 70px !important;
+  min-height: 102px !important;
+
+  padding: 9px 4px !important;
+
+  border-radius: 17px !important;
+}
+
+/* Weekday is now clearly readable */
+.event-date-card small {
+  margin-bottom: 3px !important;
+
+  color: var(--event-brown) !important;
+
+  font-size: 10.5px !important;
+  line-height: 1.1 !important;
+  font-weight: 750 !important;
+}
+
+/* Number is slightly smaller than before */
+.event-date-card strong {
+  margin: 2px 0 4px !important;
+
+  font-size: 27px !important;
+  line-height: .95 !important;
+  font-weight: 800 !important;
+}
+
+/* Month is bigger */
+.event-date-card span {
+  color: rgba(62, 45, 40, .72) !important;
+
+  font-size: 10px !important;
+  line-height: 1.15 !important;
+  font-weight: 700 !important;
+
+  white-space: nowrap !important;
+}
+
+/* Year is bigger too */
+.event-date-card em {
+  margin-top: 3px !important;
+
+  color: rgba(62, 45, 40, .62) !important;
+
+  font-family:
+    var(--font-body, "Anuphan", sans-serif) !important;
+
+  font-size: 9px !important;
+  line-height: 1.15 !important;
+  font-style: normal !important;
+  font-weight: 650 !important;
+}
+
+@media (max-width: 390px) {
+  .event-list-card {
+    grid-template-columns:
+      minmax(0, 1fr)
+      66px
+      11px !important;
+
+    gap: 8px !important;
+  }
+
+  .event-list-body {
+    grid-template-columns:
+      72px
+      minmax(0, 1fr) !important;
+
+    gap: 9px !important;
+  }
+
+  .event-list-image {
+    width: 72px !important;
+    min-height: 108px !important;
+  }
+
+  .event-list-event-title {
+    font-size: 14.5px !important;
+  }
+
+  .event-list-club-name {
+    font-size: 12.8px !important;
+  }
+
+  .event-list-location,
+  .event-list-meta,
+  .event-list-time {
+    font-size: 9.6px !important;
+  }
+
+  .event-location-pin,
+  .event-list-meta b,
+  .event-list-time > span {
+    font-size: 12.5px !important;
+  }
+
+  .event-date-card {
+    width: 66px !important;
+    min-height: 98px !important;
+  }
+
+  .event-date-card small {
+    font-size: 10px !important;
+  }
+
+  .event-date-card strong {
+    font-size: 25px !important;
+  }
+
+  .event-date-card span {
+    font-size: 9.4px !important;
+  }
+
+  .event-date-card em {
+    font-size: 8.6px !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE — EVENT CARD COMPACT BALANCED FINAL
+   Club name on image, event title in text column, compact date
+========================================================= */
+
+.event-list-card {
+  grid-template-columns:
+    minmax(0, 1fr)
+    60px
+    11px !important;
+
+  gap: 9px !important;
+
+  padding:
+    11px
+    9px
+    11px
+    11px !important;
+}
+
+.event-list-body {
+  grid-template-columns:
+    82px
+    minmax(0, 1fr) !important;
+
+  gap: 11px !important;
+
+  align-items: stretch !important;
+}
+
+/* Image becomes a compact portrait card */
+.event-list-image {
+  position: relative !important;
+
+  width: 82px !important;
+  min-height: 116px !important;
+  height: 100% !important;
+
+  border-radius: 14px !important;
+  overflow: hidden !important;
+}
+
+.event-list-image img,
+.event-list-image-fallback {
+  width: 100% !important;
+  height: 100% !important;
+
+  object-fit: cover !important;
+}
+
+/* Club name sits on top of the image */
+.event-list-club-overlay {
+  position: absolute !important;
+  top: 7px !important;
+  left: 7px !important;
+  right: 7px !important;
+
+  z-index: 2 !important;
+
+  display: block !important;
+
+  padding: 4px 6px !important;
+
+  border-radius: 9px !important;
+
+  background: rgba(255, 250, 240, .88) !important;
+  backdrop-filter: blur(4px) !important;
+
+  color: #3E2D28 !important;
+
+  font-family:
+    var(--font-body, "Anuphan", sans-serif) !important;
+
+  font-size: 7.8px !important;
+  line-height: 1.15 !important;
+  font-weight: 700 !important;
+  letter-spacing: .01em !important;
+
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+
+  box-shadow:
+    0 2px 8px rgba(62, 45, 40, .06) !important;
+}
+
+/* Old standalone club-name row is no longer used */
+.event-list-club-name {
+  display: none !important;
+}
+
+/* Event title becomes the primary heading */
+.event-list-event-title {
+  margin: 0 0 8px !important;
+
+  color: var(--event-brown) !important;
+
+  font-family:
+    var(--font-heading, "Kanit", sans-serif) !important;
+
+  font-size: 15.5px !important;
+  line-height: 1.22 !important;
+  font-weight: 650 !important;
+  letter-spacing: .01em !important;
+
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.event-list-card-content {
+  min-width: 0 !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+}
+
+/* Keep descriptions readable */
+.event-list-location,
+.event-list-meta,
+.event-list-time {
+  font-size: 10.2px !important;
+  line-height: 1.42 !important;
+}
+
+.event-list-location {
+  margin: 0 0 6px !important;
+}
+
+.event-list-meta {
+  gap: 5px 11px !important;
+}
+
+.event-list-time {
+  margin-top: auto !important;
+  padding-top: 6px !important;
+}
+
+/* Icons remain comfortably visible */
+.event-location-pin,
+.event-list-meta b,
+.event-list-time > span {
+  min-width: 14px !important;
+
+  margin-right: 4px !important;
+
+  font-size: 13px !important;
+}
+
+/* Compact date card */
+.event-date-card {
+  width: 60px !important;
+  min-height: 92px !important;
+
+  padding: 8px 3px !important;
+
+  border-radius: 16px !important;
+}
+
+/* Make weekday/month/year clearer while shrinking overall box */
+.event-date-card small {
+  margin-bottom: 2px !important;
+
+  font-size: 10.2px !important;
+  line-height: 1.1 !important;
+  font-weight: 750 !important;
+}
+
+.event-date-card strong {
+  margin: 1px 0 3px !important;
+
+  font-size: 24px !important;
+  line-height: .95 !important;
+  font-weight: 800 !important;
+}
+
+.event-date-card span {
+  font-size: 9.5px !important;
+  line-height: 1.12 !important;
+  font-weight: 700 !important;
+}
+
+.event-date-card em {
+  margin-top: 2px !important;
+
+  font-size: 8.7px !important;
+  line-height: 1.12 !important;
+  font-weight: 650 !important;
+}
+
+.event-list-chevron {
+  font-size: 23px !important;
+}
+
+/* Thai refinement */
+html[lang="th"] .event-list-event-title {
+  font-size: 15px !important;
+  line-height: 1.28 !important;
+}
+
+html[lang="th"] .event-list-club-overlay {
+  font-size: 8px !important;
+}
+
+@media (max-width: 390px) {
+  .event-list-card {
+    grid-template-columns:
+      minmax(0, 1fr)
+      56px
+      10px !important;
+
+    gap: 7px !important;
+
+    padding:
+      10px
+      7px
+      10px
+      9px !important;
+  }
+
+  .event-list-body {
+    grid-template-columns:
+      76px
+      minmax(0, 1fr) !important;
+
+    gap: 9px !important;
+  }
+
+  .event-list-image {
+    width: 76px !important;
+    min-height: 108px !important;
+  }
+
+  .event-list-club-overlay {
+    top: 6px !important;
+    left: 6px !important;
+    right: 6px !important;
+
+    padding: 3px 5px !important;
+
+    font-size: 7.2px !important;
+  }
+
+  .event-list-event-title {
+    font-size: 14px !important;
+  }
+
+  .event-list-location,
+  .event-list-meta,
+  .event-list-time {
+    font-size: 9.5px !important;
+  }
+
+  .event-date-card {
+    width: 56px !important;
+    min-height: 88px !important;
+  }
+
+  .event-date-card small {
+    font-size: 9.6px !important;
+  }
+
+  .event-date-card strong {
+    font-size: 22px !important;
+  }
+
+  .event-date-card span {
+    font-size: 9px !important;
+  }
+
+  .event-date-card em {
+    font-size: 8.2px !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE — EVENT CARD CLUB HEADING + EVEN ROW SPACING FINAL
+========================================================= */
+
+/* Left column: club name above image, never on top of image */
+.event-list-image-column {
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 7px !important;
+}
+
+.event-list-club-heading {
+  margin: 0 !important;
+  padding: 0 !important;
+
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+
+  color: #2f2320 !important;
+  background: transparent !important;
+
+  font-family: var(--font-heading, "Kanit", sans-serif) !important;
+  font-size: 13.5px !important;
+  line-height: 1.15 !important;
+  font-weight: 700 !important;
+  letter-spacing: .01em !important;
+}
+
+/* Remove old overlay completely */
+.event-list-club-overlay {
+  display: none !important;
+}
+
+.event-list-body {
+  grid-template-columns: 90px minmax(0, 1fr) !important;
+  align-items: stretch !important;
+  gap: 12px !important;
+}
+
+.event-list-image {
+  width: 90px !important;
+  height: 100px !important;
+  min-height: 100px !important;
+  flex: 0 0 100px !important;
+  border-radius: 14px !important;
+}
+
+.event-list-image img,
+.event-list-image-fallback {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* Event title stays primary on the right */
+.event-list-event-title {
+  margin: 0 0 8px !important;
+  font-size: 15.5px !important;
+  line-height: 1.2 !important;
+  font-weight: 650 !important;
+}
+
+/* Make all 4 information rows use the same vertical rhythm */
+.event-list-card-content {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  min-width: 0 !important;
+}
+
+.event-list-location,
+.event-list-meta,
+.event-list-time {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+
+  font-size: 10.2px !important;
+  line-height: 1.35 !important;
+}
+
+.event-list-location {
+  margin-bottom: 7px !important;
+}
+
+.event-list-meta {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 7px 11px !important;
+  margin-bottom: 7px !important;
+}
+
+.event-list-time {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Explicitly cancel the previous auto-push rule */
+.event-list-time {
+  margin-top: 0 !important;
+}
+
+/* All small icons share the same box and baseline */
+.event-location-pin,
+.event-list-meta b,
+.event-list-time > span {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 16px !important;
+  min-width: 16px !important;
+  height: 16px !important;
+
+  margin-right: 5px !important;
+
+  color: #CC6B37 !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+  vertical-align: middle !important;
+}
+
+/* Keep the date compact and balanced */
+.event-date-card {
+  width: 58px !important;
+  min-height: 86px !important;
+  padding: 7px 3px !important;
+  border-radius: 15px !important;
+}
+
+.event-date-card small {
+  font-size: 10px !important;
+  line-height: 1.1 !important;
+}
+
+.event-date-card strong {
+  margin: 1px 0 2px !important;
+  font-size: 22px !important;
+  line-height: .95 !important;
+}
+
+.event-date-card span {
+  font-size: 9.6px !important;
+  line-height: 1.1 !important;
+}
+
+.event-date-card em {
+  margin-top: 2px !important;
+  font-size: 8.8px !important;
+  line-height: 1.1 !important;
+}
+
+@media (max-width: 390px) {
+  .event-list-body {
+    grid-template-columns: 82px minmax(0, 1fr) !important;
+    gap: 9px !important;
+  }
+
+  .event-list-club-heading {
+    font-size: 12.5px !important;
+  }
+
+  .event-list-image {
+    width: 82px !important;
+    height: 92px !important;
+    min-height: 92px !important;
+    flex-basis: 92px !important;
+  }
+
+  .event-list-event-title {
+    font-size: 14px !important;
+  }
+
+  .event-list-location,
+  .event-list-meta,
+  .event-list-time {
+    font-size: 9.6px !important;
+  }
+
+  .event-location-pin,
+  .event-list-meta b,
+  .event-list-time > span {
+    width: 15px !important;
+    min-width: 15px !important;
+    height: 15px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE — EVENT CARD HIERARCHY + VERTICAL ALIGNMENT FINAL
+   Club = primary heading, Event = secondary heading
+========================================================= */
+
+/* Keep the club name above the image and make it the strongest heading */
+.event-list-image-column {
+  min-width: 0 !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+
+  gap: 6px !important;
+}
+
+.event-list-club-heading {
+  margin: 0 !important;
+  padding: 0 !important;
+
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+
+  color: #2F2320 !important;
+  background: transparent !important;
+
+  font-family: var(--font-heading, "Kanit", sans-serif) !important;
+  font-size: 16px !important;
+  line-height: 1.2 !important;
+  font-weight: 700 !important;
+  letter-spacing: .01em !important;
+}
+
+/* Left image size stays compact and balanced */
+.event-list-body {
+  grid-template-columns: 92px minmax(0, 1fr) !important;
+  align-items: start !important;
+  gap: 12px !important;
+}
+
+.event-list-image {
+  width: 92px !important;
+  height: 108px !important;
+  min-height: 108px !important;
+  flex: 0 0 108px !important;
+
+  border-radius: 14px !important;
+  overflow: hidden !important;
+}
+
+.event-list-image img,
+.event-list-image-fallback {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* The event title starts exactly at the top edge of the image.
+   19px club heading line + 6px gap = 25px offset. */
+.event-list-card-content {
+  min-width: 0 !important;
+  height: 108px !important;
+  margin-top: 25px !important;
+
+  display: grid !important;
+  grid-template-rows: auto repeat(4, minmax(0, 1fr)) !important;
+  align-items: center !important;
+
+  row-gap: 0 !important;
+}
+
+/* Event title is secondary to the Run Club heading */
+.event-list-event-title {
+  margin: 0 !important;
+  padding: 0 0 2px !important;
+
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+
+  color: var(--event-brown) !important;
+
+  font-family: var(--font-heading, "Kanit", sans-serif) !important;
+  font-size: 13.5px !important;
+  line-height: 1.15 !important;
+  font-weight: 600 !important;
+  letter-spacing: .01em !important;
+}
+
+/* Flatten the old meta wrapper so distance and pace become
+   two independent rows in the 4-row information rhythm. */
+.event-list-meta {
+  display: contents !important;
+}
+
+.event-list-location,
+.event-list-meta > span,
+.event-list-time {
+  min-width: 0 !important;
+
+  display: flex !important;
+  align-items: center !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  color: rgba(62, 45, 40, .76) !important;
+
+  font-family: var(--font-body, "Anuphan", sans-serif) !important;
+  font-size: 10.2px !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* Cancel all older spacing rules so all 4 detail rows
+   are distributed evenly by the grid above. */
+.event-list-location {
+  margin: 0 !important;
+}
+
+.event-list-time {
+  margin: 0 !important;
+  padding: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* Identical icon box for all four information rows */
+.event-location-pin,
+.event-list-meta b,
+.event-list-time > span {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 16px !important;
+  min-width: 16px !important;
+  height: 16px !important;
+
+  margin: 0 6px 0 0 !important;
+
+  color: #CC6B37 !important;
+
+  font-size: 14px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+  vertical-align: middle !important;
+}
+
+/* Keep the compact date treatment from the previous version */
+.event-date-card {
+  width: 58px !important;
+  min-height: 86px !important;
+  padding: 7px 3px !important;
+  border-radius: 15px !important;
+}
+
+.event-date-card small {
+  font-size: 10px !important;
+}
+
+.event-date-card strong {
+  margin: 1px 0 2px !important;
+  font-size: 22px !important;
+}
+
+.event-date-card span {
+  font-size: 9.6px !important;
+}
+
+.event-date-card em {
+  margin-top: 2px !important;
+  font-size: 8.8px !important;
+}
+
+/* Thai typography refinement */
+html[lang="th"] .event-list-club-heading {
+  font-size: 16px !important;
+  line-height: 1.25 !important;
+}
+
+html[lang="th"] .event-list-event-title {
+  font-size: 13.5px !important;
+  line-height: 1.2 !important;
+}
+
+html[lang="th"] .event-list-location,
+html[lang="th"] .event-list-meta > span,
+html[lang="th"] .event-list-time {
+  line-height: 1.3 !important;
+}
+
+@media (max-width: 390px) {
+  .event-list-body {
+    grid-template-columns: 84px minmax(0, 1fr) !important;
+    gap: 9px !important;
+  }
+
+  .event-list-club-heading {
+    font-size: 14.5px !important;
+  }
+
+  .event-list-image {
+    width: 84px !important;
+    height: 100px !important;
+    min-height: 100px !important;
+    flex-basis: 100px !important;
+  }
+
+  .event-list-card-content {
+    height: 100px !important;
+    margin-top: 23px !important;
+  }
+
+  .event-list-event-title {
+    font-size: 12.5px !important;
+  }
+
+  .event-list-location,
+  .event-list-meta > span,
+  .event-list-time {
+    font-size: 9.5px !important;
+  }
+
+  .event-location-pin,
+  .event-list-meta b,
+  .event-list-time > span {
+    width: 15px !important;
+    min-width: 15px !important;
+    height: 15px !important;
+    margin-right: 5px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE — EVENT / CLUB TITLE SWAP FINAL
+   Event = accent heading above image
+   Club = secondary heading in detail column
+========================================================= */
+
+/* Position stays the same as before, only the content is swapped.
+   This left slot is now the EVENT name and remains the largest type. */
+.event-list-club-heading {
+  position: relative !important;
+
+  width: 100% !important;
+  min-height: 25px !important;
+
+  display: flex !important;
+  align-items: center !important;
+
+  margin: 0 !important;
+  padding: 4px 8px 4px 10px !important;
+
+  box-sizing: border-box !important;
+
+  border: 1px solid rgba(204, 107, 55, .18) !important;
+  border-radius: 10px !important;
+
+  background: rgba(246, 223, 191, .58) !important;
+  color: #B85A31 !important;
+
+  font-family: var(--font-heading, "Kanit", sans-serif) !important;
+  font-size: 16px !important;
+  line-height: 1.2 !important;
+  font-weight: 700 !important;
+  letter-spacing: .015em !important;
+
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+
+  box-shadow: none !important;
+}
+
+/* Small sunrise accent makes the Event label easier to scan
+   without adding another heavy box. */
+.event-list-club-heading::before {
+  content: "" !important;
+
+  width: 4px !important;
+  height: 15px !important;
+
+  flex: 0 0 4px !important;
+
+  margin-right: 6px !important;
+
+  border-radius: 999px !important;
+
+  background: linear-gradient(
+    180deg,
+    #FBD185 0%,
+    #CC6B37 100%
+  ) !important;
+}
+
+/* This right-side slot is now the RUN CLUB name.
+   Keep the existing secondary font size exactly at this position. */
+.event-list-event-title {
+  margin: 0 !important;
+  padding: 0 0 2px !important;
+
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+
+  color: #3E2D28 !important;
+  background: transparent !important;
+
+  font-family: var(--font-heading, "Kanit", sans-serif) !important;
+  font-size: 13.5px !important;
+  line-height: 1.15 !important;
+  font-weight: 600 !important;
+  letter-spacing: .01em !important;
+}
+
+/* The accent label is slightly taller than the old plain title.
+   Move the right column down so the club title still starts exactly
+   at the top edge of the image. */
+.event-list-card-content {
+  margin-top: 31px !important;
+}
+
+html[lang="th"] .event-list-club-heading {
+  font-size: 16px !important;
+  line-height: 1.25 !important;
+}
+
+html[lang="th"] .event-list-event-title {
+  font-size: 13.5px !important;
+  line-height: 1.2 !important;
+}
+
+@media (max-width: 390px) {
+  .event-list-club-heading {
+    min-height: 23px !important;
+
+    padding: 3px 7px 3px 8px !important;
+
+    border-radius: 9px !important;
+
+    font-size: 14.5px !important;
+  }
+
+  .event-list-club-heading::before {
+    width: 3px !important;
+    height: 13px !important;
+    flex-basis: 3px !important;
+    margin-right: 5px !important;
+  }
+
+  .event-list-card-content {
+    margin-top: 29px !important;
+  }
+
+  .event-list-event-title {
+    font-size: 12.5px !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE — EVENT TITLE WIDTH ONLY
+   Keep every other Event card layout exactly as-is.
+   The Event title may extend beyond the image column and
+   only becomes "..." when it genuinely runs out of room.
+========================================================= */
+
+.event-list-image-column {
+  overflow: visible !important;
+}
+
+.event-list-club-heading {
+  /* The title is inside the narrow image column.
+     Give only this heading its own wider visual width. */
+  width: 228px !important;
+  max-width: 228px !important;
+  min-width: 0 !important;
+
+  /* Keep it on one line and truncate only at the true title limit. */
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+
+  /* Prevent flex from unexpectedly shrinking the title. */
+  flex: 0 0 auto !important;
+}
+
+/* Keep exactly the same title treatment in Thai and English. */
+html[lang="th"] .event-list-club-heading,
+html[lang="en"] .event-list-club-heading {
+  width: 228px !important;
+  max-width: 228px !important;
+}
+
+/* This is NOT a responsive redesign.
+   It only prevents the title from exceeding the available Event-card
+   content width on the existing small app canvas. */
+@media (max-width: 390px) {
+  .event-list-club-heading,
+  html[lang="th"] .event-list-club-heading,
+  html[lang="en"] .event-list-club-heading {
+    width: 220px !important;
+    max-width: 220px !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE — EVENT CARD SPACING TWEAK
+   ONLY:
+   1) more breathing room between Event title and Club title
+   2) move date card slightly lower for better visual balance
+========================================================= */
+
+/* Move only the detail column down a little.
+   Image and Event title stay exactly where they are. */
+.event-list-card-content {
+  margin-top: 39px !important;
+}
+
+/* Move the date card down slightly so it feels centered
+   against the image + detail block. */
+.event-date-card {
+  transform: translateY(8px) !important;
+}
+
+/* Keep the same adjustment in Thai and English. */
+html[lang="th"] .event-list-card-content,
+html[lang="en"] .event-list-card-content {
+  margin-top: 39px !important;
+}
+
+html[lang="th"] .event-date-card,
+html[lang="en"] .event-date-card {
+  transform: translateY(8px) !important;
+}
+
+/* =========================================================
+   RUNRISE — FOUNDER DASHBOARD TOP + CLUB IMAGE
+   Adds Runner-style language switch and real 6am.jpg cover.
+========================================================= */
+
+.founder-welcome {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
+  gap: 16px !important;
+}
+
+.founder-welcome-copy {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.founder-top-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+.founder-top-actions .language-quick-switch.compact {
+  flex: 0 0 auto;
+}
+
+/* Keep same compact language feel as Runner */
+.founder-top-actions .language-quick-switch.compact button {
+  min-width: 46px;
+  height: 40px;
+  padding: 0 13px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.founder-avatar {
+  width: 48px !important;
+  height: 48px !important;
+  flex: 0 0 48px !important;
+}
+
+/* Real club photo */
+.founder-club-cover {
+  position: relative;
+  height: 150px !important;
+  overflow: hidden;
+  background: #f7eee5;
+}
+
+.founder-club-cover-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center 48%;
+}
+
+/* Slightly more breathing room under image */
+.founder-club-banner-info {
+  padding: 16px 18px 18px !important;
+}
+
+.founder-club-banner-info h2 {
+  margin: 6px 0 5px !important;
+}
+
+html[lang="th"] .founder-welcome h1 {
+  line-height: 1.24 !important;
+}
+
+/* =========================================================
+   RUNRISE — FOUNDER HEADER = RUNNER HEADER STYLE
+   Keep Founder dashboard content unchanged.
+========================================================= */
+
+.founder-home-header {
+  margin-bottom: 28px !important;
+  padding-top: 2px !important;
+}
+
+.founder-brand-row {
+  min-height: 48px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 14px !important;
+
+  margin-bottom: 16px !important;
+}
+
+.founder-brand-row .eyebrow {
+  margin: 0 !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+
+  color: #B85A31 !important;
+
+  font-family:
+    var(--font-body, "Anuphan", sans-serif) !important;
+
+  font-size: 13px !important;
+  line-height: 1.25 !important;
+  font-weight: 700 !important;
+  letter-spacing: .05em !important;
+}
+
+.founder-top-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+
+  flex: 0 0 auto !important;
+}
+
+.founder-top-actions .language-quick-switch.compact {
+  flex: 0 0 auto !important;
+}
+
+.founder-top-actions .language-quick-switch.compact button {
+  min-width: 46px !important;
+  height: 40px !important;
+
+  padding: 0 13px !important;
+
+  border-radius: 999px !important;
+
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 700 !important;
+}
+
+.founder-avatar {
+  width: 48px !important;
+  height: 48px !important;
+
+  flex: 0 0 48px !important;
+
+  display: grid !important;
+  place-items: center !important;
+
+  border-radius: 50% !important;
+
+  font-size: 17px !important;
+  font-weight: 800 !important;
+}
+
+/* Full-width greeting, no longer squeezed by language switch/avatar */
+.founder-home-greeting {
+  width: 100% !important;
+  max-width: 100% !important;
+
+  margin: 0 !important;
+
+  color: #3E2D28 !important;
+
+  font-family:
+    var(--font-heading, "Kanit", sans-serif) !important;
+
+  font-size: clamp(29px, 8vw, 34px) !important;
+  line-height: 1.06 !important;
+  font-weight: 700 !important;
+  letter-spacing: -.025em !important;
+
+  white-space: normal !important;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+}
+
+.founder-wave {
+  display: inline-block !important;
+  white-space: nowrap !important;
+}
+
+.founder-home-subtitle {
+  max-width: 100% !important;
+
+  margin: 10px 0 0 !important;
+
+  color: #929298 !important;
+
+  font-family:
+    var(--font-body, "Anuphan", sans-serif) !important;
+
+  font-size: 16px !important;
+  line-height: 1.45 !important;
+  font-weight: 450 !important;
+  letter-spacing: .01em !important;
+}
+
+/* Thai refinement: keep the greeting visually balanced */
+html[lang="th"] .founder-home-greeting {
+  font-size: clamp(28px, 7.7vw, 33px) !important;
+  line-height: 1.18 !important;
+  letter-spacing: 0 !important;
+}
+
+html[lang="th"] .founder-home-subtitle {
+  line-height: 1.55 !important;
+}
+
+/* Retire old header layout rules so they cannot squeeze the text again */
+.founder-welcome,
+.founder-welcome-copy {
+  min-width: 0 !important;
 }
