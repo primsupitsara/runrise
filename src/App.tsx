@@ -37,6 +37,7 @@ type Page =
   | "compare-select"
   | "compare"
   | "event"
+  | "event-qr"
   | "myruns"
   | "friends"
   | "friends-chat"
@@ -46,6 +47,10 @@ type Page =
   | "founder-dashboard"
   | "founder-club"
   | "founder-events"
+  | "founder-event-management"
+  | "founder-qr-scanner"
+  | "founder-scan-result"
+  | "founder-checkin-success"
   | "founder-members"
   | "founder-profile";
 
@@ -107,6 +112,15 @@ type RunEvent = {
   meetingPoint: string;
   route: string;
   whatToBring: string;
+};
+
+type EventRegistration = {
+  id: string;
+  eventId: number;
+  runnerId: string;
+  runnerName: string;
+  status: "registered" | "checked-in";
+  checkedInAt: string | null;
 };
 
 type Club = {
@@ -362,7 +376,7 @@ const CLUB_IMAGES: Record<number, string> = {
 };
 
 function getClubImage(clubId: number) {
-  return CLUB_IMAGES[clubId];
+  return CLUB_IMAGES[clubId] || runriseLogo;
 }
 
 const initialEvents: RunEvent[] = [
@@ -429,17 +443,17 @@ const initialEvents: RunEvent[] = [
   {
     id: 501,
     clubId: 5,
-    name: "Sabai Social Run",
-    date: "30 Oct",
-    time: "20:00",
+    name: "Sabai Sunday Run",
+    date: "16 Nov",
+    time: "06:00",
     location: "Khlong Toei",
-    distance: "5K",
-    pace: "Social Pace",
+    distance: "10K",
+    pace: "6:00–7:00",
     capacity: 60,
-    participants: 35,
+    participants: 42,
     meetingPoint: "Benjakitti Park",
-    route: "Social park loop",
-    whatToBring: "Running shoes and water.",
+    route: "Easy Sunday morning loop around Benjakitti Park",
+    whatToBring: "Running shoes, water and your RUNRISE QR pass.",
   },
 ];
 
@@ -540,10 +554,12 @@ const RUNRISE_STORAGE_KEYS = [
   "runrise-user",
   "runrise-profile",
   "runrise-founder-setup",
+  "runrise-founder-club-id",
   "runrise-clubs",
   "runrise-events",
   "runrise-saved",
   "runrise-joined",
+  "runrise-registrations",
 ];
 
 
@@ -2337,7 +2353,7 @@ const THAI_TEXT: Record<string, string> = {
 
   // Founder dashboard
   "FOUNDER DASHBOARD": "แดชบอร์ดผู้จัดกิจกรรม",
-  "Good morning 👋": "สวัสดีตอนเช้า 👋",
+  "Good morning": "สวัสดีตอนเช้า",
   "Here's what's happening with your community.": "ภาพรวมคอมมูนิตี้ของคุณในวันนี้",
   "YOUR RUN CLUB": "คลับวิ่งของคุณ",
   "Total Members": "สมาชิกทั้งหมด",
@@ -2601,6 +2617,38 @@ const ORIGINAL_PLACEHOLDERS = new WeakMap<
   string
 >();
 
+function isFounderEventNameText(value: string) {
+  const normalized = value.trim();
+
+  if (!normalized) return false;
+
+  const names = new Set<string>(
+    initialEvents
+      .map((event) => event.name?.trim())
+      .filter((name): name is string => Boolean(name))
+  );
+
+  try {
+    const storedEvents = JSON.parse(
+      localStorage.getItem("runrise-events") || "[]"
+    ) as Array<Partial<RunEvent>>;
+
+    storedEvents.forEach((event) => {
+      const name =
+        typeof event.name === "string"
+          ? event.name.trim()
+          : "";
+
+      if (name) names.add(name);
+    });
+  } catch {
+    // Keep seeded event names when localStorage is unavailable or invalid.
+  }
+
+  return names.has(normalized);
+}
+
+
 function translateRunriseDocument(language: AppLanguage) {
   const root = document.getElementById("root");
 
@@ -2626,6 +2674,11 @@ function translateRunriseDocument(language: AppLanguage) {
     if (element.closest("[data-no-translate='true']")) return;
 
     const currentValue = node.nodeValue || "";
+
+    // Event names are user-generated content created by each Founder.
+    // Never pass them through the app-wide translation layer.
+    if (isFounderEventNameText(currentValue)) return;
+
     let original = ORIGINAL_TEXT_NODES.get(node);
 
     if (original === undefined) {
@@ -2884,6 +2937,20 @@ function App() {
     };
   });
 
+  const [founderClubId, setFounderClubId] = useState<number | null>(() => {
+    const savedFounderClubId = readStorage<number | null>(
+      "runrise-founder-club-id",
+      null
+    );
+
+    // Ignore legacy ids that belonged to the old shared Runner clubs
+    // such as 6am Run Club (id 1). New Founder-created clubs start at 1000.
+    return typeof savedFounderClubId === "number" &&
+      savedFounderClubId >= 1000
+      ? savedFounderClubId
+      : null;
+  });
+
 const [clubs, setClubs] = useState<Club[]>(() => {
   const storedClubs = readStorage<Club[]>(
     "runrise-clubs",
@@ -2956,6 +3023,15 @@ const [clubs, setClubs] = useState<Club[]>(() => {
     )
   );
 
+  const [registrations, setRegistrations] = useState<EventRegistration[]>(() =>
+    readStorage<EventRegistration[]>("runrise-registrations", [])
+  );
+
+  const [selectedRegistrationId, setSelectedRegistrationId] =
+    useState<string | null>(null);
+
+  const [scanCandidateRegistrationId, setScanCandidateRegistrationId] =
+    useState<string | null>(null);
 
   const [clubReviews, setClubReviews] = useState<ClubReview[]>(() =>
     readStorage<ClubReview[]>("runrise-club-reviews", initialClubReviews)
@@ -3002,6 +3078,18 @@ const [clubs, setClubs] = useState<Club[]>(() => {
   }, [founderSetup]);
 
   useEffect(() => {
+    if (founderClubId === null) {
+      localStorage.removeItem("runrise-founder-club-id");
+      return;
+    }
+
+    localStorage.setItem(
+      "runrise-founder-club-id",
+      JSON.stringify(founderClubId)
+    );
+  }, [founderClubId]);
+
+  useEffect(() => {
     localStorage.setItem("runrise-clubs", JSON.stringify(clubs));
   }, [clubs]);
 
@@ -3016,6 +3104,13 @@ const [clubs, setClubs] = useState<Club[]>(() => {
   useEffect(() => {
     localStorage.setItem("runrise-joined", JSON.stringify(joinedEvents));
   }, [joinedEvents]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "runrise-registrations",
+      JSON.stringify(registrations)
+    );
+  }, [registrations]);
 
 
   useEffect(() => {
@@ -3070,13 +3165,13 @@ const [clubs, setClubs] = useState<Club[]>(() => {
 
     const selectedPace = founderSetup.paceRanges.includes("Flexible Pace")
       ? "Flexible pace"
-      : founderSetup.paceRanges.join(" · ");
+      : founderSetup.paceRanges.join(" · ") || "Flexible pace";
 
     const selectedDistance = founderSetup.distances.includes(
       "Flexible Distance"
     )
       ? "Flexible distance"
-      : founderSetup.distances.join(" · ");
+      : founderSetup.distances.join(" · ") || "Flexible distance";
 
     const selectedSchedule = [
       founderSetup.days.join(" / "),
@@ -3085,42 +3180,105 @@ const [clubs, setClubs] = useState<Club[]>(() => {
       .filter(Boolean)
       .join(" · ");
 
-    setClubs((previous) =>
-      previous.map((club) =>
-        club.id === 1
-          ? {
-              ...club,
-              name:
-                founderSetup.clubName.trim() ||
-                club.name,
-              description:
-                founderSetup.clubDescription.trim() ||
-                club.description,
-              level: selectedLevel,
-              pace: selectedPace,
-              distance: selectedDistance,
-              schedule: selectedSchedule,
-              location:
-                founderSetup.locations[0] ||
-                founderSetup.province ||
-                club.location,
-              vibe: [
-                ...founderSetup.vibe,
-                ...founderSetup.activities,
-              ],
-            }
-          : club
-      )
-    );
+    const existingFounderClub =
+      founderClubId !== null
+        ? clubs.find((club) => club.id === founderClubId)
+        : undefined;
 
+    const newFounderClubId =
+      existingFounderClub?.id ??
+      Math.max(1000, ...clubs.map((club) => club.id + 1));
+
+    const founderClub: Club = {
+      id: newFounderClubId,
+      name:
+        founderSetup.clubName.trim() ||
+        (language === "th" ? "คลับวิ่งของฉัน" : "My Run Club"),
+      description:
+        founderSetup.clubDescription.trim() ||
+        (language === "th"
+          ? "คอมมูนิตี้วิ่งที่สร้างบน Runrise"
+          : "A running community created on Runrise."),
+      level: selectedLevel,
+      pace: selectedPace,
+      distance: selectedDistance,
+      schedule: selectedSchedule || "Flexible",
+      location:
+        founderSetup.locations[0] ||
+        founderSetup.province ||
+        "Bangkok",
+      vibe: Array.from(
+        new Set([
+          ...founderSetup.vibe,
+          ...founderSetup.activities,
+        ])
+      ),
+      members: existingFounderClub?.members || 0,
+      founder:
+        user?.name?.trim() ||
+        (language === "th" ? "ผู้จัดคลับ" : "Founder"),
+    };
+
+    setClubs((previous) => {
+      const alreadyExists = previous.some(
+        (club) => club.id === newFounderClubId
+      );
+
+      if (alreadyExists) {
+        return previous.map((club) =>
+          club.id === newFounderClubId ? founderClub : club
+        );
+      }
+
+      return [...previous, founderClub];
+    });
+
+    setFounderClubId(newFounderClubId);
+    setSelectedClubId(newFounderClubId);
     setPage("founder-dashboard");
   };
+
+  const founderClub =
+    founderClubId !== null
+      ? clubs.find((club) => club.id === founderClubId) || null
+      : null;
+
+  const founderClubEvents = founderClub
+    ? events.filter((event) => event.clubId === founderClub.id)
+    : [];
+
+  // Safety guard: never allow a Founder page to render as a blank screen
+  // when the current user does not yet have a dedicated Founder club.
+  useEffect(() => {
+    const founderPages: Page[] = [
+      "founder-dashboard",
+      "founder-club",
+      "founder-events",
+      "founder-event-management",
+      "founder-qr-scanner",
+      "founder-scan-result",
+      "founder-checkin-success",
+      "founder-members",
+      "founder-profile",
+    ];
+
+    if (founderPages.includes(page) && !founderClub) {
+      setPage("founder-onboarding");
+    }
+  }, [page, founderClub]);
 
   const selectedClub =
     clubs.find((club) => club.id === selectedClubId) || clubs[0];
 
   const selectedEvent =
     events.find((event) => event.id === selectedEventId) || events[0];
+
+  const selectedRegistration =
+    registrations.find((registration) =>
+      selectedRegistrationId
+        ? registration.id === selectedRegistrationId
+        : registration.eventId === selectedEventId
+    ) || null;
 
   const calculateMatch = (club: Club) => {
     let score = 0;
@@ -3207,7 +3365,15 @@ const [clubs, setClubs] = useState<Club[]>(() => {
     });
   };
 
+  const makeRegistrationId = () => {
+    const seed = String(Date.now()).slice(-5);
+    return `RR-${seed}`;
+  };
+
   const joinEvent = (eventId: number) => {
+    let registration =
+      registrations.find((item) => item.eventId === eventId) || null;
+
     if (!joinedEvents.includes(eventId)) {
       setJoinedEvents((previous) => [
         ...previous,
@@ -3229,8 +3395,26 @@ const [clubs, setClubs] = useState<Club[]>(() => {
       );
     }
 
-    // Do not redirect to the old My Runs flow.
-    // Stay on Event Detail and confirm the booking instead.
+    if (!registration) {
+      registration = {
+        id: makeRegistrationId(),
+        eventId,
+        runnerId: user?.email || "RUNNER-001",
+        runnerName:
+          user?.name ||
+          profile.name ||
+          "Waan",
+        status: "registered",
+        checkedInAt: null,
+      };
+
+      setRegistrations((previous) => [
+        ...previous,
+        registration as EventRegistration,
+      ]);
+    }
+
+    setSelectedRegistrationId(registration.id);
     setJoinSuccessEventId(eventId);
   };
 
@@ -3241,6 +3425,10 @@ const [clubs, setClubs] = useState<Club[]>(() => {
 
     setJoinedEvents((previous) =>
       previous.filter((id) => id !== eventId)
+    );
+
+    setRegistrations((previous) =>
+      previous.filter((item) => item.eventId !== eventId)
     );
 
     setEvents((previous) =>
@@ -3258,6 +3446,29 @@ const [clubs, setClubs] = useState<Club[]>(() => {
     );
   };
 
+  const confirmRegistrationCheckIn = (registrationId: string) => {
+    const checkedInAt = new Date().toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+
+    setRegistrations((previous) =>
+      previous.map((registration) =>
+        registration.id === registrationId
+          ? {
+              ...registration,
+              status: "checked-in",
+              checkedInAt,
+            }
+          : registration
+      )
+    );
+
+    setSelectedRegistrationId(registrationId);
+    setPage("founder-checkin-success");
+  };
+
   const switchRole = () => {
     const nextRole: Role =
       role === "runner" ? "founder" : "runner";
@@ -3273,11 +3484,17 @@ const [clubs, setClubs] = useState<Club[]>(() => {
       return;
     }
 
-    setPage(
-      isFounderSetupComplete(founderSetup)
-        ? "founder-dashboard"
-        : "founder-onboarding"
-    );
+    if (founderClub) {
+      setPage("founder-dashboard");
+      return;
+    }
+
+    if (isFounderSetupComplete(founderSetup)) {
+      completeFounderSetup();
+      return;
+    }
+
+    setPage("founder-onboarding");
   };
 
   const resetPrototype = () => {
@@ -3293,10 +3510,14 @@ const [clubs, setClubs] = useState<Club[]>(() => {
     setFounderSetup({
       ...defaultFounderSetup,
     });
+    setFounderClubId(null);
     setClubs(initialClubs);
     setEvents(initialEvents);
     setSavedClubs([]);
     setJoinedEvents([]);
+    setRegistrations([]);
+    setSelectedRegistrationId(null);
+    setScanCandidateRegistrationId(null);
     setCompareClubs([]);
     setNotifications([
       {
@@ -3404,11 +3625,23 @@ const [clubs, setClubs] = useState<Club[]>(() => {
             }}
             onFounder={() => {
               setRole("founder");
-              setPage(
-                isFounderSetupComplete(founderSetup)
-                  ? "founder-dashboard"
-                  : "founder-onboarding"
-              );
+
+              // If this user already owns a newly-created Founder club,
+              // open the dashboard normally.
+              if (founderClub) {
+                setPage("founder-dashboard");
+                return;
+              }
+
+              // Old sessions may already have complete Founder answers
+              // but no dedicated Founder club yet. Create one from those
+              // answers instead of opening an empty dashboard.
+              if (isFounderSetupComplete(founderSetup)) {
+                completeFounderSetup();
+                return;
+              }
+
+              setPage("founder-onboarding");
             }}
           />
         )}
@@ -3570,6 +3803,12 @@ const [clubs, setClubs] = useState<Club[]>(() => {
                 (club) => club.id === selectedEvent.clubId
               ) || selectedClub
             }
+            registration={
+              registrations.find(
+                (registration) =>
+                  registration.eventId === selectedEvent.id
+              ) || null
+            }
             joined={joinedEvents.includes(selectedEvent.id)}
             joinSuccess={
               joinSuccessEventId === selectedEvent.id
@@ -3586,10 +3825,34 @@ const [clubs, setClubs] = useState<Club[]>(() => {
             onCloseSuccess={() =>
               setJoinSuccessEventId(null)
             }
-            onViewBookings={() => {
-              setJoinSuccessEventId(null);
-              setPage("runner-profile");
+            onViewQr={() => {
+              const registration =
+                registrations.find(
+                  (item) =>
+                    item.eventId === selectedEvent.id
+                ) || null;
+
+              if (registration) {
+                setSelectedRegistrationId(registration.id);
+                setJoinSuccessEventId(null);
+                setPage("event-qr");
+              }
             }}
+          />
+        )}
+
+        {page === "event-qr" && selectedEvent && selectedRegistration && (
+          <RunnerEventQr
+            language={language}
+            event={selectedEvent}
+            club={
+              clubs.find(
+                (club) => club.id === selectedEvent.clubId
+              ) || selectedClub
+            }
+            registration={selectedRegistration}
+            onBack={() => setPage("event")}
+            onEventDetails={() => setPage("event")}
           />
         )}
 
@@ -3689,14 +3952,12 @@ const [clubs, setClubs] = useState<Club[]>(() => {
           />
         )}
 
-        {page === "founder-dashboard" && (
+        {page === "founder-dashboard" && founderClub && (
           <FounderDashboard
             language={language}
             setLanguage={setLanguage}
-            club={clubs[0]}
-            events={events.filter(
-              (event) => event.clubId === 1
-            )}
+            club={founderClub}
+            events={founderClubEvents}
             members={initialMembers}
             onCreateEvent={() => setPage("founder-events")}
             onEditClub={() => setPage("founder-club")}
@@ -3704,10 +3965,10 @@ const [clubs, setClubs] = useState<Club[]>(() => {
           />
         )}
 
-        {page === "founder-club" && (
+        {page === "founder-club" && founderClub && (
           <FounderClub
             language={language}
-            club={clubs[0]}
+            club={founderClub}
             setClub={(updated: Club) =>
               setClubs((previous) =>
                 previous.map((club) =>
@@ -3719,25 +3980,119 @@ const [clubs, setClubs] = useState<Club[]>(() => {
           />
         )}
 
-        {page === "founder-events" && (
+        {page === "founder-events" && founderClub && (
           <FounderEvents
             language={language}
-            events={events.filter(
-              (event) => event.clubId === 1
-            )}
+            clubId={founderClub.id}
+            events={founderClubEvents}
             setEvents={setEvents}
+            onManageEvent={(event: RunEvent) => {
+              setSelectedEventId(event.id);
+              setScanCandidateRegistrationId(null);
+              setPage("founder-event-management");
+            }}
             onNav={setPage}
           />
         )}
 
-        {page === "founder-members" && (
+        {page === "founder-event-management" && founderClub && selectedEvent && (
+          <FounderEventManagement
+            language={language}
+            event={selectedEvent}
+            club={founderClub}
+            registrations={registrations.filter(
+              (registration) => registration.eventId === selectedEvent.id
+            )}
+            onBack={() => setPage("founder-events")}
+            onScan={() => {
+              setScanCandidateRegistrationId(null);
+              setPage("founder-qr-scanner");
+            }}
+          />
+        )}
+
+        {page === "founder-qr-scanner" && founderClub && selectedEvent && (
+          <FounderQrScanner
+            language={language}
+            event={selectedEvent}
+            registrations={registrations.filter(
+              (registration) => registration.eventId === selectedEvent.id
+            )}
+            onBack={() => setPage("founder-event-management")}
+            onScan={(registrationId: string) => {
+              const existingRegistration = registrations.find(
+                (registration) => registration.id === registrationId
+              );
+
+              if (!existingRegistration && registrationId === "RR-16384") {
+                const demoRegistration: EventRegistration = {
+                  id: "RR-16384",
+                  eventId: selectedEvent.id,
+                  runnerId: "RUNNER-001",
+                  runnerName: "Waan",
+                  status: "registered",
+                  checkedInAt: null,
+                };
+
+                setRegistrations((previous) => [
+                  ...previous.filter((item) => item.id !== demoRegistration.id),
+                  demoRegistration,
+                ]);
+              }
+
+              setScanCandidateRegistrationId(registrationId);
+              setSelectedRegistrationId(registrationId);
+              setPage("founder-scan-result");
+            }}
+          />
+        )}
+
+        {page === "founder-scan-result" && founderClub && selectedEvent && scanCandidateRegistrationId && (
+          <FounderScanResult
+            language={language}
+            event={selectedEvent}
+            registration={
+              registrations.find(
+                (registration) => registration.id === scanCandidateRegistrationId
+              ) ||
+              (scanCandidateRegistrationId === "RR-16384"
+                ? {
+                    id: "RR-16384",
+                    eventId: selectedEvent.id,
+                    runnerId: "RUNNER-001",
+                    runnerName: "Waan",
+                    status: "registered",
+                    checkedInAt: null,
+                  }
+                : null)
+            }
+            onBack={() => setPage("founder-qr-scanner")}
+            onConfirm={() =>
+              confirmRegistrationCheckIn(scanCandidateRegistrationId)
+            }
+          />
+        )}
+
+        {page === "founder-checkin-success" && founderClub && selectedEvent && selectedRegistration && (
+          <FounderCheckinSuccess
+            language={language}
+            event={selectedEvent}
+            registration={selectedRegistration}
+            onScanNext={() => {
+              setScanCandidateRegistrationId(null);
+              setPage("founder-qr-scanner");
+            }}
+            onParticipants={() => setPage("founder-event-management")}
+          />
+        )}
+
+        {page === "founder-members" && founderClub && (
           <FounderMembers
             language={language}
             members={initialMembers}
-            totalMembers={clubs[0]?.members || 0}
-            newMembers={28}
-            totalRunJoins={events
-              .filter((event) => event.clubId === 1)
+            totalMembers={founderClub.members || 0}
+            newMembers={0}
+            totalRunJoins={founderClubEvents
               .reduce(
                 (total, event) => total + event.participants,
                 0
@@ -3746,14 +4101,12 @@ const [clubs, setClubs] = useState<Club[]>(() => {
           />
         )}
 
-        {page === "founder-profile" && (
+        {page === "founder-profile" && founderClub && (
           <FounderProfile
             founderName={user?.name || "Founder"}
-            club={clubs[0]}
-            runsHosted={
-              events.filter((event) => event.clubId === 1).length
-            }
-            newMembers={28}
+            club={founderClub}
+            runsHosted={founderClubEvents.length}
+            newMembers={0}
             language={language}
             setLanguage={setLanguage}
             onSwitchRole={switchRole}
@@ -5878,7 +6231,6 @@ function RunnerHome({
 
         <h1 className="ut-home-greeting">
           Good morning, <strong>{profile.name || "Runner"}</strong>{" "}
-          <span className="ut-wave">👋</span>
         </h1>
       </div>
 
@@ -6738,12 +7090,42 @@ function RunnerEventsPage({
   onEvent: (id: number) => void;
   onNav: (page: Page) => void;
 }) {
-  type EventFilter = "all" | "week" | "month" | "calendar";
+  type EventFilter = "all" | "week" | "month";
 
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] =
     useState<EventFilter>("all");
   const [showFilters, setShowFilters] = useState(false);
+
+  // Advanced Event filters reuse the same canonical values already used
+  // across onboarding / profile setup in this prototype.
+  const [selectedPaces, setSelectedPaces] = useState<string[]>([]);
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
+  const [selectedDistances, setSelectedDistances] = useState<string[]>([]);
+  const [selectedDays, setSelectedDays] = useState<string[]>([]);
+
+  const EVENT_PACE_FILTER_OPTIONS = FOUNDER_PACE_OPTIONS;
+  const EVENT_DISTANCE_FILTER_OPTIONS = PREFERRED_DISTANCE_OPTIONS;
+  const EVENT_DAY_FILTER_OPTIONS = FOUNDER_DAY_OPTIONS;
+
+  const toggleEventFilterValue = (
+    value: string,
+    current: string[],
+    setter: (next: string[]) => void
+  ) => {
+    setter(
+      current.includes(value)
+        ? current.filter((item) => item !== value)
+        : [...current, value]
+    );
+  };
+
+  const clearAdvancedFilters = () => {
+    setSelectedPaces([]);
+    setSelectedLocations([]);
+    setSelectedDistances([]);
+    setSelectedDays([]);
+  };
 
   const eventDate = (event: RunEvent) => {
     const parts = event.date.trim().split(/\s+/);
@@ -6840,25 +7222,91 @@ function RunnerEventsPage({
       : en[date.getDay()];
   };
 
-  const eventTitle = (
-    event: RunEvent,
-    currentLanguage: AppLanguage
-  ) => {
-    if (currentLanguage === "en") {
-      return event.name;
+  // Event names are user-generated content from each Founder.
+  // Never translate or replace them based on the app language.
+  // Always display the exact name stored on the event.
+  const eventTitle = (event: RunEvent) => event.name;
+
+
+  const eventLocationFilterOptions = useMemo(() => {
+    return Array.from(
+      new Set(
+        events
+          .map((event) => event.location)
+          .filter(Boolean)
+      )
+    ).sort();
+  }, [events]);
+
+  const eventDayKey = (event: RunEvent) => {
+    const keys = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    return keys[eventDate(event).getDay()];
+  };
+
+  const eventDistanceMatches = (event: RunEvent) => {
+    if (selectedDistances.length === 0) return true;
+
+    const eventKm = Number(event.distance.match(/\d+/)?.[0]);
+
+    return selectedDistances.some((option) => {
+      const optionKm = Number(option.match(/\d+/)?.[0]);
+      return (
+        Number.isFinite(eventKm) &&
+        Number.isFinite(optionKm) &&
+        eventKm === optionKm
+      );
+    });
+  };
+
+  const eventPaceMatches = (event: RunEvent) => {
+    if (selectedPaces.length === 0) return true;
+
+    const normalized = event.pace.toLowerCase();
+    const flexible =
+      normalized.includes("flexible") ||
+      normalized.includes("social") ||
+      normalized.includes("easy") ||
+      normalized.includes("no pressure");
+
+    if (
+      flexible &&
+      selectedPaces.includes("Flexible Pace")
+    ) {
+      return true;
     }
 
-    const thaiNames: Record<number, string> = {
-      101: "Weekend Morning Run",
-      201: "Evening Community Run",
-      301: "Bangkok Morning Run",
-      401: "Sunday Easy 5K",
-      501: "Sabai Social Run",
-      601: "Founders Morning 3K",
+    const times = [
+      ...event.pace.matchAll(/(\d{1,2}):(\d{2})/g),
+    ].map((match) =>
+      Number(match[1]) * 60 + Number(match[2])
+    );
+
+    if (times.length === 0) return false;
+
+    const eventMin = Math.min(...times);
+    const eventMax = Math.max(...times);
+
+    const paceBounds: Record<string, [number, number]> = {
+      "Under 5:00 min/km": [0, 299],
+      "5:00–5:59 min/km": [300, 359],
+      "6:00–6:59 min/km": [360, 419],
+      "7:00–7:59 min/km": [420, 479],
+      "8:00+ min/km": [480, Infinity],
     };
 
-    return thaiNames[event.id] || event.name;
+    return selectedPaces.some((option) => {
+      const bounds = paceBounds[option];
+      if (!bounds) return false;
+
+      return eventMax >= bounds[0] && eventMin <= bounds[1];
+    });
   };
+
+  const advancedFilterCount =
+    selectedPaces.length +
+    selectedLocations.length +
+    selectedDistances.length +
+    selectedDays.length;
 
   const sortedEvents = useMemo(() => {
     return [...events].sort(
@@ -6887,22 +7335,35 @@ function RunnerEventsPage({
         .join(" ")
         .toLowerCase();
 
-      return (
+      const matchesSearch =
         keyword.length === 0 ||
-        searchable.includes(keyword)
+        searchable.includes(keyword);
+
+      const matchesLocation =
+        selectedLocations.length === 0 ||
+        selectedLocations.includes(event.location);
+
+      const matchesDistance =
+        eventDistanceMatches(event);
+
+      const matchesPace =
+        eventPaceMatches(event);
+
+      const matchesDay =
+        selectedDays.length === 0 ||
+        selectedDays.includes(eventDayKey(event));
+
+      return (
+        matchesSearch &&
+        matchesLocation &&
+        matchesDistance &&
+        matchesPace &&
+        matchesDay
       );
     });
 
     if (activeFilter === "week") {
       next = next.slice(0, 3);
-    }
-
-    if (activeFilter === "calendar") {
-      next = [...next].sort(
-        (a, b) =>
-          eventDate(a).getTime() -
-          eventDate(b).getTime()
-      );
     }
 
     return next;
@@ -6911,6 +7372,10 @@ function RunnerEventsPage({
     clubs,
     search,
     sortedEvents,
+    selectedPaces,
+    selectedLocations,
+    selectedDistances,
+    selectedDays,
   ]);
 
   return (
@@ -7048,15 +7513,139 @@ function RunnerEventsPage({
             <path d="M4 17h3M11 17h9" />
             <circle cx="9" cy="17" r="2" />
           </svg>
+
+          {advancedFilterCount > 0 && (
+            <span className="event-filter-count">
+              {advancedFilterCount}
+            </span>
+          )}
         </button>
       </div>
 
       {showFilters && (
-        <div className="event-filter-note">
-          {language === "th"
-            ? "เลือกช่วงเวลาจากแถบด้านล่างเพื่อกรองอีเวนต์"
-            : "Use the tabs below to filter events by period."}
-        </div>
+        <section className="event-advanced-filter-panel">
+          <div className="event-advanced-filter-head">
+            <div>
+              <strong>
+                {language === "th" ? "ตัวกรอง" : "Filters"}
+              </strong>
+              <span>
+                {language === "th"
+                  ? "เลือกได้มากกว่า 1 ตัวเลือก"
+                  : "Select one or more options"}
+              </span>
+            </div>
+
+            {advancedFilterCount > 0 && (
+              <button
+                type="button"
+                onClick={clearAdvancedFilters}
+              >
+                {language === "th" ? "ล้างทั้งหมด" : "Clear all"}
+              </button>
+            )}
+          </div>
+
+          <div className="event-filter-group">
+            <h3>{language === "th" ? "เพซ" : "Pace"}</h3>
+            <div className="event-filter-chip-row">
+              {EVENT_PACE_FILTER_OPTIONS.map((option) => {
+                const selected = selectedPaces.includes(option);
+                return (
+                  <button
+                    type="button"
+                    key={option}
+                    className={selected ? "selected" : ""}
+                    onClick={() =>
+                      toggleEventFilterValue(
+                        option,
+                        selectedPaces,
+                        setSelectedPaces
+                      )
+                    }
+                  >
+                    {founderLabel(option, language)}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="event-filter-group">
+            <h3>{language === "th" ? "พื้นที่" : "Area"}</h3>
+            <div className="event-filter-chip-row">
+              {eventLocationFilterOptions.map((option) => {
+                const selected = selectedLocations.includes(option);
+                return (
+                  <button
+                    type="button"
+                    key={option}
+                    className={selected ? "selected" : ""}
+                    onClick={() =>
+                      toggleEventFilterValue(
+                        option,
+                        selectedLocations,
+                        setSelectedLocations
+                      )
+                    }
+                  >
+                    {profileValueForLanguage(option, language)}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="event-filter-group">
+            <h3>{language === "th" ? "ระยะทาง" : "Distance"}</h3>
+            <div className="event-filter-chip-row">
+              {EVENT_DISTANCE_FILTER_OPTIONS.map((option) => {
+                const selected = selectedDistances.includes(option);
+                return (
+                  <button
+                    type="button"
+                    key={option}
+                    className={selected ? "selected" : ""}
+                    onClick={() =>
+                      toggleEventFilterValue(
+                        option,
+                        selectedDistances,
+                        setSelectedDistances
+                      )
+                    }
+                  >
+                    {profileValueForLanguage(option, language)}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="event-filter-group">
+            <h3>{language === "th" ? "วัน" : "Day"}</h3>
+            <div className="event-filter-chip-row event-day-filter-row">
+              {EVENT_DAY_FILTER_OPTIONS.map((option) => {
+                const selected = selectedDays.includes(option);
+                return (
+                  <button
+                    type="button"
+                    key={option}
+                    className={selected ? "selected" : ""}
+                    onClick={() =>
+                      toggleEventFilterValue(
+                        option,
+                        selectedDays,
+                        setSelectedDays
+                      )
+                    }
+                  >
+                    {founderLabel(option, language)}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </section>
       )}
 
       <div className="event-filter-tabs">
@@ -7108,35 +7697,6 @@ function RunnerEventsPage({
             : "This month"}
         </button>
 
-        <button
-          type="button"
-          className={
-            activeFilter === "calendar"
-              ? "active"
-              : ""
-          }
-          onClick={() =>
-            setActiveFilter("calendar")
-          }
-        >
-          <svg
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <rect
-              x="3.5"
-              y="5"
-              width="17"
-              height="15"
-              rx="2"
-            />
-            <path d="M7.5 3v4M16.5 3v4M3.5 9h17" />
-          </svg>
-
-          {language === "th"
-            ? "ปฏิทิน"
-            : "Calendar"}
-        </button>
       </div>
 
       <section className="event-card-list">
@@ -7165,10 +7725,7 @@ function RunnerEventsPage({
                   <div className="event-list-body">
                     <div className="event-list-image-column">
                       <h3 className="event-list-club-heading">
-                        {eventTitle(
-                          event,
-                          language
-                        )}
+                        {eventTitle(event)}
                       </h3>
 
                       <div className="event-list-image">
@@ -8082,234 +8639,516 @@ function CompareCriterionRow({
   );
 }
 
+
 function EventDetail({
   language,
   event,
   club,
+  registration,
   joined,
   joinSuccess,
   onBack,
   onJoin,
   onCancel,
   onCloseSuccess,
-  onViewBookings,
+  onViewQr,
 }: {
   language: AppLanguage;
   event: RunEvent;
   club: Club;
+  registration: EventRegistration | null;
   joined: boolean;
   joinSuccess: boolean;
   onBack: () => void;
   onJoin: () => void;
   onCancel: () => void;
   onCloseSuccess: () => void;
-  onViewBookings: () => void;
+  onViewQr: () => void;
 }) {
-  const full =
-    event.participants >=
-    event.capacity;
+  const full = event.participants >= event.capacity;
+  const coverImage = getClubImage(club.id);
+  const [eventSaved, setEventSaved] = useState(false);
 
   return (
-    <main className="screen event-screen">
-      <div className="event-topbar">
+    <main className="screen event-screen rr-event-detail">
+      <div className="detail-toolbar rr-event-detail-toolbar">
         <button
+          type="button"
           className="circle-button"
           onClick={onBack}
+          aria-label={language === "th" ? "ย้อนกลับ" : "Back"}
         >
           ←
         </button>
 
-        <span className="club-mini-name">
-          {club.name}
-        </span>
-      </div>
-
-      <div className="event-hero">
-        <div>
-          <p className="eyebrow">
-            UPCOMING RUN
-          </p>
-
-          <h1>
-            {event.name}
-          </h1>
-
-          <p>
-            {event.date} ·{" "}
-            {event.time}
-          </p>
-        </div>
-
-        <div className="event-spots">
-          <strong>
-            {Math.max(
-              event.capacity -
-                event.participants,
-              0
-            )}
-          </strong>
-
-          <span>
-            spots left
-          </span>
-        </div>
-      </div>
-
-      <button
-        className={
-          joined
-            ? "hero-join-button joined"
-            : "hero-join-button"
-        }
-        disabled={
-          full && !joined
-        }
-        onClick={
-          joined
-            ? onCancel
-            : onJoin
-        }
-      >
-        {joined
-          ? "✓ Joined · Cancel Run"
-          : full
-          ? "Run Full"
-          : "Join This Run"}
-      </button>
-
-      <div className="event-quick-info">
-        <Info
-          label="DISTANCE"
-          value={event.distance}
-        />
-
-        <Info
-          label="PACE"
-          value={event.pace}
-        />
-
-        <Info
-          label="RUNNERS"
-          value={`${event.participants}/${event.capacity}`}
-        />
-      </div>
-
-      <section className="section">
-        <h2>
-          Meeting Point
-        </h2>
-
-        <div className="map">
-          <span>📍</span>
-
-          <strong>
-            {event.meetingPoint}
-          </strong>
-        </div>
-      </section>
-
-      <section className="section">
-        <h2>Route</h2>
-
-        <p className="muted">
-          {event.route}
-        </p>
-      </section>
-
-      <section className="section">
-        <h2>
-          What to bring
-        </h2>
-
-        <p className="muted">
-          {event.whatToBring}
-        </p>
-      </section>
-
-      {joinSuccess && (
-        <div
-          className="join-success-backdrop"
-          onClick={onCloseSuccess}
+        <button
+          type="button"
+          className="pill-button"
+          onClick={() => setEventSaved((previous) => !previous)}
+          aria-pressed={eventSaved}
         >
+          {eventSaved ? "★ Saved" : "☆ Save"}
+        </button>
+      </div>
+
+      <div className="rr-event-cover">
+        <img src={coverImage} alt={`${event.name} cover`} />
+      </div>
+
+      <section className="rr-event-heading">
+        <div>
+          <span className="rr-club-tag">{club.name}</span>
+          <h1>{event.name}</h1>
+          <p>
+            {event.id === 501
+              ? language === "th"
+                ? `อาทิตย์ 16 พ.ย. · ${event.time}`
+                : `Sunday 16 Nov · ${event.time}`
+              : `${event.date} · ${event.time}`}
+          </p>
+        </div>
+      </section>
+
+      <section className="rr-event-core-card">
+        <div className="rr-event-core-row">
+          <span>⌖</span>
+          <div>
+            <small>{language === "th" ? "สถานที่" : "Location"}</small>
+            <strong>{event.meetingPoint || profileValueForLanguage(event.location, language)}</strong>
+          </div>
+        </div>
+
+        <div className="rr-event-core-grid">
+          <div>
+            <small>{language === "th" ? "ระยะทาง" : "Distance"}</small>
+            <strong>{profileValueForLanguage(event.distance, language)}</strong>
+          </div>
+          <div>
+            <small>{language === "th" ? "เพซ" : "Pace"}</small>
+            <strong>{event.pace} /km</strong>
+          </div>
+          <div>
+            <small>{language === "th" ? "ผู้เข้าร่วม" : "Runners"}</small>
+            <strong>{event.participants}/{event.capacity}</strong>
+          </div>
+        </div>
+      </section>
+
+      <section className="rr-about-run">
+        <h2>{language === "th" ? "เกี่ยวกับกิจกรรมนี้" : "About This Run"}</h2>
+        <p>
+          {event.id === 501
+            ? language === "th"
+              ? "วิ่งเช้าวันอาทิตย์แบบสบาย ๆ ที่สวนเบญจกิติ เหมาะกับนักวิ่งทุกระดับและคนที่อยากพบเพื่อนนักวิ่งใหม่ ๆ"
+              : "Easy Sunday morning run at Benjakitti Park. Suitable for all running levels and people who want to meet new runners."
+            : language === "th"
+              ? `กิจกรรมวิ่งบรรยากาศเป็นกันเองที่ ${event.meetingPoint || event.location} เหมาะกับนักวิ่งหลายระดับและคนที่อยากพบเพื่อนนักวิ่งใหม่ ๆ`
+              : `Easy community run at ${event.meetingPoint || event.location}. Suitable for different running levels and people who want to meet new runners.`}
+        </p>
+
+        <div className="rr-info-chips">
+          <span>{language === "th" ? "ทุกระดับ" : "All Levels"}</span>
+          <span>{language === "th" ? "บรรยากาศเป็นกันเอง" : "Friendly Atmosphere"}</span>
+          <span>{language === "th" ? "พบเพื่อนใหม่" : "Meet New Friends"}</span>
+        </div>
+      </section>
+
+      <div className="rr-event-sticky-action">
+        {joined && registration ? (
+          <button className="rr-primary-cta" onClick={onViewQr}>
+            {registration.status === "checked-in"
+              ? language === "th"
+                ? "ดูบัตรกิจกรรม · เช็กอินแล้ว"
+                : "View Event Pass · Checked In"
+              : language === "th"
+                ? "ดู QR Code ของฉัน"
+                : "View My QR Code"}
+          </button>
+        ) : (
+          <button
+            className="rr-primary-cta"
+            disabled={full}
+            onClick={onJoin}
+          >
+            {full
+              ? language === "th"
+                ? "กิจกรรมเต็มแล้ว"
+                : "Event Full"
+              : language === "th"
+                ? "เข้าร่วมกิจกรรม"
+                : "Join Event"}
+          </button>
+        )}
+      </div>
+
+      {joined && registration && (
+        <button className="rr-cancel-registration" onClick={onCancel}>
+          {language === "th" ? "ยกเลิกการลงทะเบียน" : "Cancel registration"}
+        </button>
+      )}
+
+      {joinSuccess && registration && (
+        <div className="join-success-backdrop" onClick={onCloseSuccess}>
           <section
-            className="join-success-modal"
+            className="join-success-modal rr-registration-success"
             role="dialog"
             aria-modal="true"
             aria-labelledby="join-success-title"
-            onClick={(clickEvent) =>
-              clickEvent.stopPropagation()
-            }
+            onClick={(clickEvent) => clickEvent.stopPropagation()}
           >
             <button
               type="button"
               className="join-success-close"
               onClick={onCloseSuccess}
-              aria-label={
-                language === "th"
-                  ? "ปิด"
-                  : "Close"
-              }
+              aria-label={language === "th" ? "ปิด" : "Close"}
             >
               ×
             </button>
 
-            <div
-              className="join-success-icon"
-              aria-hidden="true"
-            >
-              ✓
-            </div>
-
-            <p className="join-success-eyebrow">
-              {language === "th"
-                ? "เข้าร่วมสำเร็จ"
-                : "JOINED SUCCESSFULLY"}
-            </p>
+            <div className="join-success-icon" aria-hidden="true">✓</div>
 
             <h2 id="join-success-title">
-              {language === "th"
-                ? "คุณได้เข้าร่วมกิจกรรมนี้แล้ว"
-                : "You’ve joined this run!"}
+              {language === "th" ? "ลงทะเบียนสำเร็จ!" : "Registration Successful!"}
             </h2>
 
             <p className="join-success-copy">
               {language === "th"
-                ? "ระบบบันทึกกิจกรรมนี้ไว้ใน “การจองของฉัน” เรียบร้อยแล้ว"
-                : "This event has been saved to My Bookings."}
+                ? "คุณได้ลงทะเบียนเข้าร่วมกิจกรรมแล้ว"
+                : "You have successfully registered for this event."}
             </p>
 
             <div className="join-success-event">
               <strong>{event.name}</strong>
-
-              <span>
-                {event.date} · {event.time}
-              </span>
+              <span>{event.date} · {event.time}</span>
             </div>
 
-            <button
-              type="button"
-              className="join-success-primary"
-              onClick={onViewBookings}
-            >
-              {language === "th"
-                ? "ดูการจองของฉัน"
-                : "View My Bookings"}
-
+            <button type="button" className="join-success-primary" onClick={onViewQr}>
+              {language === "th" ? "ดู QR Code ของฉัน" : "View My QR Code"}
               <span aria-hidden="true">→</span>
             </button>
 
-            <button
-              type="button"
-              className="join-success-secondary"
-              onClick={onCloseSuccess}
-            >
-              {language === "th"
-                ? "อยู่หน้านี้ต่อ"
-                : "Stay on this page"}
+            <button type="button" className="join-success-secondary" onClick={onCloseSuccess}>
+              {language === "th" ? "กลับไปดูกิจกรรม" : "Back to Event"}
             </button>
           </section>
         </div>
       )}
+    </main>
+  );
+}
+
+function buildQrCells(payload: string) {
+  const size = 21;
+  let seed = 0;
+
+  for (let index = 0; index < payload.length; index += 1) {
+    seed = (seed * 31 + payload.charCodeAt(index)) >>> 0;
+  }
+
+  const isFinderCell = (row: number, col: number) => {
+    const origins = [
+      [0, 0],
+      [0, size - 7],
+      [size - 7, 0],
+    ];
+
+    return origins.some(([originRow, originCol]) => {
+      const r = row - originRow;
+      const c = col - originCol;
+
+      if (r < 0 || c < 0 || r > 6 || c > 6) return false;
+
+      const outer = r === 0 || c === 0 || r === 6 || c === 6;
+      const inner = r >= 2 && r <= 4 && c >= 2 && c <= 4;
+
+      return outer || inner;
+    });
+  };
+
+  return Array.from({ length: size * size }, (_, index) => {
+    const row = Math.floor(index / size);
+    const col = index % size;
+
+    if (isFinderCell(row, col)) return true;
+
+    const value =
+      ((seed + row * 17 + col * 29 + row * col * 7) ^
+        ((row + 3) * (col + 5) * 13)) >>> 0;
+
+    return value % 3 !== 0;
+  });
+}
+
+function PrototypeQrCode({
+  payload,
+  compact = false,
+}: {
+  payload: string;
+  compact?: boolean;
+}) {
+  const cells = useMemo(() => buildQrCells(payload), [payload]);
+
+  return (
+    <div
+      className={compact ? "rr-qr-grid compact" : "rr-qr-grid"}
+      aria-label={`QR payload ${payload}`}
+    >
+      {cells.map((filled, index) => (
+        <span
+          key={index}
+          className={filled ? "filled" : ""}
+        />
+      ))}
+    </div>
+  );
+}
+
+function RunnerEventQr({
+  language,
+  event,
+  club,
+  registration,
+  onBack,
+  onEventDetails,
+}: {
+  language: AppLanguage;
+  event: RunEvent;
+  club: Club;
+  registration: EventRegistration;
+  onBack: () => void;
+  onEventDetails: () => void;
+}) {
+  /*
+   * EVENT CHECK-IN QR
+   * This QR is for this event registration only.
+   * Demo behavior:
+   * - First open = show QR clearly
+   * - Tap QR = show Checked In state
+   */
+  const payload = `RUNRISE|EVENT:${event.id}|REG:${registration.id}`;
+  const [demoCheckedIn, setDemoCheckedIn] = useState(false);
+
+  const copyBookingId = async () => {
+    try {
+      await navigator.clipboard.writeText(registration.id);
+    } catch {
+      // Clipboard may be unavailable in local prototype mode.
+    }
+  };
+
+  return (
+    <main className="screen rr-ticket-screen">
+      <header className="rr-ticket-topbar">
+        <button
+          type="button"
+          className="rr-icon-button"
+          onClick={onBack}
+          aria-label={language === "th" ? "ย้อนกลับ" : "Back"}
+        >
+          ←
+        </button>
+
+        <div className="rr-event-brand">
+          <img src={runriseLogo} alt="RUNRISE" />
+          <strong>RUNRISE</strong>
+        </div>
+
+        <span className="rr-topbar-spacer" />
+      </header>
+
+      <section className="rr-ticket-card">
+        <span className="rr-club-tag">{club.name}</span>
+
+        <h1>{event.name}</h1>
+
+        <p className="rr-ticket-meta">
+          {event.id === 501
+            ? language === "th"
+              ? `อาทิตย์ 16 พ.ย. · ${event.time}`
+              : `Sunday 16 Nov · ${event.time}`
+            : `${event.date} · ${event.time}`}
+          <br />
+
+          {event.meetingPoint ||
+            profileValueForLanguage(
+              event.location,
+              language
+            )}
+          <br />
+
+          {profileValueForLanguage(
+            event.distance,
+            language
+          )}{" "}
+          · Pace {event.pace} /km
+        </p>
+
+        <div
+          className={
+            demoCheckedIn
+              ? "rr-status-chip success"
+              : "rr-status-chip registered"
+          }
+        >
+          {demoCheckedIn
+            ? language === "th"
+              ? "✓ เช็กอินแล้ว"
+              : "✓ Checked In"
+            : language === "th"
+              ? "สถานะ: ลงทะเบียนแล้ว"
+              : "Status: Registered"}
+        </div>
+
+        {demoCheckedIn && (
+          <div className="rr-checkedin-state">
+            <div>✓</div>
+
+            <strong>
+              {language === "th"
+                ? "พร้อมออกวิ่งแล้ว"
+                : "You're checked in"}
+            </strong>
+
+            <span>
+              {language === "th"
+                ? "เช็กอินสำเร็จแล้ว"
+                : "Check-in completed"}
+            </span>
+          </div>
+        )}
+
+        <div className="rr-booking-id-row">
+          <div>
+            <small>
+              {language === "th"
+                ? "รหัสการจอง"
+                : "Booking ID"}
+            </small>
+
+            <strong>{registration.id}</strong>
+          </div>
+
+          <button
+            type="button"
+            className="rr-copy-button"
+            onClick={copyBookingId}
+            aria-label={
+              language === "th"
+                ? "คัดลอกรหัสการจอง"
+                : "Copy booking ID"
+            }
+          >
+            ⧉
+          </button>
+        </div>
+
+        <section
+          className={
+            demoCheckedIn
+              ? "rr-event-checkin-qr-card is-used"
+              : "rr-event-checkin-qr-card"
+          }
+          aria-label={
+            language === "th"
+              ? "QR Code สำหรับเช็กอินกิจกรรม"
+              : "Event check-in QR code"
+          }
+        >
+          <div className="rr-event-qr-heading">
+            <div className="rr-event-qr-icon" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+              <span />
+            </div>
+
+            <div>
+              <small>
+                {language === "th"
+                  ? "QR สำหรับเข้าร่วมกิจกรรม"
+                  : "EVENT CHECK-IN QR"}
+              </small>
+
+              <strong>
+                {language === "th"
+                  ? "QR Code สำหรับเช็กอิน"
+                  : "Your Check-in QR Code"}
+              </strong>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            className="rr-event-qr-tap-area"
+            onClick={() => {
+              if (!demoCheckedIn) {
+                setDemoCheckedIn(true);
+              }
+            }}
+            aria-label={
+              demoCheckedIn
+                ? language === "th"
+                  ? "เช็กอินแล้ว"
+                  : "Checked in"
+                : language === "th"
+                  ? "แตะ QR Code เพื่อจำลองการเช็กอิน"
+                  : "Tap QR code to simulate check-in"
+            }
+          >
+            <div className="rr-event-qr-code-shell">
+              <PrototypeQrCode payload={payload} />
+
+              {demoCheckedIn && (
+                <div className="rr-event-qr-used-overlay">
+                  <span>✓</span>
+                  <strong>
+                    {language === "th"
+                      ? "เช็กอินแล้ว"
+                      : "Checked In"}
+                  </strong>
+                </div>
+              )}
+            </div>
+          </button>
+
+          <p className="rr-event-qr-instruction">
+            {demoCheckedIn
+              ? language === "th"
+                ? "QR Code นี้ถูกใช้เช็กอินกิจกรรมแล้ว"
+                : "This QR code has already been used for event check-in."
+              : language === "th"
+                ? "เมื่อถึงวันวิ่ง ให้แสดง QR Code นี้แก่ผู้จัดกิจกรรมเพื่อสแกนเช็กอิน"
+                : "On event day, show this QR code to the Founder for check-in."}
+          </p>
+
+          {!demoCheckedIn && (
+            <p className="rr-event-qr-demo-hint">
+              {language === "th"
+                ? "แตะ QR Code เพื่อจำลองการเช็กอินสำหรับการพรีเซ็นต์"
+                : "Tap the QR code to simulate check-in for the prototype."}
+            </p>
+          )}
+
+          <div className="rr-event-qr-security-note">
+            <span aria-hidden="true">✓</span>
+            <p>
+              {language === "th"
+                ? `เชื่อมกับ ${event.name} และรหัสการจอง ${registration.id} โดยเฉพาะ`
+                : `Linked specifically to ${event.name} and booking ${registration.id}.`}
+            </p>
+          </div>
+        </section>
+      </section>
+
+      <button
+        type="button"
+        className="rr-secondary-cta"
+        onClick={onEventDetails}
+      >
+        {language === "th"
+          ? "ดูรายละเอียดกิจกรรม"
+          : "View Event Details"}
+      </button>
     </main>
   );
 }
@@ -8326,15 +9165,75 @@ function MyRuns({
   onNav,
 }: any) {
   const [tab, setTab] =
-    useState<
-      "runs" | "saved"
-    >("runs");
+    useState<"runs" | "saved">("runs");
 
-  const nextRun =
-    events[0];
+  /*
+    IMPORTANT:
+    `events` ที่เข้ามาในหน้านี้ถูก filter จาก joinedEvents ที่ App หลักแล้ว
+    ดังนั้นรายการนี้คือกิจกรรมที่ผู้ใช้ "จองจริง" ทั้งหมด
+
+    ก่อนหน้านี้หน้า My Runs ใช้แค่ events[0] ทำให้เห็นเพียง 1 กิจกรรม
+    แม้ว่าผู้ใช้จะจองเพิ่มแล้วก็ตาม
+  */
+  const bookedRuns = useMemo(() => {
+    const monthMap: Record<string, number> = {
+      Jan: 0,
+      Feb: 1,
+      Mar: 2,
+      Apr: 3,
+      May: 4,
+      Jun: 5,
+      Jul: 6,
+      Aug: 7,
+      Sep: 8,
+      Oct: 9,
+      Nov: 10,
+      Dec: 11,
+      "ม.ค.": 0,
+      "ก.พ.": 1,
+      "มี.ค.": 2,
+      "เม.ย.": 3,
+      "พ.ค.": 4,
+      "มิ.ย.": 5,
+      "ก.ค.": 6,
+      "ส.ค.": 7,
+      "ก.ย.": 8,
+      "ต.ค.": 9,
+      "พ.ย.": 10,
+      "ธ.ค.": 11,
+    };
+
+    const eventTime = (event: RunEvent) => {
+      const parts = String(event.date || "")
+        .trim()
+        .split(/\s+/);
+
+      const day = Number(parts[0]);
+      const month = monthMap[parts[1]];
+
+      if (!Number.isFinite(day) || month === undefined) {
+        return Number.MAX_SAFE_INTEGER;
+      }
+
+      const [hourText, minuteText] = String(event.time || "00:00")
+        .split(":");
+
+      const hour = Number(hourText) || 0;
+      const minute = Number(minuteText) || 0;
+
+      return new Date(2026, month, day, hour, minute).getTime();
+    };
+
+    return [...events].sort(
+      (a: RunEvent, b: RunEvent) => eventTime(a) - eventTime(b)
+    );
+  }, [events]);
+
+  const getClub = (event: RunEvent) =>
+    clubs.find((club: Club) => club.id === event.clubId);
 
   return (
-    <main className="screen with-nav">
+    <main className="screen with-nav myruns-page">
       <Header
         eyebrow="MY RUNRISE"
         title="Your running space"
@@ -8343,196 +9242,168 @@ function MyRuns({
 
       <div className="segmented-control">
         <button
-          className={
-            tab === "runs"
-              ? "active"
-              : ""
-          }
-          onClick={() =>
-            setTab("runs")
-          }
+          className={tab === "runs" ? "active" : ""}
+          onClick={() => setTab("runs")}
         >
-          Upcoming Runs
+          {language === "th"
+            ? `กิจกรรมวิ่งที่กำลังจะมาถึง${bookedRuns.length > 0 ? ` (${bookedRuns.length})` : ""}`
+            : `Upcoming Runs${bookedRuns.length > 0 ? ` (${bookedRuns.length})` : ""}`}
         </button>
 
         <button
-          className={
-            tab === "saved"
-              ? "active"
-              : ""
-          }
-          onClick={() =>
-            setTab("saved")
-          }
+          className={tab === "saved" ? "active" : ""}
+          onClick={() => setTab("saved")}
         >
-          Saved Clubs{" "}
-          {savedClubs.length > 0 &&
-            `(${savedClubs.length})`}
+          {language === "th" ? "คลับที่บันทึกไว้" : "Saved Clubs"}{" "}
+          {savedClubs.length > 0 && `(${savedClubs.length})`}
         </button>
       </div>
 
       {tab === "runs" && (
         <>
-          {events.length === 0 ? (
+          {bookedRuns.length === 0 ? (
             <Empty
               icon="🏃"
-              title="Your next run starts here"
-              description="Find a community and join your first run."
-              action="Discover Runs"
-              onAction={
-                onDiscover
+              title={
+                language === "th"
+                  ? "ยังไม่มีกิจกรรมที่จองไว้"
+                  : "No booked runs yet"
               }
+              description={
+                language === "th"
+                  ? "ค้นหาคอมมูนิตี้และจองกิจกรรมวิ่งที่คุณสนใจ"
+                  : "Find a community and book a run you're interested in."
+              }
+              action={language === "th" ? "ค้นหากิจกรรม" : "Discover Runs"}
+              onAction={onDiscover}
             />
           ) : (
-            <>
-              <section className="next-run-section">
-                <p className="small-label">
-                  YOUR NEXT RUN
-                </p>
-
-                <div
-                  className="next-run-hero"
-                  onClick={() =>
-                    onEvent(
-                      nextRun
-                    )
-                  }
-                >
-                  <div className="calendar-block">
-                    <strong>
-                      {nextRun.date.split(
-                        " "
-                      )[0]}
-                    </strong>
-
-                    <span>
-                      {nextRun.date.split(
-                        " "
-                      )[1]}
-                    </span>
-                  </div>
-
-                  <div className="next-run-info">
-                    <small>
-                      {
-                        clubs.find(
-                          (
-                            club: Club
-                          ) =>
-                            club.id ===
-                            nextRun.clubId
-                        )?.name
-                      }
-                    </small>
-
-                    <h2>
-                      {nextRun.name}
-                    </h2>
-
-                    <p>
-                      {nextRun.time} ·{" "}
-                      {
-                        nextRun.location
-                      }
-                    </p>
-
-                    <div className="next-run-tags">
-                      <span>
-                        {
-                          nextRun.distance
-                        }
-                      </span>
-
-                      <span>
-                        {
-                          nextRun.pace
-                        }
-                      </span>
-                    </div>
-                  </div>
+            <section className="myruns-bookings-section">
+              <div className="myruns-bookings-heading">
+                <div>
+                  <p className="small-label">
+                    {language === "th" ? "การจองของคุณ" : "YOUR BOOKINGS"}
+                  </p>
+                  <h2>
+                    {language === "th"
+                      ? `กิจกรรมที่จองไว้ทั้งหมด (${bookedRuns.length})`
+                      : `All booked runs (${bookedRuns.length})`}
+                  </h2>
                 </div>
-              </section>
+              </div>
 
-              <button
-                className="cancel-next-run"
-                onClick={() =>
-                  onCancel(
-                    nextRun.id
-                  )
-                }
-              >
-                Cancel next run
-              </button>
-            </>
+              <div className="myruns-upcoming-list">
+                {bookedRuns.map((event: RunEvent) => {
+                  const club = getClub(event);
+                  const image = getClubImage(event.clubId);
+
+                  return (
+                    <article className="myruns-upcoming-card" key={event.id}>
+                      <button
+                        type="button"
+                        className="myruns-upcoming-main"
+                        onClick={() => onEvent(event)}
+                      >
+                        <div className="myruns-upcoming-image">
+                          {image ? (
+                            <img src={image} alt={club?.name || event.name} />
+                          ) : (
+                            <span>{club?.name?.[0] || "R"}</span>
+                          )}
+                        </div>
+
+                        <div className="myruns-upcoming-copy">
+                          <span className="myruns-booked-pill">
+                            {language === "th" ? "จองแล้ว" : "Booked"}
+                          </span>
+
+                          <small>{club?.name || "Runrise Run Club"}</small>
+                          <h3>{event.name}</h3>
+                          <p>
+                            {event.date} · {event.time} ·{" "}
+                            {profileValueForLanguage(event.location, language)}
+                          </p>
+
+                          <div className="myruns-upcoming-tags">
+                            <span>
+                              {profileValueForLanguage(event.distance, language)}
+                            </span>
+                            <span>
+                              {profileValueForLanguage(event.pace, language)}
+                            </span>
+                          </div>
+                        </div>
+
+                        <span className="myruns-upcoming-arrow" aria-hidden="true">
+                          ›
+                        </span>
+                      </button>
+
+                      <button
+                        type="button"
+                        className="myruns-cancel-item"
+                        onClick={() => onCancel(event.id)}
+                      >
+                        {language === "th" ? "ยกเลิกการจอง" : "Cancel booking"}
+                      </button>
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
           )}
         </>
       )}
 
       {tab === "saved" && (
         <>
-          {savedClubs.length ===
-          0 ? (
+          {savedClubs.length === 0 ? (
             <Empty
               icon="☆"
-              title="No saved clubs yet"
-              description="Save clubs you're interested in and come back anytime."
-              action="Discover Clubs"
-              onAction={
-                onDiscover
+              title={language === "th" ? "ยังไม่มีคลับที่บันทึกไว้" : "No saved clubs yet"}
+              description={
+                language === "th"
+                  ? "บันทึกคลับที่คุณสนใจแล้วกลับมาดูได้ทุกเมื่อ"
+                  : "Save clubs you're interested in and come back anytime."
               }
+              action={language === "th" ? "ค้นหาคลับ" : "Discover Clubs"}
+              onAction={onDiscover}
             />
           ) : (
             <div className="saved-club-list">
-              {savedClubs.map(
-                (club: Club) => (
-                  <article
-                    className="saved-club-card"
-                    key={club.id}
-                  >
-                    <div
-                      className={`saved-cover cover-${club.id}`}
-                    />
+              {savedClubs.map((club: Club) => (
+                <article className="saved-club-card" key={club.id}>
+                  <div className={`saved-cover cover-${club.id}`}>
+                    {getClubImage(club.id) && (
+                      <img
+                        src={getClubImage(club.id)}
+                        alt={club.name}
+                        className="club-cover-image"
+                      />
+                    )}
+                  </div>
 
-                    <div className="saved-club-info">
-                      <h3>
-                        {club.name}
-                      </h3>
+                  <div className="saved-club-info">
+                    <h3>{club.name}</h3>
 
-                      <p>
-                        📍{" "}
-                        {
-                          club.location
-                        }
-                      </p>
+                    <p>
+                      📍 {profileValueForLanguage(club.location, language)}
+                    </p>
 
-                      <div className="saved-meta">
-                        <span>
-                          {
-                            club.distance
-                          }
-                        </span>
-
-                        <span>
-                          {
-                            club.pace
-                          }
-                        </span>
-                      </div>
-
-                      <button
-                        className="secondary"
-                        onClick={() =>
-                          onClub(
-                            club.id
-                          )
-                        }
-                      >
-                        View Club
-                      </button>
+                    <div className="saved-meta">
+                      <span>{profileValueForLanguage(club.distance, language)}</span>
+                      <span>{profileValueForLanguage(club.pace, language)}</span>
                     </div>
-                  </article>
-                )
-              )}
+
+                    <button
+                      className="secondary"
+                      onClick={() => onClub(club.id)}
+                    >
+                      {language === "th" ? "ดูคลับ" : "View Club"}
+                    </button>
+                  </div>
+                </article>
+              ))}
             </div>
           )}
         </>
@@ -9989,7 +10860,6 @@ function FounderDashboard({
           {language === "th"
             ? "สวัสดีตอนเช้า"
             : "Good morning"}{" "}
-          <span className="founder-wave">👋</span>
         </h1>
 
         <p className="founder-home-subtitle">
@@ -10002,7 +10872,7 @@ function FounderDashboard({
       <div className="founder-club-banner">
         <div className="founder-club-cover">
           <img
-            src={club6amImage}
+            src={getClubImage(club.id)}
             alt={club.name}
             className="founder-club-cover-image"
           />
@@ -10316,7 +11186,7 @@ function FounderClub({
 
       <section className="fcm-cover-card">
         <img
-          src={club6amImage}
+          src={getClubImage(draft.id)}
           alt={`${draft.name} cover`}
           className="fcm-cover-image"
         />
@@ -10604,8 +11474,10 @@ function FounderClub({
 
 function FounderEvents({
   language,
+  clubId,
   events,
   setEvents,
+  onManageEvent,
   onNav,
 }: any) {
   const [creating, setCreating] =
@@ -10663,7 +11535,7 @@ function FounderEvents({
 
     const newEvent: RunEvent = {
       id: Date.now(),
-      clubId: 1,
+      clubId,
       name: draft.name,
       date:
         draft.date ||
@@ -11197,14 +12069,22 @@ function FounderEvents({
                   />
                 </div>
 
-                <div className="founder-event-actions">
+                <div className="founder-event-actions rr-founder-event-actions">
+                  <button
+                    className="rr-manage-checkin-button"
+                    onClick={() => onManageEvent(event)}
+                  >
+                    <span>⌗</span>
+                    {language === "th" ? "จัดการเช็กอิน" : "Event Management"}
+                  </button>
+
                   <button
                     className="secondary"
                     onClick={() =>
                       startEdit(event)
                     }
                   >
-                    {language === "th" ? "แก้ไขกิจกรรม" : "Edit Run"}
+                    {language === "th" ? "แก้ไข" : "Edit"}
                   </button>
 
                   <button
@@ -11229,6 +12109,448 @@ function FounderEvents({
         active="events"
         onNav={onNav}
       />
+    </main>
+  );
+}
+
+
+function FounderEventManagement({
+  language,
+  event,
+  club,
+  registrations,
+  onBack,
+  onScan,
+}: {
+  language: AppLanguage;
+  event: RunEvent;
+  club: Club;
+  registrations: EventRegistration[];
+  onBack: () => void;
+  onScan: () => void;
+}) {
+  const [tab, setTab] = useState<"overview" | "participants" | "settings">("overview");
+  const [search, setSearch] = useState("");
+
+  const realCheckedInCount = registrations.filter(
+    (registration) => registration.status === "checked-in"
+  ).length;
+
+  const hasRealRegistrations = registrations.length > 0;
+  const registeredCount = Math.max(
+    event.participants,
+    registrations.length,
+    event.id === 501 ? 42 : 0
+  );
+
+  // Demo baseline keeps the Founder prototype meaningful even before a
+  // real Runner registration exists. Real registrations always take priority.
+  const demoCheckedInBaseline = !hasRealRegistrations && event.id === 501 ? 31 : 0;
+  const checkedInCount = Math.min(
+    registeredCount,
+    Math.max(realCheckedInCount, demoCheckedInBaseline)
+  );
+  const notArrivedCount = Math.max(registeredCount - checkedInCount, 0);
+
+  const demoParticipants = [
+    { name: "Waan", status: "registered" as const },
+    { name: "Beam", status: "registered" as const },
+    { name: "Mint", status: "checked-in" as const },
+    { name: "Praew", status: "registered" as const },
+  ];
+
+  const actualNames = new Set(registrations.map((registration) => registration.runnerName));
+  const rows = [
+    ...registrations.map((registration) => ({
+      name: registration.runnerName,
+      status: registration.status,
+      registrationId: registration.id,
+    })),
+    ...demoParticipants
+      .filter((participant) => !actualNames.has(participant.name))
+      .map((participant, index) => ({
+        ...participant,
+        registrationId: `DEMO-${index + 1}`,
+      })),
+  ].filter((participant) =>
+    participant.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <main className="screen rr-founder-event-management">
+      <header className="rr-founder-management-header">
+        <button className="rr-icon-button" onClick={onBack}>←</button>
+
+        <div className="rr-founder-brand">
+          <img src={runriseLogo} alt="RUNRISE" />
+          <div>
+            <span>RUNRISE</span>
+            <small>Founder</small>
+          </div>
+        </div>
+
+        <span className="rr-topbar-spacer" />
+      </header>
+
+      <section className="rr-founder-management-title">
+        <p className="eyebrow">
+          {language === "th" ? "จัดการกิจกรรม" : "EVENT MANAGEMENT"}
+        </p>
+        <h1>{language === "th" ? "จัดการกิจกรรม" : "Event Management"}</h1>
+      </section>
+
+      <div className="rr-founder-tabs">
+        {[
+          ["overview", language === "th" ? "ภาพรวม" : "Overview"],
+          ["participants", language === "th" ? "ผู้เข้าร่วม" : "Participants"],
+          ["settings", language === "th" ? "การตั้งค่า" : "Settings"],
+        ].map(([value, label]) => (
+          <button
+            type="button"
+            key={value}
+            className={tab === value ? "active" : ""}
+            onClick={() => setTab(value as "overview" | "participants" | "settings")}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <section className="rr-management-event-card">
+        <img src={getClubImage(club.id)} alt={club.name} />
+        <div>
+          <span>{club.name}</span>
+          <h2>{event.name}</h2>
+          <p>
+            {event.meetingPoint || profileValueForLanguage(event.location, language)}
+            <br />
+            {event.id === 501
+              ? language === "th"
+                ? `16 พ.ย. 2569 · ${event.time}`
+                : `16 Nov 2026 · ${event.time}`
+              : `${event.date} · ${event.time}`}
+          </p>
+        </div>
+      </section>
+
+      {tab === "overview" && (
+        <>
+          <div className="rr-kpi-grid">
+            <article>
+              <span>{language === "th" ? "ลงทะเบียน" : "Registered"}</span>
+              <strong>{registeredCount}</strong>
+            </article>
+
+            <article className="highlight">
+              <span>{language === "th" ? "เช็กอินแล้ว" : "Checked In"}</span>
+              <strong>{checkedInCount}</strong>
+            </article>
+
+            <article>
+              <span>{language === "th" ? "ยังไม่มา" : "Not Arrived"}</span>
+              <strong>{notArrivedCount}</strong>
+            </article>
+          </div>
+
+          <button className="rr-scan-primary" onClick={onScan}>
+            <span>⌗</span>
+            {language === "th" ? "สแกน QR" : "Scan QR"}
+          </button>
+        </>
+      )}
+
+      {(tab === "overview" || tab === "participants") && (
+        <section className="rr-participant-section">
+          <div className="rr-participant-title-row">
+            <h2>
+              {language === "th" ? "ผู้เข้าร่วม" : "Participants"} ({registeredCount})
+            </h2>
+          </div>
+
+          <label className="rr-participant-search">
+            <span>⌕</span>
+            <input
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder={language === "th" ? "ค้นหานักวิ่ง" : "Search runners"}
+            />
+          </label>
+
+          <div className="rr-participant-list">
+            {rows.map((participant) => (
+              <article className="rr-participant-row" key={participant.registrationId}>
+                <div className="rr-participant-avatar">
+                  {participant.name.charAt(0).toUpperCase()}
+                </div>
+
+                <div className="rr-participant-name">
+                  <strong>{participant.name}</strong>
+                  <span>
+                    {participant.status === "checked-in"
+                      ? language === "th"
+                        ? "เช็กอินแล้ว"
+                        : "Checked In"
+                      : language === "th"
+                        ? "ลงทะเบียนแล้ว"
+                        : "Registered"}
+                  </span>
+                </div>
+
+                <span
+                  className={
+                    participant.status === "checked-in"
+                      ? "rr-participant-status checked"
+                      : "rr-participant-status registered"
+                  }
+                >
+                  {participant.status === "checked-in"
+                    ? language === "th"
+                      ? "เช็กอินแล้ว"
+                      : "Checked In"
+                    : language === "th"
+                      ? "ลงทะเบียนแล้ว"
+                      : "Registered"}
+                </span>
+
+                <span className="rr-participant-chevron">›</span>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {tab === "settings" && (
+        <section className="rr-settings-placeholder">
+          <h2>{language === "th" ? "การตั้งค่ากิจกรรม" : "Event Settings"}</h2>
+          <p>
+            {language === "th"
+              ? "รายละเอียดการแก้ไขกิจกรรมยังคงอยู่ในหน้า Events เดิมของคุณ"
+              : "Event editing remains available from your existing Events page."}
+          </p>
+        </section>
+      )}
+    </main>
+  );
+}
+
+function FounderQrScanner({
+  language,
+  event,
+  registrations,
+  onBack,
+  onScan,
+}: {
+  language: AppLanguage;
+  event: RunEvent;
+  registrations: EventRegistration[];
+  onBack: () => void;
+  onScan: (registrationId: string) => void;
+}) {
+  const candidate =
+    registrations.find((registration) => registration.status === "registered") ||
+    registrations[0] || {
+      id: "RR-16384",
+      eventId: event.id,
+      runnerId: "RUNNER-001",
+      runnerName: "Waan",
+      status: "registered" as const,
+      checkedInAt: null,
+    };
+
+  return (
+    <main className="screen rr-scanner-screen">
+      <header className="rr-scanner-header">
+        <button className="rr-icon-button dark" onClick={onBack}>←</button>
+        <h1>{language === "th" ? "สแกน QR" : "Scan QR"}</h1>
+        <span className="rr-topbar-spacer" />
+      </header>
+
+      <div className="rr-camera-view">
+        <div className="rr-scanner-copy">
+          <strong>{language === "th" ? "สแกน QR ผู้เข้าร่วม" : "SCAN PARTICIPANT QR"}</strong>
+          <span>
+            {language === "th"
+              ? "สแกน QR ของนักวิ่งเพื่อยืนยันการเช็กอิน"
+              : "Scan the runner’s QR code to confirm check-in"}
+          </span>
+        </div>
+
+        <button
+          type="button"
+          className="rr-scan-frame"
+          onClick={() => candidate && onScan(candidate.id)}
+          disabled={!candidate}
+        >
+          <i className="corner tl" />
+          <i className="corner tr" />
+          <i className="corner bl" />
+          <i className="corner br" />
+
+          <div className="rr-scanner-runner" aria-hidden="true">
+            <span className="head" />
+            <span className="body" />
+            <span className="arm left" />
+            <span className="arm right" />
+          </div>
+
+          <div className="rr-demo-phone">
+            <div className="rr-demo-phone-top">
+              <img src={runriseLogo} alt="" />
+              RUNRISE
+            </div>
+            <PrototypeQrCode
+              payload={`RUNRISE|EVENT:${event.id}|REG:${candidate.id}`}
+              compact
+            />
+          </div>
+        </button>
+
+        <p className="rr-scanner-hint">
+          {language === "th"
+            ? "สำหรับ Prototype: แตะกรอบเพื่อจำลองการสแกน QR"
+            : "Prototype: tap the frame to simulate a QR scan"}
+        </p>
+
+        <button className="rr-flashlight-button" type="button">⌁</button>
+      </div>
+    </main>
+  );
+}
+
+function FounderScanResult({
+  language,
+  event,
+  registration,
+  onBack,
+  onConfirm,
+}: {
+  language: AppLanguage;
+  event: RunEvent;
+  registration: EventRegistration | null;
+  onBack: () => void;
+  onConfirm: () => void;
+}) {
+  if (!registration) return null;
+
+  const alreadyCheckedIn = registration.status === "checked-in";
+
+  return (
+    <main className="screen rr-scan-result-screen">
+      <header className="rr-simple-header">
+        <button className="rr-icon-button" onClick={onBack}>←</button>
+        <h1>{language === "th" ? "ผลการสแกน" : "Scan Result"}</h1>
+        <span className="rr-topbar-spacer" />
+      </header>
+
+      <section className="rr-scan-result-card">
+        <div className="rr-valid-check">✓</div>
+
+        <h2>{language === "th" ? "พบนักวิ่ง" : "Runner Found"}</h2>
+
+        <div className="rr-result-profile">
+          <div>{registration.runnerName.charAt(0).toUpperCase()}</div>
+          <strong>{registration.runnerName}</strong>
+        </div>
+
+        <dl className="rr-result-details">
+          <div>
+            <dt>{language === "th" ? "กิจกรรม" : "Event"}</dt>
+            <dd>{event.name}</dd>
+          </div>
+          <div>
+            <dt>{language === "th" ? "วันที่" : "Date"}</dt>
+            <dd>
+              {event.id === 501
+                ? language === "th"
+                  ? `16 พ.ย. 2569 · ${event.time}`
+                  : `16 Nov 2026 · ${event.time}`
+                : `${event.date} · ${event.time}`}
+            </dd>
+          </div>
+          <div>
+            <dt>{language === "th" ? "รหัสลงทะเบียน" : "Registration ID"}</dt>
+            <dd>{registration.id}</dd>
+          </div>
+        </dl>
+
+        <div className="rr-valid-registration">
+          <span>✓</span>
+          <strong>
+            {alreadyCheckedIn
+              ? language === "th"
+                ? "เช็กอินรายการนี้แล้ว"
+                : "Already Checked In"
+              : language === "th"
+                ? "การลงทะเบียนถูกต้อง"
+                : "Valid Registration"}
+          </strong>
+        </div>
+      </section>
+
+      <button
+        className="rr-primary-cta rr-confirm-checkin"
+        onClick={onConfirm}
+        disabled={alreadyCheckedIn}
+      >
+        {alreadyCheckedIn
+          ? language === "th"
+            ? "เช็กอินแล้ว"
+            : "Already Checked In"
+          : language === "th"
+            ? "ยืนยันเช็กอิน"
+            : "Confirm Check-in"}
+      </button>
+    </main>
+  );
+}
+
+function FounderCheckinSuccess({
+  language,
+  event,
+  registration,
+  onScanNext,
+  onParticipants,
+}: {
+  language: AppLanguage;
+  event: RunEvent;
+  registration: EventRegistration;
+  onScanNext: () => void;
+  onParticipants: () => void;
+}) {
+  return (
+    <main className="screen rr-checkin-success-screen">
+      <section className="rr-checkin-success-card">
+        <div className="rr-checkin-success-icon">✓</div>
+
+        <h1>{language === "th" ? "เช็กอินสำเร็จ" : "Check-in Successful"}</h1>
+
+        <div className="rr-success-summary">
+          <div>
+            <span>{language === "th" ? "นักวิ่ง" : "Runner"}</span>
+            <strong>{registration.runnerName}</strong>
+          </div>
+          <div>
+            <span>{language === "th" ? "กิจกรรม" : "Event"}</span>
+            <strong>{event.name}</strong>
+          </div>
+          <div>
+            <span>{language === "th" ? "เวลา" : "Time"}</span>
+            <strong>
+              {language === "th"
+                ? `เช็กอินเมื่อ ${registration.checkedInAt || "05:52"} น.`
+                : `Checked in at ${registration.checkedInAt || "05:52"}`}
+            </strong>
+          </div>
+        </div>
+
+        <button className="rr-primary-cta" onClick={onScanNext}>
+          {language === "th" ? "สแกนนักวิ่งคนถัดไป" : "Scan Next Runner"}
+        </button>
+
+        <button className="rr-secondary-cta" onClick={onParticipants}>
+          {language === "th" ? "ดูผู้เข้าร่วม" : "View Participants"}
+        </button>
+      </section>
     </main>
   );
 }

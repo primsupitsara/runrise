@@ -19412,3 +19412,2476 @@ html[lang="th"] .founder-home-subtitle {
 .founder-welcome-copy {
   min-width: 0 !important;
 }
+
+
+/* =========================================================
+   RUNRISE — EVENT REGISTRATION + QR CHECK-IN
+   Runner + Founder connected prototype
+   ========================================================= */
+
+.rr-event-detail,
+.rr-ticket-screen,
+.rr-founder-event-management,
+.rr-scan-result-screen,
+.rr-checkin-success-screen {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(251, 209, 133, .20), transparent 31%),
+    #F9F2E0;
+}
+
+.rr-event-nav,
+.rr-ticket-topbar,
+.rr-founder-management-header,
+.rr-simple-header,
+.rr-scanner-header {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.rr-ticket-topbar,
+.rr-simple-header,
+.rr-scanner-header {
+  grid-template-columns: 44px 1fr 44px;
+}
+
+.rr-simple-header h1,
+.rr-scanner-header h1 {
+  margin: 0;
+  text-align: center;
+  font-size: 20px;
+  letter-spacing: -.3px;
+}
+
+.rr-icon-button {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(62,45,40,.06);
+  border-radius: 14px;
+  background: rgba(255,255,255,.86);
+  color: #3E2D28;
+  font-size: 19px;
+  font-weight: 800;
+  box-shadow: 0 5px 18px rgba(62,45,40,.06);
+}
+
+.rr-icon-button.dark {
+  border-color: rgba(255,255,255,.15);
+  background: rgba(255,255,255,.10);
+  color: #fff;
+  box-shadow: none;
+}
+
+.rr-event-brand {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.rr-event-brand img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.rr-event-brand strong {
+  color: #3E2D28;
+  font-family: "Kanit", "Anuphan", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+}
+
+.rr-event-nav-actions {
+  display: flex;
+  gap: 7px;
+}
+
+.rr-event-nav-actions .rr-icon-button {
+  width: 38px;
+  height: 38px;
+  border-radius: 13px;
+}
+
+.rr-event-cover {
+  height: 205px;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #F6DFBF;
+  box-shadow: 0 10px 28px rgba(62,45,40,.07);
+}
+
+.rr-event-cover img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.rr-event-heading {
+  margin: 20px 2px 15px;
+}
+
+.rr-club-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 11px;
+  border-radius: 999px;
+  background: #F6DFBF;
+  color: #A04C2A;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.rr-event-heading h1,
+.rr-ticket-card h1 {
+  margin: 9px 0 5px;
+  color: #3E2D28;
+  font-family: "Kanit", "Anuphan", sans-serif;
+  font-size: 30px;
+  line-height: 1.12;
+  letter-spacing: -.6px;
+}
+
+.rr-event-heading p,
+.rr-ticket-meta {
+  margin: 0;
+  color: #806E66;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.rr-event-core-card {
+  overflow: hidden;
+  border: 1px solid rgba(62,45,40,.06);
+  border-radius: 22px;
+  background: rgba(255,255,255,.90);
+  box-shadow: 0 8px 25px rgba(62,45,40,.045);
+}
+
+.rr-event-core-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 16px;
+  border-bottom: 1px solid rgba(62,45,40,.07);
+}
+
+.rr-event-core-row > span {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 11px;
+  background: #FFF3E2;
+  color: #CC6B37;
+  font-size: 19px;
+}
+
+.rr-event-core-row div {
+  min-width: 0;
+}
+
+.rr-event-core-card small,
+.rr-booking-id-row small,
+.rr-kpi-grid span {
+  display: block;
+  margin-bottom: 3px;
+  color: #9A8C85;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.rr-event-core-card strong {
+  color: #3E2D28;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.rr-event-core-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.rr-event-core-grid > div {
+  min-width: 0;
+  padding: 13px 12px 14px;
+  border-right: 1px solid rgba(62,45,40,.07);
+}
+
+.rr-event-core-grid > div:last-child {
+  border-right: 0;
+}
+
+.rr-about-run {
+  margin-top: 25px;
+}
+
+.rr-about-run h2 {
+  margin-bottom: 10px;
+  color: #3E2D28;
+  font-family: "Kanit", "Anuphan", sans-serif;
+  font-size: 21px;
+}
+
+.rr-about-run > p {
+  margin: 0;
+  color: #806E66;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.rr-info-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 14px;
+}
+
+.rr-info-chips span {
+  padding: 8px 11px;
+  border-radius: 999px;
+  background: #F6DFBF;
+  color: #A04C2A;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.rr-event-sticky-action {
+  position: sticky;
+  z-index: 12;
+  bottom: -1px;
+  margin: 30px -2px 0;
+  padding: 13px 2px 8px;
+  background: linear-gradient(180deg, rgba(249,242,224,0), #F9F2E0 28%);
+}
+
+.rr-primary-cta,
+.rr-secondary-cta,
+.rr-scan-primary,
+.rr-manage-checkin-button {
+  border: 0;
+  font-family: "Anuphan", sans-serif;
+  font-weight: 700;
+}
+
+.rr-primary-cta {
+  width: 100%;
+  min-height: 56px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #FBD185 0%, #DC9242 48%, #CC6B37 100%);
+  color: #fff;
+  font-size: 15px;
+  box-shadow: 0 10px 24px rgba(204,107,55,.20);
+}
+
+.rr-primary-cta:disabled {
+  opacity: .45;
+}
+
+.rr-secondary-cta {
+  width: 100%;
+  min-height: 50px;
+  margin-top: 10px;
+  border-radius: 17px;
+  background: #fff;
+  color: #A04C2A;
+  box-shadow: 0 6px 20px rgba(62,45,40,.045);
+}
+
+.rr-cancel-registration {
+  width: 100%;
+  margin-top: 7px;
+  padding: 9px;
+  border: 0;
+  background: transparent;
+  color: #A04C2A;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.rr-registration-success {
+  padding-top: 30px;
+}
+
+.rr-registration-success h2 {
+  margin: 10px 0 7px;
+  color: #3E2D28;
+  font-size: 23px;
+}
+
+.rr-registration-success .join-success-icon {
+  background: linear-gradient(145deg, #FBD185, #CC6B37);
+}
+
+/* Event ticket / QR */
+.rr-ticket-card {
+  padding: 20px;
+  border: 1px solid rgba(62,45,40,.06);
+  border-radius: 26px;
+  background: rgba(255,255,255,.94);
+  box-shadow: 0 12px 34px rgba(62,45,40,.065);
+}
+
+.rr-ticket-meta {
+  margin-top: 8px;
+}
+
+.rr-status-chip {
+  width: fit-content;
+  margin-top: 15px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.rr-status-chip.registered {
+  background: #F6DFBF;
+  color: #A04C2A;
+}
+
+.rr-status-chip.success {
+  background: #E3F4E9;
+  color: #26744F;
+}
+
+.rr-ticket-qr-wrap {
+  margin: 22px auto 16px;
+  text-align: center;
+}
+
+.rr-ticket-qr-wrap p {
+  margin: 12px 0 0;
+  color: #806E66;
+  font-size: 11px;
+}
+
+.rr-qr-grid {
+  width: 214px;
+  height: 214px;
+  display: grid;
+  grid-template-columns: repeat(21, 1fr);
+  grid-template-rows: repeat(21, 1fr);
+  gap: 1px;
+  margin: auto;
+  padding: 12px;
+  border: 1px solid rgba(62,45,40,.08);
+  border-radius: 20px;
+  background: #fff;
+}
+
+.rr-qr-grid span {
+  border-radius: 1px;
+  background: transparent;
+}
+
+.rr-qr-grid span.filled {
+  background: #181313;
+}
+
+.rr-qr-grid.compact {
+  width: 118px;
+  height: 118px;
+  padding: 8px;
+  border-radius: 13px;
+}
+
+.rr-booking-id-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 13px 14px;
+  border-radius: 16px;
+  background: #FFF7EB;
+}
+
+.rr-booking-id-row strong {
+  color: #3E2D28;
+  font-size: 13px;
+}
+
+.rr-copy-button {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 12px;
+  background: #F6DFBF;
+  color: #A04C2A;
+  font-size: 17px;
+}
+
+.rr-checkedin-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  margin: 26px 0 18px;
+  padding: 25px 15px;
+  border-radius: 20px;
+  background: #EFF8F2;
+  color: #26744F;
+  text-align: center;
+}
+
+.rr-checkedin-state > div {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #D8EFDF;
+  font-size: 29px;
+  font-weight: 900;
+}
+
+.rr-checkedin-state span {
+  font-size: 11px;
+}
+
+/* Founder Event Management */
+.rr-founder-management-header > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.05;
+}
+
+.rr-founder-management-header > div span {
+  color: #3E2D28;
+  font-family: "Kanit", sans-serif;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.rr-founder-management-header > div small {
+  margin-top: 3px;
+  color: #CC6B37;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.rr-founder-management-title h1 {
+  margin: 0 0 18px;
+  font-size: 29px;
+}
+
+.rr-founder-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin-bottom: 16px;
+  padding: 4px;
+  border-radius: 15px;
+  background: #EFE6D7;
+}
+
+.rr-founder-tabs button {
+  min-height: 39px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: #806E66;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.rr-founder-tabs button.active {
+  background: #fff;
+  color: #A04C2A;
+  box-shadow: 0 3px 10px rgba(62,45,40,.06);
+}
+
+.rr-management-event-card {
+  display: grid;
+  grid-template-columns: 82px 1fr;
+  gap: 13px;
+  align-items: center;
+  padding: 13px;
+  border-radius: 21px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(62,45,40,.05);
+}
+
+.rr-management-event-card img {
+  width: 82px;
+  height: 82px;
+  object-fit: cover;
+  border-radius: 17px;
+}
+
+.rr-management-event-card span {
+  color: #CC6B37;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.rr-management-event-card h2 {
+  margin: 3px 0 5px;
+  color: #3E2D28;
+  font-size: 17px;
+  line-height: 1.2;
+}
+
+.rr-management-event-card p {
+  margin: 0;
+  color: #806E66;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.rr-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.rr-kpi-grid article {
+  min-height: 84px;
+  padding: 12px 10px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 5px 18px rgba(62,45,40,.035);
+}
+
+.rr-kpi-grid article.highlight {
+  background: #FFF0DC;
+}
+
+.rr-kpi-grid strong {
+  display: block;
+  margin-top: 6px;
+  color: #3E2D28;
+  font-size: 26px;
+  line-height: 1;
+}
+
+.rr-scan-primary {
+  width: 100%;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 14px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #FBD185, #CC6B37);
+  color: #fff;
+  font-size: 14px;
+  box-shadow: 0 10px 24px rgba(204,107,55,.18);
+}
+
+.rr-scan-primary span {
+  font-size: 22px;
+}
+
+.rr-participant-section {
+  margin-top: 24px;
+}
+
+.rr-participant-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 11px;
+}
+
+.rr-participant-title-row h2 {
+  margin: 0;
+  font-size: 19px;
+}
+
+.rr-participant-search {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 13px;
+  border-radius: 15px;
+  background: #fff;
+}
+
+.rr-participant-search span {
+  color: #806E66;
+  font-size: 20px;
+}
+
+.rr-participant-search input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #3E2D28;
+  font-size: 12px;
+}
+
+.rr-participant-list {
+  overflow: hidden;
+  margin-top: 10px;
+  border-radius: 20px;
+  background: #fff;
+}
+
+.rr-participant-row {
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 13px;
+  border-bottom: 1px solid rgba(62,45,40,.07);
+}
+
+.rr-participant-row:last-child {
+  border-bottom: 0;
+}
+
+.rr-participant-avatar {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #FBD185, #DC9242);
+  color: #fff;
+  font-weight: 800;
+}
+
+.rr-participant-name {
+  min-width: 0;
+  flex: 1;
+}
+
+.rr-participant-name strong {
+  display: block;
+  color: #3E2D28;
+  font-size: 12px;
+}
+
+.rr-participant-name span {
+  color: #9A8C85;
+  font-size: 9px;
+}
+
+.rr-participant-status {
+  min-width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.rr-participant-status.checked {
+  background: #E3F4E9;
+  color: #26744F;
+}
+
+.rr-participant-status.registered {
+  background: #FFF0DC;
+  color: #CC6B37;
+}
+
+.rr-participant-chevron {
+  color: #9A8C85;
+  font-size: 18px;
+}
+
+.rr-settings-placeholder {
+  margin-top: 16px;
+  padding: 18px;
+  border-radius: 20px;
+  background: #fff;
+}
+
+.rr-settings-placeholder h2 {
+  margin-bottom: 7px;
+}
+
+.rr-settings-placeholder p {
+  margin: 0;
+  color: #806E66;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.rr-founder-event-actions {
+  grid-template-columns: 1fr 72px 72px !important;
+}
+
+.rr-manage-checkin-button {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #FBD185, #CC6B37);
+  color: #fff;
+  font-size: 10px;
+}
+
+/* Scanner */
+.rr-scanner-screen {
+  padding: 0;
+  background: #111;
+  color: #fff;
+}
+
+.rr-scanner-header {
+  position: absolute;
+  z-index: 4;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  margin: 0;
+}
+
+.rr-camera-view {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background:
+    linear-gradient(rgba(0,0,0,.18), rgba(0,0,0,.36)),
+    radial-gradient(circle at 50% 42%, #6C7779 0%, #333A3C 35%, #16191A 100%);
+}
+
+.rr-camera-view::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(120deg, rgba(255,255,255,.05), transparent 28%),
+    radial-gradient(circle at 25% 80%, rgba(251,209,133,.12), transparent 26%);
+}
+
+.rr-scanner-copy {
+  position: relative;
+  z-index: 2;
+  width: 82%;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.rr-scanner-copy strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  letter-spacing: 1.4px;
+}
+
+.rr-scanner-copy span {
+  color: rgba(255,255,255,.74);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.rr-scan-frame {
+  position: relative;
+  z-index: 2;
+  width: 270px;
+  height: 270px;
+  border: 0;
+  background: transparent;
+}
+
+.rr-scan-frame:disabled {
+  opacity: .72;
+}
+
+.rr-scan-frame .corner {
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  border-color: #fff;
+  border-style: solid;
+}
+
+.rr-scan-frame .tl {
+  top: 0;
+  left: 0;
+  border-width: 4px 0 0 4px;
+  border-radius: 18px 0 0 0;
+}
+
+.rr-scan-frame .tr {
+  top: 0;
+  right: 0;
+  border-width: 4px 4px 0 0;
+  border-radius: 0 18px 0 0;
+}
+
+.rr-scan-frame .bl {
+  bottom: 0;
+  left: 0;
+  border-width: 0 0 4px 4px;
+  border-radius: 0 0 0 18px;
+}
+
+.rr-scan-frame .br {
+  bottom: 0;
+  right: 0;
+  border-width: 0 4px 4px 0;
+  border-radius: 0 0 18px 0;
+}
+
+.rr-demo-phone {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 155px;
+  height: 215px;
+  transform: translate(-50%, -50%) rotate(-3deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 5px solid #111;
+  border-radius: 26px;
+  background: #F9F2E0;
+  box-shadow: 0 15px 35px rgba(0,0,0,.28);
+}
+
+.rr-demo-phone-top {
+  color: #A04C2A;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.rr-no-registration {
+  width: 90%;
+  color: #806E66;
+  font-size: 10px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.rr-scanner-hint {
+  position: relative;
+  z-index: 2;
+  max-width: 280px;
+  margin: 18px 0 0;
+  color: rgba(255,255,255,.65);
+  font-size: 9px;
+  text-align: center;
+}
+
+.rr-flashlight-button {
+  position: absolute;
+  z-index: 3;
+  bottom: 36px;
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 50%;
+  background: rgba(255,255,255,.12);
+  color: #fff;
+  font-size: 20px;
+}
+
+/* Scan result */
+.rr-scan-result-card,
+.rr-checkin-success-card {
+  padding: 23px 20px;
+  border-radius: 26px;
+  background: #fff;
+  box-shadow: 0 12px 34px rgba(62,45,40,.06);
+}
+
+.rr-valid-check,
+.rr-checkin-success-icon {
+  width: 66px;
+  height: 66px;
+  display: grid;
+  place-items: center;
+  margin: 4px auto 13px;
+  border-radius: 50%;
+  background: #DFF2E6;
+  color: #26744F;
+  font-size: 31px;
+  font-weight: 900;
+}
+
+.rr-scan-result-card > h2,
+.rr-checkin-success-card > h1 {
+  margin: 0 0 18px;
+  color: #3E2D28;
+  text-align: center;
+}
+
+.rr-result-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px;
+  border-radius: 18px;
+  background: #FFF7EB;
+}
+
+.rr-result-profile > div {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #FBD185, #DC9242);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.rr-result-details {
+  display: grid;
+  gap: 0;
+  margin: 17px 0;
+}
+
+.rr-result-details > div {
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(62,45,40,.07);
+}
+
+.rr-result-details dt {
+  margin-bottom: 3px;
+  color: #9A8C85;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.rr-result-details dd {
+  margin: 0;
+  color: #3E2D28;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.rr-valid-registration {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 13px;
+  border-radius: 15px;
+  background: #E8F5EC;
+  color: #26744F;
+  font-size: 11px;
+}
+
+.rr-confirm-checkin {
+  margin-top: 15px;
+}
+
+.rr-checkin-success-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rr-checkin-success-card {
+  width: 100%;
+}
+
+.rr-success-summary {
+  margin: 19px 0 22px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #FFF7EB;
+}
+
+.rr-success-summary > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(62,45,40,.07);
+}
+
+.rr-success-summary > div:last-child {
+  border-bottom: 0;
+}
+
+.rr-success-summary span {
+  color: #9A8C85;
+  font-size: 10px;
+}
+
+.rr-success-summary strong {
+  max-width: 62%;
+  color: #3E2D28;
+  font-size: 11px;
+  text-align: right;
+}
+
+.rr-topbar-spacer {
+  display: block;
+  width: 42px;
+}
+
+
+
+/* =========================================================
+   RUNRISE — EVENT REGISTRATION + QR CHECK-IN FINAL POLISH
+   Added on top of the current project without changing other screens.
+   ========================================================= */
+
+.rr-event-detail,
+.rr-ticket-screen,
+.rr-founder-event-management,
+.rr-scan-result-screen,
+.rr-checkin-success-screen {
+  position: relative;
+  padding-top: 50px;
+}
+
+.rr-event-detail::before,
+.rr-ticket-screen::before,
+.rr-founder-event-management::before,
+.rr-scan-result-screen::before,
+.rr-checkin-success-screen::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 92px;
+  height: 24px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: #151313;
+  box-shadow: inset 0 -1px 0 rgba(255,255,255,.08);
+  pointer-events: none;
+  z-index: 80;
+}
+
+.rr-event-nav,
+.rr-ticket-topbar,
+.rr-founder-management-header,
+.rr-simple-header {
+  margin-bottom: 20px;
+}
+
+.rr-event-cover {
+  height: 218px;
+  border-radius: 26px;
+}
+
+.rr-event-heading {
+  margin-top: 22px;
+}
+
+.rr-event-heading h1,
+.rr-ticket-card h1 {
+  font-size: 31px;
+  line-height: 1.12;
+}
+
+.rr-event-heading p,
+.rr-ticket-meta {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.rr-event-core-card,
+.rr-ticket-card,
+.rr-management-event-card,
+.rr-scan-result-card,
+.rr-checkin-success-card {
+  border-radius: 24px;
+}
+
+.rr-event-core-card {
+  box-shadow: 0 10px 28px rgba(62,45,40,.045);
+}
+
+.rr-event-core-row {
+  padding: 16px;
+}
+
+.rr-event-core-grid > div {
+  padding: 14px 12px 15px;
+}
+
+.rr-event-core-card small,
+.rr-booking-id-row small,
+.rr-kpi-grid span {
+  font-size: 10px;
+}
+
+.rr-event-core-card strong {
+  font-size: 13px;
+}
+
+.rr-info-chips {
+  gap: 8px;
+}
+
+.rr-info-chips span {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 10px;
+}
+
+.rr-primary-cta {
+  min-height: 58px;
+  border-radius: 19px;
+  font-size: 15px;
+}
+
+.rr-registration-success {
+  padding: 30px 22px 22px;
+  border-radius: 28px;
+}
+
+.rr-registration-success .join-success-icon {
+  width: 70px;
+  height: 70px;
+  font-size: 33px;
+  box-shadow: 0 10px 25px rgba(204,107,55,.18);
+}
+
+.rr-registration-success h2 {
+  font-size: 24px;
+}
+
+.rr-ticket-card {
+  padding: 21px;
+}
+
+.rr-status-chip {
+  min-height: 31px;
+  display: inline-flex;
+  align-items: center;
+  margin-top: 16px;
+  padding: 0 12px;
+}
+
+.rr-ticket-qr-wrap {
+  margin-top: 24px;
+}
+
+.rr-qr-grid {
+  width: 220px;
+  height: 220px;
+  border-radius: 22px;
+  box-shadow: 0 8px 24px rgba(62,45,40,.055);
+}
+
+.rr-booking-id-row {
+  margin-top: 20px;
+  padding: 14px;
+}
+
+.rr-founder-management-header > div.rr-founder-brand {
+  min-width: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.rr-founder-brand > img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.rr-founder-brand > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.05;
+}
+
+.rr-founder-brand > div span {
+  color: #3E2D28;
+  font-family: "Kanit", "Anuphan", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+}
+
+.rr-founder-brand > div small {
+  margin-top: 2px;
+  color: #CC6B37;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.rr-founder-management-title h1 {
+  font-size: 30px;
+}
+
+.rr-management-event-card {
+  grid-template-columns: 88px 1fr;
+  gap: 14px;
+  padding: 14px;
+}
+
+.rr-management-event-card img {
+  width: 88px;
+  height: 88px;
+  border-radius: 18px;
+}
+
+.rr-management-event-card h2 {
+  font-size: 18px;
+}
+
+.rr-management-event-card p {
+  font-size: 10.5px;
+}
+
+.rr-kpi-grid article {
+  min-height: 88px;
+  padding: 13px 11px;
+}
+
+.rr-kpi-grid article.highlight {
+  background: linear-gradient(145deg, #FFF4E2, #F6DFBF);
+  box-shadow: inset 0 0 0 1px rgba(204,107,55,.10);
+}
+
+.rr-kpi-grid strong {
+  font-size: 28px;
+}
+
+.rr-scan-primary {
+  min-height: 58px;
+  border-radius: 19px;
+  font-size: 15px;
+}
+
+.rr-participant-row {
+  min-height: 72px;
+  gap: 9px;
+}
+
+.rr-participant-name > span {
+  display: none;
+}
+
+.rr-participant-status {
+  width: auto !important;
+  height: auto !important;
+  min-width: 78px;
+  min-height: 28px;
+  padding: 0 9px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px !important;
+  font-size: 8.5px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  white-space: nowrap;
+}
+
+.rr-participant-status.checked {
+  background: #E5F4EA !important;
+  color: #26744F !important;
+}
+
+.rr-participant-status.registered {
+  background: #FFF0DC !important;
+  color: #A04C2A !important;
+}
+
+.rr-scanner-screen {
+  position: relative;
+}
+
+.rr-scanner-screen::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 92px;
+  height: 24px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: #050505;
+  z-index: 8;
+  box-shadow: inset 0 -1px 0 rgba(255,255,255,.12);
+  pointer-events: none;
+}
+
+.rr-scanner-header {
+  top: 48px;
+}
+
+.rr-camera-view {
+  background:
+    linear-gradient(rgba(14,18,19,.18), rgba(8,10,11,.50)),
+    radial-gradient(circle at 50% 42%, #889392 0%, #495152 36%, #16191A 100%);
+}
+
+.rr-scanner-copy {
+  margin-top: 62px;
+  margin-bottom: 22px;
+}
+
+.rr-scanner-copy strong {
+  font-size: 13px;
+  letter-spacing: 1.8px;
+}
+
+.rr-scan-frame {
+  width: 276px;
+  height: 276px;
+}
+
+.rr-scanner-runner {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  width: 152px;
+  height: 190px;
+  transform: translateX(-50%);
+  opacity: .42;
+  pointer-events: none;
+}
+
+.rr-scanner-runner .head {
+  position: absolute;
+  left: 50%;
+  top: 4px;
+  width: 44px;
+  height: 44px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: #0f1112;
+}
+
+.rr-scanner-runner .body {
+  position: absolute;
+  left: 50%;
+  top: 44px;
+  width: 94px;
+  height: 130px;
+  transform: translateX(-50%);
+  border-radius: 44px 44px 24px 24px;
+  background: #0f1112;
+}
+
+.rr-scanner-runner .arm {
+  position: absolute;
+  top: 80px;
+  width: 68px;
+  height: 22px;
+  border-radius: 999px;
+  background: #0f1112;
+}
+
+.rr-scanner-runner .arm.left {
+  left: -2px;
+  transform: rotate(-30deg);
+}
+
+.rr-scanner-runner .arm.right {
+  right: -2px;
+  transform: rotate(30deg);
+}
+
+.rr-demo-phone {
+  z-index: 3;
+  width: 146px;
+  height: 208px;
+  gap: 8px;
+  border-radius: 27px;
+}
+
+.rr-demo-phone-top {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.rr-demo-phone-top img {
+  width: 17px;
+  height: 17px;
+  object-fit: contain;
+}
+
+.rr-demo-phone .rr-qr-grid.compact {
+  width: 116px;
+  height: 116px;
+}
+
+.rr-flashlight-button {
+  width: 52px;
+  height: 52px;
+  bottom: 28px;
+}
+
+.rr-scan-result-card {
+  padding: 24px 21px;
+}
+
+.rr-valid-check,
+.rr-checkin-success-icon {
+  width: 70px;
+  height: 70px;
+}
+
+.rr-result-profile {
+  padding: 14px;
+}
+
+.rr-valid-registration {
+  min-height: 48px;
+}
+
+.rr-checkin-success-screen {
+  padding-top: 70px;
+}
+
+.rr-checkin-success-card {
+  padding: 28px 22px;
+}
+
+.rr-success-summary > div {
+  padding: 13px 14px;
+}
+
+html[lang="th"] .rr-event-heading h1,
+html[lang="th"] .rr-ticket-card h1,
+html[lang="th"] .rr-founder-management-title h1,
+html[lang="th"] .rr-scan-result-card h2,
+html[lang="th"] .rr-checkin-success-card h1 {
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+/* =========================================================
+   RUNRISE — RUNNER EVENT CHECK-IN QR
+   Event-specific QR shown AFTER Booking ID.
+   This is separate from the Friend QR flow.
+========================================================= */
+
+.rr-event-checkin-qr-card {
+  margin-top: 18px;
+  padding: 18px 16px 17px;
+  border: 1px solid rgba(204, 107, 55, .12);
+  border-radius: 22px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(249, 242, 224, .72) 0%,
+      rgba(255, 255, 255, .96) 100%
+    );
+}
+
+.rr-event-qr-heading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 16px;
+}
+
+.rr-event-qr-heading > div:last-child {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rr-event-qr-heading small {
+  color: #CC6B37;
+  font-family: "Anuphan", sans-serif;
+  font-size: 10px;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.rr-event-qr-heading strong {
+  color: #3E2D28;
+  font-family: "Kanit", "Anuphan", sans-serif;
+  font-size: 17px;
+  line-height: 1.22;
+  font-weight: 650;
+}
+
+.rr-event-qr-icon {
+  width: 43px;
+  height: 43px;
+  flex: 0 0 43px;
+  position: relative;
+  border-radius: 13px;
+  background: #F6DFBF;
+}
+
+.rr-event-qr-icon span {
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  border: 2px solid #A04C2A;
+  box-sizing: border-box;
+}
+
+.rr-event-qr-icon span:nth-child(1) {
+  top: 9px;
+  left: 9px;
+}
+
+.rr-event-qr-icon span:nth-child(2) {
+  top: 9px;
+  right: 9px;
+}
+
+.rr-event-qr-icon span:nth-child(3) {
+  bottom: 9px;
+  left: 9px;
+}
+
+.rr-event-qr-icon span:nth-child(4) {
+  right: 9px;
+  bottom: 9px;
+  width: 6px;
+  height: 6px;
+  border-width: 0;
+  background: #A04C2A;
+}
+
+.rr-event-qr-code-shell {
+  width: fit-content;
+  max-width: 100%;
+  position: relative;
+  margin: 0 auto;
+  padding: 10px;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow:
+    0 8px 24px rgba(62, 45, 40, .055);
+}
+
+.rr-event-checkin-qr-card .rr-qr-grid {
+  margin: 0;
+}
+
+.rr-event-qr-instruction {
+  max-width: 270px;
+  margin: 14px auto 0;
+  color: #806E66;
+  font-family: "Anuphan", sans-serif;
+  font-size: 11px;
+  line-height: 1.55;
+  font-weight: 500;
+  text-align: center;
+}
+
+.rr-event-qr-security-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 13px;
+  padding: 10px 11px;
+  border-radius: 14px;
+  background: rgba(246, 223, 191, .42);
+}
+
+.rr-event-qr-security-note > span {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #FBD185;
+  color: #A04C2A;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.rr-event-qr-security-note p {
+  margin: 0;
+  color: #806E66;
+  font-family: "Anuphan", sans-serif;
+  font-size: 9.5px;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.rr-event-qr-used-overlay {
+  position: absolute;
+  inset: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-radius: 18px;
+  background: rgba(239, 248, 242, .88);
+  color: #26744F;
+  backdrop-filter: blur(2px);
+}
+
+.rr-event-qr-used-overlay span {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #D6F0DF;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.rr-event-qr-used-overlay strong {
+  font-family: "Kanit", "Anuphan", sans-serif;
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.rr-event-checkin-qr-card.is-used .rr-event-qr-instruction {
+  color: #26744F;
+}
+
+html[lang="th"] .rr-event-qr-heading strong {
+  line-height: 1.34;
+}
+
+html[lang="th"] .rr-event-qr-instruction,
+html[lang="th"] .rr-event-qr-security-note p {
+  line-height: 1.6;
+}
+
+/* =========================================================
+   RUNRISE — EVENT QR DEMO INTERACTION
+   First state = clean QR
+   Tap QR = checked-in overlay
+========================================================= */
+
+.rr-event-qr-tap-area {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rr-event-qr-tap-area:focus-visible {
+  outline: 3px solid rgba(204, 107, 55, .25);
+  outline-offset: 6px;
+  border-radius: 24px;
+}
+
+/* QR must be sharp and fully visible before check-in */
+.rr-event-checkin-qr-card:not(.is-used) .rr-qr-grid,
+.rr-event-checkin-qr-card:not(.is-used) .rr-event-qr-code-shell {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* Only after tapping the QR do we soften it behind the success overlay */
+.rr-event-checkin-qr-card.is-used .rr-qr-grid {
+  filter: blur(2px) !important;
+  opacity: .22 !important;
+}
+
+.rr-event-qr-used-overlay {
+  cursor: default;
+}
+
+.rr-event-qr-demo-hint {
+  margin: 8px auto 0;
+  color: #B85A31;
+  font-family: "Anuphan", sans-serif;
+  font-size: 9px;
+  line-height: 1.45;
+  font-weight: 600;
+  text-align: center;
+}
+
+html[lang="th"] .rr-event-qr-demo-hint {
+  line-height: 1.6;
+}
+
+/* =========================================================
+   RUNRISE — TRUE FULL-WIDTH FIXED BOTTOM ACTION BARS
+   Event Detail + Compare Select
+   Final override: docked flush to the bottom of the Runrise phone
+========================================================= */
+
+/*
+  The Runrise prototype scrolls inside .screen.
+  Giving .phone a transform makes position: fixed descendants
+  use the phone frame as their containing block in desktop preview,
+  while still behaving like a normal fixed bottom bar on mobile.
+*/
+.phone {
+  position: relative;
+  transform: translateZ(0);
+}
+
+/* Give the pages enough bottom room so content is not hidden
+   behind the fixed action bars. */
+.rr-event-detail {
+  padding-bottom: 118px !important;
+}
+
+.compare-select-page {
+  padding-bottom: 132px !important;
+}
+
+
+/* ---------------------------------------------------------
+   RUNNER EVENT DETAIL — FULL-WIDTH BOTTOM DOCK
+--------------------------------------------------------- */
+
+.rr-event-sticky-action {
+  position: fixed !important;
+
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+
+  width: 100% !important;
+  max-width: none !important;
+
+  z-index: 120 !important;
+
+  margin: 0 !important;
+
+  padding:
+    12px
+    16px
+    calc(12px + env(safe-area-inset-bottom)) !important;
+
+  transform: none !important;
+
+  border: 0 !important;
+  border-top: 1px solid rgba(62, 45, 40, .07) !important;
+  border-radius: 0 !important;
+
+  /* Solid, opaque dock — no floating glass card */
+  background: #F9F2E0 !important;
+
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  box-shadow:
+    0 -8px 24px rgba(62, 45, 40, .08) !important;
+}
+
+.rr-event-sticky-action .rr-primary-cta {
+  width: 100% !important;
+  min-height: 58px !important;
+
+  margin: 0 !important;
+
+  border: 0 !important;
+  border-radius: 18px !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #FBD185 0%,
+      #E69A43 48%,
+      #CC6B37 100%
+    ) !important;
+
+  color: #FFFFFF !important;
+
+  font-family: "Anuphan", sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+
+  box-shadow:
+    0 8px 20px rgba(204, 107, 55, .18) !important;
+
+  cursor: pointer;
+}
+
+.rr-event-sticky-action .rr-primary-cta:active {
+  transform: scale(.985);
+}
+
+.rr-event-sticky-action .rr-primary-cta:disabled {
+  opacity: .45 !important;
+  box-shadow: none !important;
+  cursor: default;
+}
+
+
+/* ---------------------------------------------------------
+   COMPARE SELECT — FULL-WIDTH BOTTOM DOCK
+--------------------------------------------------------- */
+
+.compare-select-sticky {
+  position: fixed !important;
+
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+
+  width: 100% !important;
+  max-width: none !important;
+
+  z-index: 120 !important;
+
+  margin: 0 !important;
+
+  padding:
+    9px
+    16px
+    calc(12px + env(safe-area-inset-bottom)) !important;
+
+  transform: none !important;
+
+  border: 0 !important;
+  border-top: 1px solid rgba(62, 45, 40, .07) !important;
+  border-radius: 0 !important;
+
+  /* Solid, opaque dock — no floating glass card */
+  background: #F9F2E0 !important;
+
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  box-shadow:
+    0 -8px 24px rgba(62, 45, 40, .08) !important;
+}
+
+.compare-select-sticky p {
+  margin: 0 0 7px !important;
+  padding: 0 !important;
+
+  color: rgba(62, 45, 40, .52) !important;
+
+  font-size: 9px !important;
+  line-height: 1.3 !important;
+  font-weight: 600 !important;
+}
+
+.compare-select-sticky button {
+  width: 100% !important;
+  min-height: 56px !important;
+
+  display: grid !important;
+  grid-template-columns: 32px minmax(0, 1fr) 32px !important;
+  align-items: center !important;
+
+  margin: 0 !important;
+  padding: 0 14px !important;
+
+  border: 0 !important;
+  border-radius: 18px !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #FBD185 0%,
+      #E69A43 48%,
+      #CC6B37 100%
+    ) !important;
+
+  color: #FFFFFF !important;
+
+  font-family: "Anuphan", sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+
+  box-shadow:
+    0 8px 20px rgba(204, 107, 55, .18) !important;
+
+  cursor: pointer;
+}
+
+.compare-select-sticky button span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: inherit;
+
+  font-size: 18px;
+}
+
+.compare-select-sticky button:not(:disabled):active {
+  transform: scale(.985);
+}
+
+.compare-select-sticky button:disabled {
+  opacity: 1 !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #F7D9A7 0%,
+      #E9BE9F 100%
+    ) !important;
+
+  color: rgba(255, 255, 255, .92) !important;
+
+  box-shadow: none !important;
+  cursor: default;
+}
+
+
+/* ---------------------------------------------------------
+   SMALL PHONES
+--------------------------------------------------------- */
+
+@media (max-width: 390px) {
+  .rr-event-sticky-action,
+  .compare-select-sticky {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  .rr-event-sticky-action .rr-primary-cta {
+    min-height: 56px !important;
+    font-size: 14px !important;
+  }
+
+  .compare-select-sticky button {
+    min-height: 54px !important;
+    font-size: 13px !important;
+  }
+}
+
+
+/* =========================================================
+   RUNRISE — MY RUNS / BOOKINGS SYNC
+   Shows every joined event, not only events[0].
+========================================================= */
+
+.myruns-page {
+  padding-bottom: 112px !important;
+}
+
+.myruns-next-run-button {
+  width: 100%;
+  border: 0;
+  text-align: left;
+  font-family: inherit;
+}
+
+.myruns-more-runs-section {
+  margin-top: 30px;
+}
+
+.myruns-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 13px;
+}
+
+.myruns-section-heading .small-label {
+  margin: 0 0 5px;
+}
+
+.myruns-section-heading h2 {
+  margin: 0;
+  color: var(--runrise-brown, #3E2D28);
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.myruns-upcoming-list {
+  display: grid;
+  gap: 12px;
+}
+
+.myruns-upcoming-card {
+  overflow: hidden;
+  border: 1px solid rgba(62, 45, 40, .07);
+  border-radius: 22px;
+  background: rgba(255,255,255,.94);
+  box-shadow: 0 8px 24px rgba(62,45,40,.045);
+}
+
+.myruns-upcoming-main {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr) 24px;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 0;
+  background: transparent;
+  color: var(--runrise-brown, #3E2D28);
+  text-align: left;
+  font-family: inherit;
+}
+
+.myruns-upcoming-image {
+  width: 76px;
+  height: 76px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: var(--runrise-sand, #F6DFBF);
+  color: var(--runrise-rust, #A04C2A);
+  font-size: 24px;
+  font-weight: 850;
+}
+
+.myruns-upcoming-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.myruns-upcoming-copy {
+  min-width: 0;
+}
+
+.myruns-booked-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 25px;
+  margin-bottom: 6px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: rgba(246, 223, 191, .88);
+  color: var(--runrise-rust, #A04C2A);
+  font-size: 8.5px;
+  font-weight: 800;
+}
+
+.myruns-upcoming-copy small {
+  display: block;
+  overflow: hidden;
+  color: rgba(62,45,40,.52);
+  font-size: 9px;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.myruns-upcoming-copy h3 {
+  margin: 3px 0 5px;
+  overflow: hidden;
+  color: var(--runrise-brown, #3E2D28);
+  font-size: 15px;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.myruns-upcoming-copy p {
+  margin: 0;
+  color: rgba(62,45,40,.55);
+  font-size: 9.5px;
+  line-height: 1.4;
+}
+
+.myruns-upcoming-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.myruns-upcoming-tags span {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: rgba(246,223,191,.58);
+  color: var(--runrise-rust, #A04C2A);
+  font-size: 8px;
+  font-weight: 750;
+}
+
+.myruns-upcoming-arrow {
+  display: grid;
+  place-items: center;
+  color: rgba(62,45,40,.5);
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.myruns-cancel-item {
+  width: 100%;
+  min-height: 42px;
+  border: 0;
+  border-top: 1px solid rgba(62,45,40,.055);
+  background: rgba(255,250,240,.6);
+  color: #C94747;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+@media (max-width: 360px) {
+  .myruns-upcoming-main {
+    grid-template-columns: 68px minmax(0, 1fr) 20px;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .myruns-upcoming-image {
+    width: 68px;
+    height: 68px;
+    border-radius: 16px;
+  }
+}
+
+/* =========================================================
+   RUNRISE — SAVED CLUBS CARD FIX
+   Restores the original Saved Clubs layout in My Runs.
+   Keeps club images clipped inside each saved-club card.
+========================================================= */
+
+.myruns-page .saved-club-list {
+  display: grid !important;
+  gap: 14px !important;
+  width: 100% !important;
+}
+
+.myruns-page .saved-club-card {
+  display: grid !important;
+  grid-template-columns: 100px minmax(0, 1fr) !important;
+  width: 100% !important;
+  min-height: 158px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(62, 45, 40, 0.06) !important;
+  border-radius: 21px !important;
+  background: #ffffff !important;
+  box-shadow: 0 7px 22px rgba(62, 45, 40, 0.045) !important;
+}
+
+.myruns-page .saved-cover {
+  position: relative !important;
+  width: 100px !important;
+  height: 100% !important;
+  min-height: 158px !important;
+  overflow: hidden !important;
+  border-radius: 0 !important;
+  background: #F6DFBF !important;
+}
+
+.myruns-page .saved-cover .club-cover-image {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  border-radius: 0 !important;
+  transform: none !important;
+}
+
+.myruns-page .saved-club-info {
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  padding: 13px !important;
+  background: #ffffff !important;
+}
+
+.myruns-page .saved-club-info h3 {
+  margin: 0 0 4px !important;
+  color: var(--runrise-brown, #3E2D28) !important;
+  font-size: 15px !important;
+  line-height: 1.25 !important;
+  font-weight: 800 !important;
+}
+
+.myruns-page .saved-club-info p {
+  margin: 0 0 10px !important;
+  color: var(--muted, #806E66) !important;
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+}
+
+.myruns-page .saved-meta {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 5px !important;
+  margin: 0 0 10px !important;
+}
+
+.myruns-page .saved-meta span {
+  padding: 5px 7px !important;
+  border-radius: 999px !important;
+  background: #f4f4f7 !important;
+  color: var(--muted, #806E66) !important;
+  font-size: 8px !important;
+  font-weight: 700 !important;
+}
+
+.myruns-page .saved-club-info .secondary {
+  width: 100% !important;
+  min-height: 38px !important;
+  margin: auto 0 0 !important;
+  padding: 0 12px !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  background: #F6DFBF !important;
+  color: var(--runrise-terracotta, #CC6B37) !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 360px) {
+  .myruns-page .saved-club-card {
+    grid-template-columns: 92px minmax(0, 1fr) !important;
+  }
+
+  .myruns-page .saved-cover {
+    width: 92px !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE — EVENT ADVANCED FILTERS
+   - Calendar quick-filter removed
+   - Filter button opens Pace / Area / Distance / Day filters
+========================================================= */
+
+/* Keep the quick period row clean after removing Calendar. */
+.event-filter-tabs {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.event-filter-button {
+  position: relative;
+}
+
+.event-filter-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+
+  min-width: 18px;
+  height: 18px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0 5px;
+
+  border: 2px solid #F9F2E0;
+  border-radius: 999px;
+
+  background: #CC6B37;
+  color: #fff;
+
+  font-size: 8px;
+  line-height: 1;
+  font-weight: 850;
+}
+
+.event-advanced-filter-panel {
+  margin: 0 0 13px;
+  padding: 15px;
+
+  border: 1px solid rgba(62, 45, 40, .065);
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, .94);
+
+  box-shadow:
+    0 10px 26px rgba(62, 45, 40, .055);
+}
+
+.event-advanced-filter-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin-bottom: 14px;
+}
+
+.event-advanced-filter-head > div {
+  min-width: 0;
+}
+
+.event-advanced-filter-head strong {
+  display: block;
+
+  color: #3E2D28;
+
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 850;
+}
+
+.event-advanced-filter-head span {
+  display: block;
+  margin-top: 3px;
+
+  color: rgba(62, 45, 40, .48);
+
+  font-size: 8.5px;
+  font-weight: 600;
+}
+
+.event-advanced-filter-head > button {
+  flex-shrink: 0;
+
+  padding: 5px 8px;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: rgba(246, 223, 191, .72);
+  color: #A04C2A;
+
+  font-size: 8.5px;
+  font-weight: 800;
+}
+
+.event-filter-group + .event-filter-group {
+  margin-top: 14px;
+  padding-top: 13px;
+  border-top: 1px solid rgba(62, 45, 40, .055);
+}
+
+.event-filter-group h3 {
+  margin: 0 0 8px;
+
+  color: #3E2D28;
+
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 850;
+}
+
+.event-filter-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.event-filter-chip-row button {
+  min-height: 32px;
+
+  padding: 0 10px;
+
+  border: 1px solid rgba(62, 45, 40, .07);
+  border-radius: 999px;
+
+  background: #F8F5F1;
+  color: rgba(62, 45, 40, .68);
+
+  font-family: inherit;
+  font-size: 8.5px;
+  line-height: 1.2;
+  font-weight: 720;
+
+  transition:
+    background .15s ease,
+    color .15s ease,
+    border-color .15s ease,
+    transform .15s ease;
+}
+
+.event-filter-chip-row button:active {
+  transform: scale(.97);
+}
+
+.event-filter-chip-row button.selected {
+  border-color: rgba(204, 107, 55, .20);
+
+  background:
+    linear-gradient(135deg, #FBD185, #DC9242);
+
+  color: #fff;
+}
+
+.event-day-filter-row button {
+  min-width: 42px;
+}
+
+@media (max-width: 360px) {
+  .event-advanced-filter-panel {
+    padding: 13px;
+  }
+
+  .event-filter-chip-row button {
+    padding-inline: 9px;
+    font-size: 8px;
+  }
+}
+
+/* =========================================================
+   RUNRISE — MY RUNS / UNIFIED BOOKINGS LIST
+   One section only: all booked events, sorted nearest first.
+========================================================= */
+
+.myruns-bookings-section {
+  margin-top: 24px;
+}
+
+.myruns-bookings-heading {
+  margin-bottom: 14px;
+}
+
+.myruns-bookings-heading .small-label {
+  margin: 0 0 5px;
+}
+
+.myruns-bookings-heading h2 {
+  margin: 0;
+  color: var(--runrise-brown, #3E2D28);
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 850;
+}
+
+/* Hide the old split-section presentation if any stale markup remains. */
+.myruns-page .next-run-section,
+.myruns-page .myruns-more-runs-section {
+  display: none;
+}
+
+/* Every booked event uses the same white card layout. */
+.myruns-bookings-section .myruns-upcoming-list {
+  display: grid;
+  gap: 12px;
+}
+
+.myruns-bookings-section .myruns-upcoming-card {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(62, 45, 40, .07);
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(62, 45, 40, .045);
+}
+
+.myruns-bookings-section .myruns-upcoming-main {
+  min-height: 128px;
+}
