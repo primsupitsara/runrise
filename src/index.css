@@ -1432,7 +1432,7 @@ h3 {
 
   display: grid;
 
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
 
 
 
@@ -19880,7 +19880,7 @@ html[lang="th"] .founder-home-subtitle {
 
 .rr-founder-tabs {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 4px;
   margin-bottom: 16px;
   padding: 4px;
@@ -21885,3 +21885,3804 @@ html[lang="th"] .rr-event-qr-demo-hint {
 .myruns-bookings-section .myruns-upcoming-main {
   min-height: 128px;
 }
+
+/* =========================================================
+   FOUNDER IA REDESIGN — DASHBOARD / ACTIVITIES / PROFILE
+   Members live inside Activity Detail. Club lives in Profile.
+========================================================= */
+
+.founder-nav.founder-nav-simplified {
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+.founder-dashboard-redesign {
+  padding-bottom: 112px;
+}
+
+.founder-section-title.compact {
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.founder-section-title.compact .eyebrow {
+  margin-bottom: 4px;
+}
+
+.founder-quick-section {
+  margin-top: 10px;
+}
+
+.founder-actions-priority {
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.founder-action-wide {
+  min-height: 96px;
+  justify-content: space-between;
+  border: 1px solid rgba(62,45,40,.05);
+  box-shadow: 0 10px 28px rgba(62,45,40,.06);
+}
+
+.founder-action-wide.primary-action {
+  background: linear-gradient(145deg, #F5B967 0%, #D9783D 100%);
+  box-shadow: 0 14px 30px rgba(204,107,55,.20);
+}
+
+.founder-next-section {
+  margin-top: 24px;
+}
+
+.founder-next-activity-card {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr) 36px;
+  gap: 12px;
+  align-items: center;
+  padding: 15px;
+  border: 1px solid rgba(255,255,255,.9);
+  border-radius: 24px;
+  background: linear-gradient(145deg, #fffdf8 0%, #fff6e7 100%);
+  box-shadow: 0 12px 32px rgba(62,45,40,.07);
+}
+
+.founder-next-date {
+  min-height: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #F6DFBF, #fff4dd);
+  color: #CC6B37;
+}
+
+.founder-next-date strong {
+  font-size: 27px;
+  line-height: 1;
+}
+
+.founder-next-date span {
+  margin-top: 5px;
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.founder-next-copy {
+  min-width: 0;
+}
+
+.founder-next-copy > span {
+  color: #CC6B37;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .7px;
+}
+
+.founder-next-copy h3 {
+  margin: 4px 0 5px;
+  overflow: hidden;
+  font-size: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.founder-next-copy p {
+  margin: 0 0 10px;
+  color: #806E66;
+  font-size: 9.5px;
+}
+
+.founder-next-progress-copy {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  color: #806E66;
+  font-size: 8px;
+}
+
+.founder-next-progress-copy strong {
+  color: #3E2D28;
+}
+
+.founder-next-progress,
+.founder-performance-track {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(204,107,55,.10);
+}
+
+.founder-next-progress i,
+.founder-performance-track i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #FBD185, #CC6B37);
+}
+
+.founder-next-manage {
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: white;
+  color: #CC6B37;
+  font-size: 23px;
+  box-shadow: 0 5px 15px rgba(62,45,40,.07);
+}
+
+.founder-empty-action {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 18px;
+  border: 1px dashed rgba(204,107,55,.25);
+  border-radius: 22px;
+  background: rgba(255,255,255,.68);
+  color: #3E2D28;
+  text-align: left;
+}
+
+.founder-empty-action span {
+  color: #CC6B37;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.founder-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.founder-kpi-card {
+  min-width: 0;
+  min-height: 112px;
+  padding: 13px 11px;
+  border: 1px solid rgba(255,255,255,.9);
+  border-radius: 20px;
+  background: linear-gradient(145deg, #f8f9fb, #eef1f5);
+  box-shadow: 0 8px 22px rgba(32,35,42,.045);
+}
+
+.founder-kpi-card.accent {
+  background: linear-gradient(145deg, #fff6e8, #f7e3c5);
+}
+
+.founder-kpi-card span {
+  display: block;
+  min-height: 26px;
+  color: #806E66;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.founder-kpi-card strong {
+  display: block;
+  margin: 7px 0 5px;
+  color: #111113;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.founder-kpi-card small {
+  display: block;
+  color: #929298;
+  font-size: 7.5px;
+  line-height: 1.25;
+}
+
+.founder-kpi-card small.positive {
+  color: #299265;
+}
+
+.founder-growth-section {
+  margin-top: 24px;
+}
+
+.founder-growth-card {
+  padding: 17px;
+  border: 1px solid rgba(255,255,255,.92);
+  border-radius: 25px;
+  background: linear-gradient(150deg, #ffffff 0%, #fff9ef 100%);
+  box-shadow: 0 14px 34px rgba(62,45,40,.07);
+}
+
+.founder-growth-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.founder-growth-head h2 {
+  margin: 0;
+  font-size: 19px;
+}
+
+.founder-growth-number {
+  text-align: right;
+}
+
+.founder-growth-number strong {
+  display: block;
+  color: #299265;
+  font-size: 17px;
+}
+
+.founder-growth-number span {
+  color: #929298;
+  font-size: 8px;
+}
+
+.founder-line-chart {
+  height: 156px;
+  margin-top: 12px;
+  padding: 4px 0 0;
+  border-radius: 18px;
+  background:
+    linear-gradient(rgba(62,45,40,.045) 1px, transparent 1px);
+  background-size: 100% 36px;
+}
+
+.founder-line-chart svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.founder-growth-months {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  margin-top: 5px;
+}
+
+.founder-growth-months span {
+  color: #929298;
+  font-size: 7.5px;
+  text-align: center;
+}
+
+.founder-growth-insight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 13px;
+  padding: 11px 12px;
+  border-radius: 16px;
+  background: #eef8f2;
+}
+
+.founder-growth-insight > span {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: white;
+  color: #299265;
+  font-weight: 900;
+}
+
+.founder-growth-insight strong,
+.founder-growth-insight small {
+  display: block;
+}
+
+.founder-growth-insight strong {
+  color: #287956;
+  font-size: 10px;
+}
+
+.founder-growth-insight small {
+  margin-top: 2px;
+  color: #6f8f7e;
+  font-size: 8px;
+}
+
+.founder-performance-list {
+  overflow: hidden;
+  border-radius: 22px;
+  background: white;
+  box-shadow: 0 9px 28px rgba(62,45,40,.05);
+}
+
+.founder-performance-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 15px;
+  border: none;
+  border-bottom: 1px solid rgba(62,45,40,.06);
+  background: white;
+  text-align: left;
+}
+
+.founder-performance-row:last-child {
+  border-bottom: none;
+}
+
+.founder-performance-copy strong,
+.founder-performance-copy span {
+  display: block;
+}
+
+.founder-performance-copy strong {
+  margin-bottom: 4px;
+  color: #3E2D28;
+  font-size: 11px;
+}
+
+.founder-performance-copy span {
+  margin-bottom: 8px;
+  color: #929298;
+  font-size: 8px;
+}
+
+.founder-performance-rate {
+  color: #CC6B37;
+  font-size: 15px;
+}
+
+.founder-attention-card {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 24px;
+  gap: 11px;
+  align-items: center;
+  padding: 14px;
+  border: 1px solid rgba(204,107,55,.12);
+  border-radius: 20px;
+  background: linear-gradient(145deg, #fff8ed, #fff1df);
+  text-align: left;
+}
+
+.founder-attention-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: white;
+  color: #CC6B37;
+  font-weight: 900;
+}
+
+.founder-attention-card strong {
+  font-size: 11px;
+}
+
+.founder-attention-card p {
+  margin: 3px 0 0;
+  color: #806E66;
+  font-size: 8.5px;
+  line-height: 1.4;
+}
+
+.founder-attention-arrow {
+  color: #CC6B37;
+  font-size: 22px;
+}
+
+/* Club management is now conceptually part of Profile. */
+.founder-profile-club-section {
+  margin-top: 25px;
+}
+
+.founder-profile-section-head h2 {
+  margin: -2px 0 12px;
+  font-size: 20px;
+}
+
+.founder-profile-club-card {
+  overflow: hidden;
+  border-radius: 24px;
+  background: white;
+  box-shadow: 0 12px 32px rgba(62,45,40,.06);
+}
+
+.founder-profile-club-cover {
+  height: 132px;
+  overflow: hidden;
+  background: #f5efe4;
+}
+
+.founder-profile-club-cover img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.founder-profile-club-body {
+  padding: 15px;
+}
+
+.founder-profile-club-kicker {
+  color: #CC6B37;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.founder-profile-club-body h3 {
+  margin: 5px 0 4px;
+  font-size: 19px;
+}
+
+.founder-profile-club-body p {
+  margin: 0;
+  color: #806E66;
+  font-size: 10px;
+}
+
+.founder-profile-club-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0;
+}
+
+.founder-profile-club-tags span {
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: #f6f3ef;
+  color: #806E66;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.founder-manage-club-button {
+  width: 100%;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  border: none;
+  border-radius: 14px;
+  background: #F6DFBF;
+  color: #CC6B37;
+  font-size: 10px;
+  font-weight: 850;
+}
+
+.founder-manage-club-button strong {
+  font-size: 20px;
+}
+
+/* The standalone Members destination is intentionally hidden from the IA.
+   Participant management remains available inside FounderEventManagement. */
+
+
+
+/* =========================================================
+   FOUNDER UX POLISH — NOV 2026
+   Dashboard chart, participant profile, scan return action
+========================================================= */
+
+.founder-line-chart-premium {
+  position: relative;
+  height: 184px;
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  gap: 8px;
+  margin-top: 15px;
+  padding: 10px 8px 8px 0;
+  overflow: hidden;
+  border: 1px solid rgba(204, 107, 55, .07);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 88% 8%, rgba(251, 209, 133, .20), transparent 28%),
+    linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,250,243,.92));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.9),
+    0 8px 24px rgba(62,45,40,.035);
+}
+
+.founder-chart-scale {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  align-items: start;
+  padding: 9px 0 18px 5px;
+}
+
+.founder-chart-scale span {
+  color: #B0A39C;
+  font-size: 7px;
+  font-weight: 700;
+}
+
+.founder-chart-canvas {
+  position: relative;
+  overflow: visible;
+  border-radius: 16px;
+  background:
+    linear-gradient(rgba(62,45,40,.055) 1px, transparent 1px);
+  background-size: 100% 42px;
+}
+
+.founder-chart-canvas svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.founder-chart-latest {
+  position: absolute;
+  right: 3px;
+  top: 10px;
+  min-width: 44px;
+  padding: 6px 8px;
+  border: 1px solid rgba(204,107,55,.10);
+  border-radius: 12px;
+  background: rgba(255,255,255,.94);
+  box-shadow: 0 7px 20px rgba(62,45,40,.08);
+  text-align: center;
+  backdrop-filter: blur(12px);
+}
+
+.founder-chart-latest span,
+.founder-chart-latest strong {
+  display: block;
+}
+
+.founder-chart-latest span {
+  color: #9A8C85;
+  font-size: 7px;
+}
+
+.founder-chart-latest strong {
+  margin-top: 1px;
+  color: #CC6B37;
+  font-size: 13px;
+}
+
+.founder-growth-card {
+  background:
+    radial-gradient(circle at 92% 0%, rgba(251,209,133,.18), transparent 24%),
+    linear-gradient(150deg, #ffffff 0%, #fffaf2 100%);
+}
+
+.founder-growth-insight {
+  border: 1px solid rgba(41,146,101,.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.75);
+}
+
+/* Two focused tabs only: Overview / Participants */
+.rr-founder-tabs {
+  grid-template-columns: repeat(2, 1fr) !important;
+}
+
+/* Participant rows are interactive profile entries */
+button.rr-participant-row {
+  width: 100%;
+  border: 0;
+  background: #fff;
+  text-align: left;
+}
+
+button.rr-participant-row:active {
+  background: #FFF8ED;
+}
+
+.rr-participant-profile-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(33, 24, 21, .34);
+  backdrop-filter: blur(5px);
+}
+
+.rr-participant-profile-sheet {
+  position: relative;
+  width: min(100%, 390px);
+  max-height: 82%;
+  overflow-y: auto;
+  padding: 12px 18px 28px;
+  border-radius: 28px 28px 0 0;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(251,209,133,.22), transparent 28%),
+    #FFFDF9;
+  box-shadow: 0 -18px 48px rgba(45,31,27,.18);
+}
+
+.rr-participant-profile-handle {
+  width: 42px;
+  height: 4px;
+  margin: 0 auto 17px;
+  border-radius: 99px;
+  background: #D8CEC8;
+}
+
+.rr-participant-profile-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: #F3EDE4;
+  color: #6E5D55;
+  font-size: 20px;
+}
+
+.rr-participant-profile-hero {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 4px 44px 18px 2px;
+}
+
+.rr-participant-profile-avatar {
+  width: 62px;
+  height: 62px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #FBD185, #DC9242);
+  color: white;
+  font-size: 24px;
+  font-weight: 900;
+  box-shadow: 0 8px 22px rgba(204,107,55,.16);
+}
+
+.rr-participant-profile-hero span {
+  color: #CC6B37;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.rr-participant-profile-hero h2 {
+  margin: 3px 0 2px;
+  color: #3E2D28;
+  font-size: 22px;
+}
+
+.rr-participant-profile-hero p {
+  margin: 0;
+  color: #806E66;
+  font-size: 10px;
+}
+
+.rr-participant-profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.rr-participant-profile-grid > div {
+  min-height: 78px;
+  padding: 12px;
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(62,45,40,.04);
+}
+
+.rr-participant-profile-grid span,
+.rr-participant-profile-grid strong {
+  display: block;
+}
+
+.rr-participant-profile-grid span {
+  margin-bottom: 6px;
+  color: #9A8C85;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.rr-participant-profile-grid strong {
+  color: #3E2D28;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.rr-participant-profile-event {
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #FFF1DD, #FFF8EE);
+}
+
+.rr-participant-profile-event span {
+  color: #CC6B37;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .8px;
+}
+
+.rr-participant-profile-event strong {
+  display: block;
+  margin: 5px 0 2px;
+  color: #3E2D28;
+  font-size: 13px;
+}
+
+.rr-participant-profile-event p {
+  margin: 0;
+  color: #806E66;
+  font-size: 9px;
+}
+
+.rr-back-to-management {
+  width: 100%;
+  min-height: 52px;
+  margin-top: 9px;
+  border-radius: 17px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* Keep the same founder identity across dashboard and profile */
+.founder-avatar,
+.founder-profile-avatar {
+  background: linear-gradient(145deg, #FBD185, #DC9242);
+}
+
+
+/* =========================================================
+   FOUNDER UX ROUND 3 — NOV 2026
+   Create bar / clear statuses / dashboard calendar
+========================================================= */
+
+/* 1) Activities — full-width create action */
+.founder-page-top-single {
+  display: block;
+  margin-bottom: 15px;
+}
+
+.founder-create-bar {
+  width: 100%;
+  min-height: 72px;
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) 24px;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 22px;
+  padding: 12px 15px;
+  border: 0;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 92% 0%, rgba(255,255,255,.24), transparent 32%),
+    linear-gradient(135deg, #F7C36F 0%, #E5964C 52%, #CC6B37 100%);
+  color: #fff;
+  text-align: left;
+  box-shadow:
+    0 12px 28px rgba(204,107,55,.19),
+    inset 0 1px 0 rgba(255,255,255,.28);
+}
+
+.founder-create-bar:active {
+  transform: scale(.99);
+}
+
+.founder-create-bar-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  background: rgba(255,255,255,.18);
+  font-size: 29px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.founder-create-bar > span:nth-child(2) {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.founder-create-bar strong {
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.founder-create-bar small {
+  color: rgba(255,255,255,.82);
+  font-size: 8.5px;
+  line-height: 1.35;
+}
+
+.founder-create-bar-arrow {
+  justify-self: end;
+  font-size: 26px;
+  line-height: 1;
+  opacity: .9;
+}
+
+/* 2) Participant status explanation */
+.rr-status-legend {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 11px;
+  padding: 11px 12px;
+  border: 1px solid rgba(62,45,40,.055);
+  border-radius: 17px;
+  background: rgba(255,255,255,.72);
+}
+
+.rr-status-legend > div {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+}
+
+.rr-status-legend > div + div {
+  padding-top: 8px;
+  border-top: 1px solid rgba(62,45,40,.055);
+}
+
+.rr-status-dot {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.rr-status-dot.checked {
+  background: #E3F4E9;
+  color: #26744F;
+}
+
+.rr-status-dot.registered {
+  background: #FFF0DC;
+  color: #CC6B37;
+}
+
+.rr-status-legend strong,
+.rr-status-legend small {
+  display: block;
+}
+
+.rr-status-legend strong {
+  color: #3E2D28;
+  font-size: 10px;
+}
+
+.rr-status-legend small {
+  margin-top: 1px;
+  color: #9A8C85;
+  font-size: 8px;
+  line-height: 1.35;
+}
+
+/* 3) QR icon — real QR visual, no hash symbol */
+.rr-scan-qr-icon {
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+}
+
+.rr-scan-qr-icon svg {
+  width: 23px;
+  height: 23px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rr-scan-primary .rr-scan-qr-icon {
+  font-size: initial;
+}
+
+/* 4) Dashboard activity calendar */
+.founder-calendar-section {
+  margin-top: 24px;
+}
+
+.founder-calendar-card {
+  padding: 15px;
+  border: 1px solid rgba(255,255,255,.92);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(251,209,133,.16), transparent 30%),
+    #fff;
+  box-shadow: 0 12px 32px rgba(62,45,40,.055);
+}
+
+.founder-calendar-weekdays,
+.founder-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.founder-calendar-weekdays {
+  margin-bottom: 7px;
+}
+
+.founder-calendar-weekdays span {
+  color: #A2948D;
+  font-size: 7.5px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.founder-calendar-day {
+  position: relative;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 11px;
+  background: #F8F5F1;
+  color: #65544D;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.founder-calendar-day.empty {
+  visibility: hidden;
+}
+
+.founder-calendar-day.has-activity {
+  background:
+    linear-gradient(145deg, #FBD185 0%, #ECA558 100%);
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(204,107,55,.15);
+}
+
+.founder-calendar-day.has-activity span {
+  transform: translateY(-2px);
+}
+
+.founder-calendar-day i {
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  min-width: 5px;
+  height: 5px;
+  display: grid;
+  place-items: center;
+  transform: translateX(-50%);
+  padding: 0 2px;
+  border-radius: 99px;
+  background: rgba(255,255,255,.9);
+  color: #CC6B37;
+  font-size: 5px;
+  font-style: normal;
+  line-height: 1;
+}
+
+.founder-calendar-legend {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 11px;
+  border-top: 1px solid rgba(62,45,40,.055);
+}
+
+.founder-calendar-legend > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #806E66;
+  font-size: 8px;
+  font-weight: 750;
+}
+
+.founder-calendar-legend > span i {
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+  border-radius: 50%;
+  background: #E5964C;
+}
+
+.founder-calendar-legend small {
+  color: #A2948D;
+  font-size: 7.5px;
+  text-align: right;
+}
+
+.founder-calendar-upcoming {
+  display: grid;
+  gap: 7px;
+  margin-top: 11px;
+}
+
+.founder-calendar-upcoming button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 14px;
+  background: #FFF8ED;
+  text-align: left;
+}
+
+.founder-calendar-upcoming button > span {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #fff;
+  color: #CC6B37;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.founder-calendar-upcoming strong,
+.founder-calendar-upcoming small {
+  display: block;
+}
+
+.founder-calendar-upcoming strong {
+  overflow: hidden;
+  color: #3E2D28;
+  font-size: 9.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.founder-calendar-upcoming small {
+  margin-top: 2px;
+  overflow: hidden;
+  color: #9A8C85;
+  font-size: 7.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.founder-calendar-upcoming b {
+  color: #CC6B37;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Community overview wording now uses Participants; no visual change needed. */
+
+
+/* =========================================================
+   FOUNDER UX ROUND 4 — DATE / PACE / QR POLISH
+   Nov 2026
+========================================================= */
+
+/* Create / Edit Activity — date and month as deliberate pickers */
+.event-date-time-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(112px, .75fr);
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 16px;
+}
+
+.event-date-field-group,
+.event-pace-field-group {
+  min-width: 0;
+}
+
+.event-date-field-group > .event-field-label,
+.event-pace-field-group > .event-field-label {
+  display: block;
+  margin-bottom: 7px;
+}
+
+.event-date-selector {
+  display: grid;
+  grid-template-columns: .82fr 1.18fr;
+  gap: 8px;
+}
+
+.event-date-select-field {
+  position: relative;
+  min-width: 0;
+  padding: 8px 10px 9px;
+  border: 1px solid rgba(60,60,67,.11);
+  border-radius: 14px;
+  background: #f8f8fa;
+  transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+}
+
+.event-date-select-field:focus-within {
+  border-color: rgba(204,107,55,.38);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(204,107,55,.065);
+}
+
+.event-date-select-field > span {
+  display: block;
+  margin-bottom: 2px;
+  color: #9a8d87;
+  font-size: 7.5px;
+  font-weight: 850;
+  letter-spacing: .55px;
+}
+
+.event-date-select-field select {
+  width: 100%;
+  min-height: 31px;
+  padding: 0 20px 0 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #3E2D28;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.event-time-field {
+  margin-bottom: 0 !important;
+}
+
+.event-time-field input {
+  min-height: 66px;
+  font-size: 14px !important;
+  font-weight: 820;
+}
+
+/* Event pace uses the same wheel language as Runner onboarding */
+.event-pace-field-group {
+  margin-bottom: 16px;
+}
+
+.event-pace-range-picker {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgba(60,60,67,.08);
+  border-radius: 20px;
+  background: linear-gradient(145deg, #fbfbfc 0%, #f4f4f7 100%);
+}
+
+.event-pace-wheel-block {
+  min-width: 0;
+}
+
+.event-pace-wheel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 2px 7px;
+}
+
+.event-pace-wheel-heading span {
+  color: #978a84;
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: .5px;
+}
+
+.event-pace-wheel-heading strong {
+  color: #CC6B37;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.event-pace-range-picker .ut-pace-picker {
+  height: 138px;
+  border-radius: 17px;
+  background: rgba(255,255,255,.88);
+}
+
+.event-pace-range-picker .ut-wheel-column {
+  height: 120px;
+}
+
+.event-pace-range-picker .ut-wheel-spacer {
+  height: 37px;
+}
+
+.event-pace-range-picker .ut-wheel-item {
+  height: 40px;
+  font-size: 14px;
+}
+
+.event-pace-range-picker .ut-wheel-item.selected {
+  font-size: 20px;
+}
+
+.event-pace-range-picker .ut-picker-selection {
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(251,209,133,.22);
+}
+
+.event-pace-range-separator {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 20px;
+}
+
+.event-pace-range-separator::before,
+.event-pace-range-separator::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: rgba(62,45,40,.08);
+}
+
+.event-pace-range-separator span {
+  padding: 0 10px;
+  color: #a1938d;
+  font-size: 8px;
+  font-weight: 850;
+}
+
+.event-pace-range-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: #fff2df;
+}
+
+.event-pace-range-summary span {
+  color: #a17156;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.event-pace-range-summary strong {
+  color: #A84E29;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+/* Quick Action — proper QR symbol, never a # / hash glyph */
+.founder-qr-action-icon svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.founder-action-wide .founder-qr-action-icon {
+  background: linear-gradient(145deg, #FFF1D9, #F7D5A6);
+  color: #B5552E;
+  box-shadow: inset 0 0 0 1px rgba(204,107,55,.08);
+}
+
+@media (max-width: 360px) {
+  .event-date-time-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .event-time-field input {
+    min-height: 52px;
+  }
+}
+
+
+/* =========================================================
+   FOUNDER UX ROUND 5 — PACE ALIGNMENT / QR / CALENDAR NAV
+   Nov 2026
+========================================================= */
+
+/* Pace wheel: selected value must sit exactly in the center highlight row. */
+.event-pace-range-picker .ut-pace-picker {
+  height: 138px;
+  grid-template-columns: 1fr 22px 1fr auto;
+  align-items: center;
+}
+
+.event-pace-range-picker .ut-wheel-column {
+  height: 120px;
+  scroll-snap-type: y mandatory;
+  scroll-padding-block: 40px;
+}
+
+.event-pace-range-picker .ut-wheel-item {
+  height: 40px;
+  min-height: 40px;
+  line-height: 40px;
+  padding: 0;
+}
+
+.event-pace-range-picker .ut-wheel-item.selected {
+  color: #3E2D28;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.event-pace-range-picker .ut-picker-selection {
+  top: 50%;
+  height: 40px;
+  transform: translateY(-50%);
+}
+
+/* Clear QR symbol — three finder blocks + data modules. */
+.founder-qr-action-icon {
+  display: grid !important;
+  place-items: center;
+}
+
+.founder-qr-action-icon .founder-qr-symbol {
+  width: 25px;
+  height: 25px;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.founder-qr-action-icon .founder-qr-symbol .qr-fill {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* Calendar month/year navigation. */
+.founder-calendar-title-row {
+  align-items: flex-end;
+}
+
+.founder-calendar-controls {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) 36px;
+  align-items: end;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.founder-calendar-nav-button {
+  width: 36px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(62,45,40,.07);
+  border-radius: 12px;
+  background: #FFF8ED;
+  color: #CC6B37;
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.founder-calendar-selectors {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1.35fr .9fr;
+  gap: 7px;
+}
+
+.founder-calendar-selectors label {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.founder-calendar-selectors label > span {
+  padding-left: 2px;
+  color: #A2948D;
+  font-size: 7px;
+  font-weight: 850;
+  letter-spacing: .5px;
+}
+
+.founder-calendar-selectors select {
+  width: 100%;
+  min-width: 0;
+  height: 43px;
+  padding: 0 28px 0 10px;
+  border: 1px solid rgba(62,45,40,.07);
+  border-radius: 12px;
+  outline: none;
+  background: #F8F5F1;
+  color: #3E2D28;
+  font: inherit;
+  font-size: 9px;
+  font-weight: 850;
+  appearance: auto;
+}
+
+.founder-calendar-selectors select:focus {
+  border-color: rgba(204,107,55,.34);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(204,107,55,.06);
+}
+
+.founder-calendar-current-label {
+  margin: 2px 0 10px;
+  color: #3E2D28;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: -.2px;
+}
+
+
+/* =========================================================
+   FOUNDER UX ROUND 6 — ALIGNED DATE/TIME + CUSTOM DROPDOWNS + QR
+   Nov 2026
+========================================================= */
+
+/* A single polished select system used in activity creation and calendar. */
+.runrise-select {
+  position: relative;
+  min-width: 0;
+  z-index: 1;
+}
+
+.runrise-select.is-open {
+  z-index: 80;
+}
+
+.runrise-select-label {
+  display: block;
+  margin-bottom: 5px;
+  color: #9A8D87;
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: .4px;
+}
+
+.runrise-select-trigger {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #3E2D28;
+  text-align: left;
+  cursor: pointer;
+}
+
+.runrise-select-trigger strong {
+  min-width: 0;
+  overflow: hidden;
+  color: #3E2D28;
+  font-size: 15px;
+  font-weight: 850;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.runrise-select-trigger svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: #6E625D;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .18s ease;
+}
+
+.runrise-select.is-open .runrise-select-trigger svg {
+  transform: rotate(180deg);
+}
+
+.runrise-select-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  max-height: 238px;
+  overflow-y: auto;
+  padding: 7px;
+  border: 1px solid rgba(62,45,40,.08);
+  border-radius: 17px;
+  background: rgba(255,255,255,.985);
+  box-shadow: 0 18px 45px rgba(62,45,40,.16);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(204,107,55,.24) transparent;
+}
+
+.runrise-select-menu button {
+  width: 100%;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: #584A45;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 760;
+  text-align: left;
+  cursor: pointer;
+}
+
+.runrise-select-menu button:hover {
+  background: #FFF7EA;
+}
+
+.runrise-select-menu button.selected {
+  background: linear-gradient(135deg, #FFF2DE 0%, #FCE4C1 100%);
+  color: #A84E29;
+  font-weight: 900;
+}
+
+.runrise-select-check {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: #F5C982;
+  color: #A84E29;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+/* Date + time: same top edge, same control height, same visual weight. */
+.event-date-time-grid {
+  grid-template-columns: minmax(0, 2fr) minmax(112px, 1fr) !important;
+  align-items: start !important;
+  gap: 10px !important;
+}
+
+.event-date-field-group,
+.event-time-field {
+  display: flex !important;
+  min-width: 0;
+  flex-direction: column;
+  align-self: stretch;
+}
+
+.event-date-field-group > .event-field-label,
+.event-time-field {
+  color: #9A8D87;
+  font-weight: 800;
+}
+
+.event-date-field-group > .event-field-label,
+.event-time-field > span,
+.event-time-field:not(:has(span)) {
+  margin-bottom: 7px;
+}
+
+.event-date-selector {
+  flex: 1;
+  align-items: stretch;
+}
+
+.event-date-select-field {
+  height: 66px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8px 11px !important;
+  overflow: visible;
+}
+
+.event-date-select-field .runrise-select-label {
+  margin-bottom: 0;
+}
+
+.event-date-select-field .runrise-select-trigger {
+  min-height: 34px;
+}
+
+.event-time-field input {
+  height: 66px !important;
+  min-height: 66px !important;
+  box-sizing: border-box;
+  margin-top: 7px;
+  padding: 0 14px !important;
+  border-radius: 14px !important;
+}
+
+/* Calendar picker: custom Runrise dropdowns instead of browser-native menus. */
+.founder-calendar-controls {
+  align-items: stretch !important;
+}
+
+.founder-calendar-selectors {
+  align-items: stretch;
+}
+
+.founder-calendar-dropdown {
+  min-height: 62px;
+  padding: 8px 11px;
+  border: 1px solid rgba(62,45,40,.07);
+  border-radius: 14px;
+  background: #F8F5F1;
+  transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+}
+
+.founder-calendar-dropdown.is-open {
+  border-color: rgba(204,107,55,.36);
+  background: #FFF;
+  box-shadow: 0 0 0 4px rgba(204,107,55,.055);
+}
+
+.founder-calendar-dropdown .runrise-select-label {
+  margin-bottom: 1px;
+  padding: 0;
+}
+
+.founder-calendar-dropdown .runrise-select-trigger {
+  min-height: 35px;
+}
+
+.founder-calendar-dropdown .runrise-select-trigger strong {
+  font-size: 11px;
+}
+
+.founder-calendar-dropdown .runrise-select-menu {
+  top: calc(100% + 7px);
+  min-width: 148px;
+}
+
+.founder-calendar-nav-button {
+  height: 62px !important;
+  align-self: stretch;
+  border-radius: 14px !important;
+}
+
+/* QR visual inspired by a scanner frame + unmistakable QR finder blocks. */
+.founder-qr-action-icon .founder-qr-symbol,
+.rr-scan-qr-icon .rr-scan-qr-symbol {
+  width: 30px !important;
+  height: 30px !important;
+  overflow: visible;
+  fill: none;
+}
+
+.founder-qr-action-icon .qr-scan-frame,
+.rr-scan-qr-icon .qr-scan-frame {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.founder-qr-action-icon .qr-finder,
+.rr-scan-qr-icon .qr-finder {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.1;
+}
+
+.founder-qr-action-icon .qr-core,
+.rr-scan-qr-icon .qr-core,
+.founder-qr-action-icon .qr-data,
+.rr-scan-qr-icon .qr-data {
+  fill: currentColor;
+  stroke: none;
+}
+
+.founder-action-wide .founder-qr-action-icon {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 13px !important;
+}
+
+.rr-scan-qr-icon {
+  width: 32px !important;
+  height: 32px !important;
+}
+
+@media (max-width: 360px) {
+  .event-date-time-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .event-time-field input {
+    margin-top: 0;
+  }
+}
+
+/* =========================================================
+   FOUNDER EVENT FORM — YEAR + TRUE CONTROL ALIGNMENT
+   Nov 2026
+========================================================= */
+
+/* Date (day / month / year) and time now share the same top line
+   and exactly the same control height. */
+.event-date-time-grid {
+  grid-template-columns: minmax(0, 3fr) minmax(112px, 1fr) !important;
+  gap: 10px !important;
+  align-items: start !important;
+}
+
+.event-date-field-group,
+.event-time-field {
+  min-width: 0;
+  display: flex !important;
+  flex-direction: column !important;
+  align-self: stretch !important;
+}
+
+.event-date-field-group > .event-field-label,
+.event-time-field > .event-field-label {
+  display: block !important;
+  min-height: 21px;
+  margin: 0 0 7px !important;
+  color: #9A8D87 !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+}
+
+.event-date-selector {
+  display: grid !important;
+  grid-template-columns: .72fr 1.08fr 1fr !important;
+  gap: 8px !important;
+  align-items: stretch !important;
+}
+
+.event-date-select-field,
+.event-time-field input {
+  height: 72px !important;
+  min-height: 72px !important;
+  box-sizing: border-box !important;
+  border-radius: 16px !important;
+}
+
+.event-date-select-field {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  padding: 8px 10px !important;
+}
+
+.event-date-select-field .runrise-select-label {
+  margin: 0 0 1px !important;
+  line-height: 1.1 !important;
+}
+
+.event-date-select-field .runrise-select-trigger {
+  min-height: 38px !important;
+  padding: 0 !important;
+}
+
+.event-date-year .runrise-select-trigger strong {
+  font-size: 13px !important;
+}
+
+.event-time-field input {
+  margin: 0 !important;
+  padding: 0 14px !important;
+  background: #F8F8FA !important;
+  border: 1px solid rgba(60,60,67,.11) !important;
+  color: #3E2D28 !important;
+  font-size: 15px !important;
+  font-weight: 850 !important;
+}
+
+.event-time-field input:focus {
+  background: #FFF !important;
+  border-color: rgba(204,107,55,.38) !important;
+  box-shadow: 0 0 0 4px rgba(204,107,55,.065) !important;
+  outline: none !important;
+}
+
+/* Keep the capacity field friendly for direct typing. */
+.event-editor input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.event-editor input[type="number"]::-webkit-inner-spin-button,
+.event-editor input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@media (max-width: 390px) {
+  .event-date-time-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .event-date-selector {
+    grid-template-columns: .72fr 1.08fr 1fr !important;
+  }
+}
+
+
+/* =========================================================
+   FOUNDER CREATE EVENT — CALM DATE / TIME PICKER REDESIGN
+   Nov 2026
+   - Date becomes one clear 3-part group: day / month / year
+   - Time uses the same visual height and rhythm
+   - Optimized for the 390px Runrise phone viewport
+========================================================= */
+
+.event-date-time-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 16px !important;
+  align-items: stretch !important;
+}
+
+.event-date-field-group,
+.event-time-field {
+  min-width: 0 !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-self: stretch !important;
+}
+
+.event-date-field-group > .event-field-label,
+.event-time-field > .event-field-label {
+  min-height: unset !important;
+  margin: 0 0 9px !important;
+  color: #948883 !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+}
+
+/* One composed date surface instead of three visually crowded boxes. */
+.event-date-selector {
+  display: grid !important;
+  grid-template-columns: .78fr 1.35fr 1fr !important;
+  gap: 8px !important;
+  width: 100% !important;
+  padding: 8px !important;
+  border: 1px solid rgba(62, 45, 40, 0.07) !important;
+  border-radius: 20px !important;
+  background: #F5F3F3 !important;
+  box-sizing: border-box !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.72) !important;
+}
+
+.event-date-select-field {
+  height: 70px !important;
+  min-height: 70px !important;
+  padding: 8px 11px !important;
+  border: 0 !important;
+  border-radius: 14px !important;
+  background: rgba(255,255,255,.72) !important;
+  box-shadow: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+
+.event-date-select-field.is-open,
+.event-date-select-field:focus-within {
+  background: #FFF !important;
+  box-shadow: 0 0 0 2px rgba(204,107,55,.14) !important;
+}
+
+.event-date-select-field .runrise-select-label {
+  margin: 0 0 3px !important;
+  padding: 0 !important;
+  color: #A2948E !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+}
+
+.event-date-select-field .runrise-select-trigger {
+  min-height: 34px !important;
+  padding: 0 !important;
+  gap: 6px !important;
+}
+
+.event-date-select-field .runrise-select-trigger strong {
+  color: #3E2D28 !important;
+  font-size: 16px !important;
+  font-weight: 850 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.event-date-month .runrise-select-trigger strong {
+  font-size: 15px !important;
+}
+
+.event-date-year .runrise-select-trigger strong {
+  font-size: 14px !important;
+}
+
+.event-date-select-field .runrise-select-chevron {
+  flex: 0 0 auto !important;
+  opacity: .72 !important;
+}
+
+/* Time now mirrors the date group's outer height and visual weight. */
+.event-time-field input {
+  width: 100% !important;
+  height: 86px !important;
+  min-height: 86px !important;
+  margin: 0 !important;
+  padding: 0 18px !important;
+  border: 1px solid rgba(62,45,40,.08) !important;
+  border-radius: 20px !important;
+  background: #F5F3F3 !important;
+  box-sizing: border-box !important;
+  color: #3E2D28 !important;
+  font-size: 17px !important;
+  font-weight: 850 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.72) !important;
+}
+
+.event-time-field input:focus {
+  background: #FFF !important;
+  border-color: rgba(204,107,55,.35) !important;
+  box-shadow: 0 0 0 4px rgba(204,107,55,.06) !important;
+  outline: none !important;
+}
+
+/* Give the date menus breathing room and keep them within the phone surface. */
+.event-date-select-field .runrise-select-menu {
+  min-width: max(132px, 100%) !important;
+  max-height: 230px !important;
+  overflow-y: auto !important;
+  border-radius: 16px !important;
+  padding: 6px !important;
+}
+
+.event-date-day .runrise-select-menu {
+  min-width: 112px !important;
+}
+
+.event-date-month .runrise-select-menu {
+  min-width: 168px !important;
+}
+
+.event-date-year .runrise-select-menu {
+  min-width: 126px !important;
+  right: 0 !important;
+  left: auto !important;
+}
+
+/* Capacity is a direct numeric field: starts at 0, accepts typing, max 10,000. */
+.event-editor input[type="number"] {
+  appearance: textfield !important;
+  -moz-appearance: textfield !important;
+}
+
+.event-editor input[type="number"]::-webkit-inner-spin-button,
+.event-editor input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+
+@media (min-width: 700px) {
+  .event-date-time-grid {
+    grid-template-columns: minmax(0, 1.7fr) minmax(180px, .8fr) !important;
+    gap: 12px !important;
+  }
+
+  .event-time-field input {
+    height: 86px !important;
+  }
+}
+
+/* =========================================================
+   FOUNDER CREATE EVENT — BALANCED DATE + TIME
+   Nov 2026
+   Equal 50/50 cards with a calmer segmented date control.
+========================================================= */
+
+.event-date-time-grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: 12px !important;
+  align-items: start !important;
+}
+
+.event-date-field-group,
+.event-time-field {
+  min-width: 0 !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.event-date-field-group > .event-field-label,
+.event-time-field > .event-field-label {
+  margin: 0 0 9px !important;
+  min-height: 18px !important;
+  color: #948883 !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+}
+
+/* Date = one calm card, not three crowded mini cards. */
+.event-date-selector {
+  width: 100% !important;
+  height: 94px !important;
+  min-height: 94px !important;
+  display: grid !important;
+  grid-template-columns: .72fr 1.05fr 1fr !important;
+  gap: 0 !important;
+  padding: 10px 8px !important;
+  border: 1px solid rgba(62,45,40,.09) !important;
+  border-radius: 20px !important;
+  background: #F6F4F4 !important;
+  box-sizing: border-box !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.78) !important;
+  overflow: visible !important;
+}
+
+.event-date-select-field {
+  position: relative !important;
+  height: 72px !important;
+  min-height: 72px !important;
+  padding: 7px 9px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+
+.event-date-select-field + .event-date-select-field::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 1px;
+  background: rgba(62,45,40,.08);
+}
+
+.event-date-select-field.is-open,
+.event-date-select-field:focus-within {
+  background: rgba(255,255,255,.72) !important;
+  border-radius: 13px !important;
+  box-shadow: 0 0 0 2px rgba(204,107,55,.10) !important;
+}
+
+.event-date-select-field .runrise-select-label {
+  margin: 0 0 5px !important;
+  padding: 0 !important;
+  color: #A2948E !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+}
+
+.event-date-select-field .runrise-select-trigger {
+  min-height: 31px !important;
+  padding: 0 !important;
+  gap: 5px !important;
+  align-items: center !important;
+}
+
+.event-date-select-field .runrise-select-trigger strong {
+  color: #3E2D28 !important;
+  font-size: 15px !important;
+  font-weight: 850 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.event-date-day .runrise-select-trigger strong {
+  font-size: 16px !important;
+}
+
+.event-date-month .runrise-select-trigger strong {
+  font-size: 14px !important;
+}
+
+.event-date-year .runrise-select-trigger strong {
+  font-size: 13px !important;
+}
+
+.event-date-select-field .runrise-select-chevron {
+  flex: 0 0 auto !important;
+  opacity: .68 !important;
+  transform: scale(.88);
+}
+
+/* Time card mirrors the date card exactly. */
+.event-time-field input {
+  width: 100% !important;
+  height: 94px !important;
+  min-height: 94px !important;
+  margin: 0 !important;
+  padding: 0 18px !important;
+  border: 1px solid rgba(62,45,40,.09) !important;
+  border-radius: 20px !important;
+  background: #F6F4F4 !important;
+  box-sizing: border-box !important;
+  color: #3E2D28 !important;
+  font-size: 18px !important;
+  font-weight: 850 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.78) !important;
+}
+
+.event-time-field input:focus {
+  background: #FFF !important;
+  border-color: rgba(204,107,55,.32) !important;
+  box-shadow: 0 0 0 4px rgba(204,107,55,.055) !important;
+  outline: none !important;
+}
+
+/* Keep menus roomy even though the closed control is compact. */
+.event-date-select-field .runrise-select-menu {
+  z-index: 80 !important;
+  max-height: 230px !important;
+  overflow-y: auto !important;
+  border-radius: 16px !important;
+  padding: 6px !important;
+}
+
+.event-date-day .runrise-select-menu {
+  min-width: 112px !important;
+}
+
+.event-date-month .runrise-select-menu {
+  min-width: 160px !important;
+}
+
+.event-date-year .runrise-select-menu {
+  min-width: 128px !important;
+  right: 0 !important;
+  left: auto !important;
+}
+
+/* Only very narrow phones stack the controls. */
+@media (max-width: 340px) {
+  .event-date-time-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .event-date-selector,
+  .event-time-field input {
+    height: 90px !important;
+    min-height: 90px !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE FOUNDER — EVENT DATE LAYOUT REDESIGN
+   Mobile-first: roomy full-width date row + full-width time
+   This intentionally replaces the previous 50/50 layout.
+========================================================= */
+
+.event-date-time-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 18px !important;
+  align-items: stretch !important;
+  width: 100% !important;
+}
+
+.event-date-field-group,
+.event-time-field {
+  width: 100% !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.event-date-field-group > .event-field-label,
+.event-time-field > .event-field-label {
+  margin: 0 0 10px !important;
+  min-height: 20px !important;
+  color: #948883 !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+}
+
+/* Date gets the full row. Each segment is its own roomy card. */
+.event-date-selector {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, .82fr) minmax(0, 1.35fr) minmax(0, 1fr) !important;
+  gap: 10px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.event-date-select-field {
+  position: relative !important;
+  width: 100% !important;
+  height: 88px !important;
+  min-height: 88px !important;
+  padding: 13px 14px !important;
+  border: 1px solid rgba(62,45,40,.10) !important;
+  border-radius: 18px !important;
+  background: #F6F4F4 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.82) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+
+/* Remove the old segmented divider lines completely. */
+.event-date-select-field + .event-date-select-field::before {
+  display: none !important;
+  content: none !important;
+}
+
+.event-date-select-field.is-open,
+.event-date-select-field:focus-within {
+  background: #FFFFFF !important;
+  border-color: rgba(204,107,55,.34) !important;
+  box-shadow: 0 0 0 4px rgba(204,107,55,.055) !important;
+}
+
+.event-date-select-field .runrise-select-label {
+  margin: 0 0 8px !important;
+  padding: 0 !important;
+  color: #9A8C86 !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+}
+
+.event-date-select-field .runrise-select-trigger {
+  width: 100% !important;
+  min-height: 30px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  padding: 0 !important;
+}
+
+.event-date-select-field .runrise-select-trigger strong,
+.event-date-day .runrise-select-trigger strong,
+.event-date-month .runrise-select-trigger strong,
+.event-date-year .runrise-select-trigger strong {
+  min-width: 0 !important;
+  color: #3E2D28 !important;
+  font-size: 16px !important;
+  font-weight: 850 !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.event-date-month .runrise-select-trigger strong {
+  font-size: 15px !important;
+}
+
+.event-date-year .runrise-select-trigger strong {
+  font-size: 15px !important;
+}
+
+.event-date-select-field .runrise-select-chevron {
+  flex: 0 0 auto !important;
+  opacity: .72 !important;
+  transform: scale(.92) !important;
+}
+
+/* Time becomes its own full-width card below date. */
+.event-time-field input {
+  width: 100% !important;
+  height: 88px !important;
+  min-height: 88px !important;
+  margin: 0 !important;
+  padding: 0 22px !important;
+  border: 1px solid rgba(62,45,40,.10) !important;
+  border-radius: 18px !important;
+  background: #F6F4F4 !important;
+  box-sizing: border-box !important;
+  color: #3E2D28 !important;
+  font-size: 20px !important;
+  font-weight: 850 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.82) !important;
+}
+
+.event-time-field input:focus {
+  background: #FFFFFF !important;
+  border-color: rgba(204,107,55,.34) !important;
+  box-shadow: 0 0 0 4px rgba(204,107,55,.055) !important;
+  outline: none !important;
+}
+
+/* Dropdown menus remain roomy and float above neighboring cards. */
+.event-date-select-field .runrise-select-menu {
+  z-index: 120 !important;
+  max-height: 240px !important;
+  overflow-y: auto !important;
+  padding: 7px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 14px 34px rgba(62,45,40,.16) !important;
+}
+
+.event-date-day .runrise-select-menu {
+  min-width: 120px !important;
+}
+
+.event-date-month .runrise-select-menu {
+  min-width: 176px !important;
+}
+
+.event-date-year .runrise-select-menu {
+  min-width: 138px !important;
+  right: 0 !important;
+  left: auto !important;
+}
+
+/* Very narrow screens: still keep all three date choices usable. */
+@media (max-width: 360px) {
+  .event-date-selector {
+    grid-template-columns: 1fr 1.25fr 1fr !important;
+    gap: 7px !important;
+  }
+
+  .event-date-select-field {
+    height: 82px !important;
+    min-height: 82px !important;
+    padding: 11px 10px !important;
+  }
+
+  .event-date-select-field .runrise-select-trigger strong,
+  .event-date-day .runrise-select-trigger strong,
+  .event-date-month .runrise-select-trigger strong,
+  .event-date-year .runrise-select-trigger strong {
+    font-size: 14px !important;
+  }
+
+  .event-time-field input {
+    height: 82px !important;
+    min-height: 82px !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE FOUNDER — DATE / TIME FORM SCALE NORMALIZATION
+   Match the visual scale of the rest of Create Activity form.
+========================================================= */
+
+/* Keep the redesigned stacked layout, but bring its scale
+   back in line with Distance / Capacity and other controls. */
+.event-date-time-grid {
+  gap: 14px !important;
+}
+
+.event-date-field-group > .event-field-label,
+.event-time-field > .event-field-label {
+  margin: 0 0 8px !important;
+  min-height: auto !important;
+  color: #948883 !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  line-height: 1.3 !important;
+}
+
+/* Date row: compact, consistent control height. */
+.event-date-selector {
+  gap: 8px !important;
+}
+
+.event-date-select-field {
+  height: 64px !important;
+  min-height: 64px !important;
+  padding: 9px 12px !important;
+  border-radius: 14px !important;
+}
+
+.event-date-select-field .runrise-select-label {
+  margin: 0 0 5px !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  letter-spacing: .1px !important;
+}
+
+.event-date-select-field .runrise-select-trigger {
+  min-height: 24px !important;
+  gap: 6px !important;
+}
+
+.event-date-select-field .runrise-select-trigger strong,
+.event-date-day .runrise-select-trigger strong,
+.event-date-month .runrise-select-trigger strong,
+.event-date-year .runrise-select-trigger strong {
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+}
+
+.event-date-month .runrise-select-trigger strong,
+.event-date-year .runrise-select-trigger strong {
+  font-size: 13px !important;
+}
+
+.event-date-select-field .runrise-select-chevron {
+  transform: scale(.78) !important;
+}
+
+/* Time control: same height, radius, type scale and visual weight
+   as the date controls / other Create Activity inputs. */
+.event-time-field input {
+  height: 64px !important;
+  min-height: 64px !important;
+  margin: 0 !important;
+  padding: 0 16px !important;
+  border-radius: 14px !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+}
+
+/* Keep native time indicator visually proportional. */
+.event-time-field input::-webkit-calendar-picker-indicator {
+  width: 18px !important;
+  height: 18px !important;
+  margin-left: 8px !important;
+  opacity: .9 !important;
+}
+
+/* Very narrow phones: retain compact sizing rather than shrinking
+   the typography into an unreadable state. */
+@media (max-width: 360px) {
+  .event-date-selector {
+    gap: 6px !important;
+  }
+
+  .event-date-select-field,
+  .event-time-field input {
+    height: 60px !important;
+    min-height: 60px !important;
+  }
+
+  .event-date-select-field {
+    padding: 8px 9px !important;
+  }
+
+  .event-date-select-field .runrise-select-trigger strong,
+  .event-date-day .runrise-select-trigger strong,
+  .event-date-month .runrise-select-trigger strong,
+  .event-date-year .runrise-select-trigger strong,
+  .event-time-field input {
+    font-size: 13px !important;
+  }
+}
+
+
+/* =========================================================
+   FOUNDER EVENT CARD — TYPOGRAPHY + CHECK-IN QR POLISH
+   ========================================================= */
+
+/* Keep supporting text on one consistent readable scale. */
+.founder-event-card .eyebrow,
+.founder-event-tags span,
+.capacity-row,
+.rr-founder-event-actions button {
+  font-family: "Anuphan", sans-serif;
+  font-size: 13px !important;
+  line-height: 1.35;
+}
+
+.founder-event-card .eyebrow {
+  margin-bottom: 6px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.founder-event-card h3 {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.28;
+  font-weight: 800;
+}
+
+.founder-event-card .muted {
+  margin-top: 6px;
+  font-size: 14px !important;
+  line-height: 1.45;
+}
+
+.founder-event-tags {
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.founder-event-tags span {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.capacity-row {
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.capacity-row span,
+.capacity-row strong {
+  font-size: 13px !important;
+  font-weight: 700;
+}
+
+.capacity-progress {
+  height: 7px;
+}
+
+/* Action row: equal visual rhythm and clear labels. */
+.rr-founder-event-actions {
+  grid-template-columns: 1.55fr .78fr .78fr !important;
+  gap: 10px !important;
+  margin-top: 18px !important;
+}
+
+.rr-founder-event-actions button {
+  min-height: 52px !important;
+  border-radius: 16px !important;
+  font-weight: 800 !important;
+}
+
+.rr-manage-checkin-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+  padding: 0 16px !important;
+}
+
+.rr-manage-checkin-label {
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* QR glyph only — no separate orange tile/background behind the icon. */
+.rr-manage-checkin-qr {
+  width: 24px;
+  height: 24px;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 24px;
+  color: currentColor;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.rr-manage-checkin-qr-symbol {
+  width: 24px;
+  height: 24px;
+  overflow: visible;
+  fill: none;
+}
+
+.rr-manage-checkin-qr .qr-scan-frame {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rr-manage-checkin-qr .qr-finder {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+}
+
+.rr-manage-checkin-qr .qr-core,
+.rr-manage-checkin-qr .qr-data {
+  fill: currentColor;
+  stroke: none;
+}
+
+.rr-founder-event-actions .secondary,
+.rr-founder-event-actions .founder-danger-button {
+  font-size: 13px !important;
+  font-weight: 800 !important;
+}
+
+@media (max-width: 360px) {
+  .rr-founder-event-actions {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .rr-manage-checkin-button {
+    grid-column: 1 / -1;
+  }
+}
+
+/* =========================================================
+   RUNRISE FOUNDER — CREATE / EDIT ACTIVITY TYPOGRAPHY UNIFIED
+   Make all field headings match Event Date / Start Time.
+========================================================= */
+
+/* All top-level field labels in Create / Edit Activity */
+.event-editor > label,
+.event-editor .founder-form-two > label,
+.event-editor .event-distance-field > .event-field-label,
+.event-editor .event-pace-field-group > .event-field-label,
+.event-editor .event-date-field-group > .event-field-label,
+.event-editor .event-time-field > .event-field-label {
+  color: #948883 !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* Keep ordinary label wrappers spaced consistently without affecting inputs */
+.event-editor > label,
+.event-editor .founder-form-two > label {
+  gap: 8px !important;
+}
+
+/* Distance / Pace custom labels need the same spacing as normal labels */
+.event-editor .event-distance-field > .event-field-label,
+.event-editor .event-pace-field-group > .event-field-label {
+  display: block !important;
+  margin: 0 0 8px !important;
+}
+
+/* Pace picker internal headings: readable, but still secondary to the field title */
+.event-editor .event-pace-wheel-heading {
+  margin: 0 4px 9px !important;
+}
+
+.event-editor .event-pace-wheel-heading span {
+  color: #8f817b !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  line-height: 1.3 !important;
+  letter-spacing: 0.01em !important;
+}
+
+.event-editor .event-pace-wheel-heading strong {
+  color: #CC6B37 !important;
+  font-size: 12px !important;
+  font-weight: 850 !important;
+  line-height: 1.25 !important;
+}
+
+/* “ถึง” between start/end pace */
+.event-editor .event-pace-range-separator {
+  min-height: 28px !important;
+}
+
+.event-editor .event-pace-range-separator span {
+  padding: 0 12px !important;
+  color: #948883 !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+}
+
+/* Summary row: “ช่วงเพซที่ตั้งไว้” + selected range */
+.event-editor .event-pace-range-summary {
+  min-height: 52px !important;
+  padding: 12px 14px !important;
+  border-radius: 15px !important;
+}
+
+.event-editor .event-pace-range-summary span {
+  color: #9a6b52 !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  line-height: 1.3 !important;
+  letter-spacing: 0.01em !important;
+}
+
+.event-editor .event-pace-range-summary strong {
+  color: #A84E29 !important;
+  font-size: 12.5px !important;
+  font-weight: 900 !important;
+  line-height: 1.25 !important;
+}
+
+/* Avoid legacy global label rules shrinking these again in Thai mode */
+html[lang="th"] .event-editor > label,
+html[lang="th"] .event-editor .founder-form-two > label,
+html[lang="th"] .event-editor .event-field-label,
+html[lang="th"] .event-editor .event-pace-wheel-heading span,
+html[lang="th"] .event-editor .event-pace-range-separator span,
+html[lang="th"] .event-editor .event-pace-range-summary span {
+  letter-spacing: 0.01em !important;
+}
+
+/* =========================================================
+   RUNRISE FOUNDER — FORM TYPOGRAPHY REBALANCE
+   2026-11-11
+   - Day / Month / Year labels are easier to read
+   - Start / End pace labels match that same scale
+   - Distance and Capacity controls align 1:1
+========================================================= */
+
+/* Day / Month / Year — raise the small internal label size. */
+.event-editor .event-date-select-field .runrise-select-label {
+  margin: 0 0 6px !important;
+  color: #948883 !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0 !important;
+}
+
+/* Keep the actual selected date values visually stronger. */
+.event-editor .event-date-select-field .runrise-select-trigger strong,
+.event-editor .event-date-day .runrise-select-trigger strong,
+.event-editor .event-date-month .runrise-select-trigger strong,
+.event-editor .event-date-year .runrise-select-trigger strong {
+  font-size: 14px !important;
+  font-weight: 850 !important;
+  line-height: 1.15 !important;
+}
+
+/* Pace start / end should use the SAME label scale as Day / Month / Year. */
+.event-editor .event-pace-wheel-heading span {
+  color: #948883 !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0 !important;
+}
+
+/* Pace selected value remains slightly stronger, not oversized. */
+.event-editor .event-pace-wheel-heading strong {
+  color: #CC6B37 !important;
+  font-size: 12px !important;
+  font-weight: 850 !important;
+  line-height: 1.15 !important;
+}
+
+/* “ถึง” follows the same supporting-text scale. */
+.event-editor .event-pace-range-separator span {
+  color: #948883 !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+}
+
+/* Summary label uses the same 11px system; value gets only one step stronger. */
+.event-editor .event-pace-range-summary span {
+  color: #9A6B52 !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+}
+
+.event-editor .event-pace-range-summary strong {
+  color: #A84E29 !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+}
+
+/* ---------------------------------------------------------
+   Distance + Maximum participants — exact shared geometry
+--------------------------------------------------------- */
+.event-editor .founder-form-two {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: 10px !important;
+  align-items: start !important;
+}
+
+/* Both columns reserve exactly the same heading row and control row. */
+.event-editor .founder-form-two > .event-distance-field,
+.event-editor .founder-form-two > label {
+  min-width: 0 !important;
+  margin: 0 !important;
+  display: grid !important;
+  grid-template-rows: 34px 50px !important;
+  row-gap: 8px !important;
+  align-items: stretch !important;
+}
+
+/* Remove legacy spacing that made the left field sit differently. */
+.event-editor .founder-form-two > .event-distance-field {
+  gap: 8px !important;
+  margin-bottom: 0 !important;
+}
+
+/* Identical heading typography in both columns. */
+.event-editor .founder-form-two > .event-distance-field > .event-field-label,
+.event-editor .founder-form-two > label {
+  color: #948883 !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+  letter-spacing: 0 !important;
+}
+
+.event-editor .founder-form-two > .event-distance-field > .event-field-label {
+  display: flex !important;
+  align-items: flex-end !important;
+  margin: 0 !important;
+  min-height: 34px !important;
+}
+
+/* Make both grey controls exactly the same height / radius / padding. */
+.event-editor .founder-form-two .event-distance-trigger,
+.event-editor .founder-form-two > label > input[type="number"] {
+  width: 100% !important;
+  height: 50px !important;
+  min-height: 50px !important;
+  margin: 0 !important;
+  padding: 0 13px !important;
+  box-sizing: border-box !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 12px !important;
+  background: #F8F8FA !important;
+  color: #3E2D28 !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+}
+
+.event-editor .founder-form-two .event-distance-trigger {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+/* Keep the capacity number vertically centered like the distance value. */
+.event-editor .founder-form-two > label > input[type="number"] {
+  align-self: stretch !important;
+}
+
+@media (max-width: 360px) {
+  .event-editor .founder-form-two {
+    gap: 8px !important;
+  }
+
+  .event-editor .founder-form-two > .event-distance-field,
+  .event-editor .founder-form-two > label {
+    grid-template-rows: 36px 48px !important;
+  }
+
+  .event-editor .founder-form-two .event-distance-trigger,
+  .event-editor .founder-form-two > label > input[type="number"] {
+    height: 48px !important;
+    min-height: 48px !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE FOUNDER — DISTANCE/CAPACITY ALIGN + CUSTOM TIME PICKER
+   ========================================================= */
+
+/* Distance and capacity: same label row, spacing, and control geometry. */
+.event-editor .founder-form-two > .event-distance-field,
+.event-editor .founder-form-two > .event-capacity-field {
+  display: grid !important;
+  grid-template-rows: 32px 50px auto !important;
+  row-gap: 8px !important;
+  align-items: stretch !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+.event-editor .founder-form-two > .event-distance-field > .event-field-label,
+.event-editor .founder-form-two > .event-capacity-field > .event-field-label {
+  display: flex !important;
+  align-items: flex-end !important;
+  min-height: 32px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #948883 !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0 !important;
+}
+
+.event-editor .founder-form-two > .event-capacity-field > .event-capacity-input,
+.event-editor .founder-form-two .event-distance-trigger {
+  width: 100% !important;
+  height: 50px !important;
+  min-height: 50px !important;
+  margin: 0 !important;
+  padding: 0 13px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 12px !important;
+  box-sizing: border-box !important;
+  background: #F8F8FA !important;
+  color: #3E2D28 !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+}
+
+.event-capacity-input::placeholder {
+  color: #b4aaa5;
+  font-weight: 650;
+}
+
+.event-capacity-input:focus {
+  outline: none;
+  border-color: rgba(204, 107, 55, .42) !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(204, 107, 55, .08);
+}
+
+.event-capacity-input.has-error {
+  border-color: #d85c50 !important;
+  background: #fffafa !important;
+}
+
+.event-capacity-error {
+  display: block;
+  margin: -1px 2px 0;
+  color: #c84d43;
+  font-size: 9.5px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+
+/* Replace the browser-native time field with a fully clickable Runrise picker. */
+.event-time-field {
+  position: relative !important;
+  display: grid !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+}
+
+.event-time-field > .event-field-label {
+  margin: 0 !important;
+}
+
+.event-time-picker {
+  position: relative;
+  width: 100%;
+  z-index: 35;
+}
+
+.event-time-trigger {
+  width: 100%;
+  height: 64px;
+  min-height: 64px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #F8F8FA;
+  color: #3E2D28;
+  cursor: pointer;
+  font-family: "Anuphan", sans-serif;
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.event-time-trigger:hover,
+.event-time-picker.is-open .event-time-trigger {
+  border-color: rgba(204, 107, 55, .34);
+  background: #FFFCF7;
+}
+
+.event-time-picker.is-open .event-time-trigger {
+  box-shadow: 0 0 0 3px rgba(204, 107, 55, .08);
+}
+
+.event-time-trigger strong {
+  font-size: 15px;
+  font-weight: 850;
+  line-height: 1;
+}
+
+.event-time-clock {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  color: #3E2D28;
+  flex: 0 0 22px;
+}
+
+.event-time-clock svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.event-time-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 120;
+  padding: 14px;
+  border: 1px solid rgba(62, 45, 40, .08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .98);
+  box-shadow: 0 18px 42px rgba(62, 45, 40, .15);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  animation: runriseTimeMenuIn .16s ease-out;
+}
+
+@keyframes runriseTimeMenuIn {
+  from { opacity: 0; transform: translateY(-5px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.event-time-popover-section + .event-time-popover-section {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(62, 45, 40, .07);
+}
+
+.event-time-popover-heading {
+  margin-bottom: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.event-time-popover-heading span {
+  color: #948883;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.event-time-popover-heading strong {
+  color: #CC6B37;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.event-time-hour-grid {
+  max-height: 176px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+  padding-right: 2px;
+  scrollbar-width: thin;
+}
+
+.event-time-minute-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.event-time-hour-grid button,
+.event-time-minute-grid button {
+  min-height: 38px;
+  padding: 0 8px;
+  border: 1px solid rgba(62, 45, 40, .07);
+  border-radius: 11px;
+  background: #F8F6F4;
+  color: #6F625E;
+  font-family: "Anuphan", sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform .14s ease, background .14s ease, color .14s ease, border-color .14s ease;
+}
+
+.event-time-hour-grid button:hover,
+.event-time-minute-grid button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(204, 107, 55, .18);
+  background: #FFF3E6;
+}
+
+.event-time-hour-grid button.selected,
+.event-time-minute-grid button.selected {
+  border-color: rgba(204, 107, 55, .26);
+  background: linear-gradient(135deg, #FAD59B 0%, #E58A46 100%);
+  color: #FFFFFF;
+  box-shadow: 0 7px 14px rgba(204, 107, 55, .13);
+}
+
+@media (max-width: 360px) {
+  .event-editor .founder-form-two > .event-distance-field,
+  .event-editor .founder-form-two > .event-capacity-field {
+    grid-template-rows: 34px 48px !important;
+  }
+
+  .event-editor .founder-form-two > .event-capacity-field > input[type="number"],
+  .event-editor .founder-form-two .event-distance-trigger {
+    height: 48px !important;
+    min-height: 48px !important;
+  }
+
+  .event-time-trigger {
+    height: 60px;
+    min-height: 60px;
+  }
+
+  .event-time-hour-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+
+/* =========================================================
+   FOUNDER — TIME WHEEL PICKER
+   Two independent scroll wheels: hour + minute
+========================================================= */
+
+.event-time-wheel-popover {
+  padding: 16px !important;
+  border-radius: 20px !important;
+}
+
+.event-time-wheel-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+
+.event-time-wheel-header > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+
+.event-time-wheel-header span {
+  color: #948883;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.event-time-wheel-header strong {
+  color: #CC6B37;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.event-time-wheel-picker {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 30px minmax(0, 1fr);
+  align-items: center;
+  height: 176px;
+  padding: 0 10px;
+  overflow: hidden;
+  border: 1px solid rgba(62, 45, 40, .08);
+  border-radius: 18px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FBFAF8 100%);
+}
+
+.event-time-wheel-picker .ut-wheel-column {
+  height: 132px !important;
+  z-index: 2;
+}
+
+.event-time-wheel-picker .ut-wheel-spacer {
+  height: 44px !important;
+}
+
+.event-time-wheel-picker .ut-wheel-item {
+  height: 44px !important;
+  padding: 0;
+  color: #B6B2B5;
+  font-size: 17px !important;
+  font-weight: 750 !important;
+}
+
+.event-time-wheel-picker .ut-wheel-item.selected {
+  color: #3E2D28 !important;
+  font-size: 24px !important;
+  font-weight: 900 !important;
+}
+
+.event-time-wheel-selection {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 50%;
+  height: 48px;
+  transform: translateY(-50%);
+  border: 1px solid rgba(204, 107, 55, .23);
+  border-radius: 14px;
+  background: linear-gradient(90deg, rgba(251, 209, 133, .28), rgba(255, 243, 230, .72), rgba(251, 209, 133, .28));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.event-time-wheel-colon {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  color: #3E2D28;
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.event-time-wheel-summary {
+  margin-top: 12px;
+  min-height: 46px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-radius: 14px;
+  background: #FFF2DF;
+}
+
+.event-time-wheel-summary span {
+  color: #9B6B52;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.event-time-wheel-summary strong {
+  color: #B9532F;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+@media (max-width: 360px) {
+  .event-time-wheel-popover {
+    padding: 12px !important;
+  }
+
+  .event-time-wheel-picker {
+    grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr);
+    padding: 0 6px;
+  }
+
+  .event-time-wheel-picker .ut-wheel-item.selected {
+    font-size: 22px !important;
+  }
+}
+
+/* =========================================================
+   RUNRISE FOUNDER — FORM VERTICAL RHYTHM FIX
+   Keep Distance/Capacity → Pace spacing consistent with the
+   rest of the Create/Edit Activity form.
+========================================================= */
+
+/* The Distance + Capacity row is one complete form section. */
+.event-editor .founder-form-two {
+  margin-bottom: 24px !important;
+}
+
+/* Pace starts as the next section; remove any legacy offset. */
+.event-editor .event-pace-field-group {
+  margin-top: 0 !important;
+}
+
+/* Keep the Pace heading aligned with other field headings. */
+.event-editor .event-pace-field-group > .event-field-label {
+  margin-top: 0 !important;
+  margin-bottom: 8px !important;
+}
+
+/* Keep the spacing stable on smaller phone widths too. */
+@media (max-width: 390px) {
+  .event-editor .founder-form-two {
+    margin-bottom: 22px !important;
+  }
+}
+
+
+/* =========================================================
+   FOUNDER — CONTINUOUS QR CHECK-IN
+   Real registration first + fast next-participant flow
+========================================================= */
+
+.rr-demo-registration {
+  display: grid;
+  gap: 2px;
+  margin-top: 7px;
+  text-align: center;
+}
+
+.rr-demo-registration strong {
+  color: #3E2D28;
+  font-size: 9px;
+  font-weight: 850;
+}
+
+.rr-demo-registration span {
+  color: #9A8C85;
+  font-size: 7.5px;
+  font-weight: 750;
+  letter-spacing: .25px;
+}
+
+.rr-scanner-empty {
+  position: relative;
+  z-index: 3;
+  width: min(100%, 310px);
+  padding: 26px 20px;
+  border-radius: 26px;
+  background: rgba(255,255,255,.97);
+  text-align: center;
+  box-shadow: 0 18px 50px rgba(0,0,0,.18);
+}
+
+.rr-scanner-empty-icon {
+  width: 66px;
+  height: 66px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: #DFF2E6;
+  color: #26744F;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.rr-scanner-empty h2 {
+  margin: 0 0 7px;
+  color: #3E2D28;
+  font-size: 22px;
+}
+
+.rr-scanner-empty p {
+  margin: 0 0 20px;
+  color: #806E66;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.rr-success-eyebrow {
+  margin: 0 0 4px;
+  color: #CC6B37;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .7px;
+  text-align: center;
+}
+
+.rr-checkin-success-card > .rr-success-eyebrow + h1 {
+  margin-bottom: 18px;
+}
+
+.rr-success-registration-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(204,107,55,.10);
+  border-radius: 18px;
+  background: #FFF7EB;
+}
+
+.rr-success-registration-card > div:first-child {
+  min-width: 0;
+}
+
+.rr-success-registration-card span {
+  display: block;
+  color: #9A8C85;
+  font-size: 8.5px;
+  font-weight: 750;
+}
+
+.rr-success-registration-card strong {
+  display: block;
+  margin-top: 4px;
+  color: #3E2D28;
+  font-size: 13px;
+  font-weight: 850;
+  letter-spacing: .25px;
+}
+
+.rr-success-registration-status {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 9px;
+  border-radius: 999px;
+  background: #E8F5EC;
+  color: #26744F;
+  font-size: 9px;
+  font-weight: 850;
+}
+
+.rr-success-registration-status span {
+  color: inherit;
+  font-size: 10px;
+}
+
+.rr-scan-next-button {
+  min-height: 66px;
+  display: grid;
+  grid-template-columns: 34px 1fr 18px;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  text-align: left;
+}
+
+.rr-scan-next-button > span:nth-child(2) {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.rr-scan-next-button strong {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.rr-scan-next-button small {
+  color: rgba(255,255,255,.84);
+  font-size: 9px;
+  font-weight: 650;
+}
+
+.rr-scan-next-button em {
+  color: #fff;
+  font-size: 25px;
+  font-style: normal;
+  line-height: 1;
+}
+
+.rr-scan-next-qr {
+  position: relative;
+  width: 31px;
+  height: 31px;
+  display: block;
+}
+
+.rr-scan-next-qr i,
+.rr-scan-next-qr b {
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.rr-scan-next-qr i:nth-child(1),
+.rr-scan-next-qr i:nth-child(2),
+.rr-scan-next-qr i:nth-child(3) {
+  width: 10px;
+  height: 10px;
+  border: 2.5px solid currentColor;
+  border-radius: 2px;
+}
+
+.rr-scan-next-qr i:nth-child(1) {
+  left: 1px;
+  top: 1px;
+}
+
+.rr-scan-next-qr i:nth-child(2) {
+  right: 1px;
+  top: 1px;
+}
+
+.rr-scan-next-qr i:nth-child(3) {
+  left: 1px;
+  bottom: 1px;
+}
+
+.rr-scan-next-qr b {
+  right: 2px;
+  bottom: 2px;
+  width: 9px;
+  height: 9px;
+  background:
+    linear-gradient(currentColor,currentColor) 0 0/3px 3px no-repeat,
+    linear-gradient(currentColor,currentColor) 6px 0/3px 3px no-repeat,
+    linear-gradient(currentColor,currentColor) 3px 3px/3px 3px no-repeat,
+    linear-gradient(currentColor,currentColor) 0 6px/3px 3px no-repeat,
+    linear-gradient(currentColor,currentColor) 6px 6px/3px 3px no-repeat;
+}
+
+
+/* =========================================================
+   FOUNDER — LIVE REGISTRATION / LOCALE / MANAGEMENT HEADER
+========================================================= */
+
+.rr-founder-management-header.rr-founder-management-header-back-only {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 24px;
+}
+
+.rr-runner-style-back {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #EFE9DA;
+  color: #111111;
+  font-size: 23px;
+  line-height: 1;
+  font-weight: 800;
+  box-shadow: none;
+}
+
+.rr-runner-style-back:active {
+  transform: scale(.96);
+}
+
+.rr-status-legend {
+  padding: 14px 14px;
+  gap: 11px;
+}
+
+.rr-status-legend > div {
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 11px;
+}
+
+.rr-status-legend > div + div {
+  padding-top: 11px;
+}
+
+.rr-status-dot {
+  width: 34px;
+  height: 34px;
+  font-size: 14px;
+}
+
+.rr-status-legend strong {
+  font-size: 12.5px;
+  line-height: 1.25;
+  font-weight: 800;
+}
+
+.rr-status-legend small {
+  margin-top: 3px;
+  font-size: 10.5px;
+  line-height: 1.45;
+  font-weight: 550;
+}
+
+
+/* =========================================================
+   RUNNER + FOUNDER — QR / EVENT CARD VISUAL POLISH
+========================================================= */
+
+/* Runner QR page: back only */
+.rr-ticket-topbar {
+  grid-template-columns: 44px 1fr 44px;
+}
+
+/* Shared scanner-style QR icon */
+.rr-qr-scan-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rr-qr-scan-svg rect {
+  fill: none;
+  stroke: currentColor;
+}
+
+.rr-event-qr-icon {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  display: grid;
+  place-items: center;
+  padding: 8px;
+  border-radius: 14px;
+  background: #F6DFBF;
+  color: #B6532B;
+}
+
+.rr-event-qr-icon .rr-qr-scan-svg {
+  width: 30px;
+  height: 30px;
+}
+
+/* Booking ID: document/copy icon */
+.rr-copy-button {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  background: #F6DFBF;
+  color: #A94F2B;
+}
+
+.rr-booking-copy-svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Destructive secondary action: visible, but still below the main CTA */
+.rr-cancel-registration {
+  width: 100%;
+  min-height: 60px;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 10px 14px;
+  border: 1px solid rgba(194, 66, 66, .14);
+  border-radius: 18px;
+  background: linear-gradient(135deg, #FFF7F5, #FFF0F0);
+  color: #B64A45;
+  text-align: left;
+  box-shadow: 0 7px 20px rgba(182, 74, 69, .06);
+}
+
+.rr-cancel-registration-icon {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(194, 66, 66, .10);
+  color: #C64242;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.rr-cancel-registration > span:nth-child(2) {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.rr-cancel-registration strong {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.rr-cancel-registration small {
+  color: #A87A76;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.rr-cancel-registration-arrow {
+  color: #C64242;
+  font-size: 22px;
+  line-height: 1;
+}
+
+/* Founder next activity: stronger readable metadata */
+.founder-next-copy > span {
+  font-size: 10.5px;
+  line-height: 1.3;
+  font-weight: 850;
+  letter-spacing: .35px;
+}
+
+.founder-next-copy h3 {
+  margin: 6px 0 7px;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.founder-next-copy p {
+  margin: 0 0 12px;
+  font-size: 11.5px;
+  line-height: 1.4;
+}
+
+.founder-next-progress-copy {
+  margin-bottom: 6px;
+  font-size: 10.5px;
+  line-height: 1.3;
+  font-weight: 650;
+}
+
+.founder-next-progress-copy strong {
+  font-size: 11px;
+  font-weight: 850;
+}
+
+/* Founder scanner: CI yellow/gold text over dark camera background */
+.rr-scanner-header h1 {
+  color: #FBD185 !important;
+  text-shadow: 0 2px 12px rgba(0,0,0,.22);
+}
+
+.rr-scanner-copy strong {
+  color: #FBD185 !important;
+  font-weight: 850;
+  text-shadow: 0 2px 12px rgba(0,0,0,.20);
+}
+
+/* Founder success button uses the same scanner QR icon */
+.rr-scan-next-qr {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+
+.rr-scan-next-qr .rr-qr-scan-svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* Disable obsolete hand-built QR pieces if older CSS still exists */
+.rr-scan-next-qr > i,
+.rr-scan-next-qr > b {
+  display: none !important;
+}
+
