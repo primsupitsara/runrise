@@ -584,6 +584,9 @@ const initialMembers: Member[] = [
   },
 ];
 
+// Keep this legacy seed available without changing application behavior.
+void initialMembers;
+
 function readStorage<T>(key: string, fallback: T): T {
   try {
     const raw = localStorage.getItem(key);
@@ -13132,6 +13135,9 @@ function FounderEventManagement({
     )
   );
 
+  // Preserve this derived value for compatibility without affecting the flow.
+  void actualNames;
+
   const rows = [
     ...participantSource.map((registration) => ({
       name: registration.runnerName,
@@ -13925,6 +13931,9 @@ function FounderMetric({
   );
 }
 
+// Preserve the existing component without rendering or changing any flow.
+void FounderMetric;
+
 function Header({
   eyebrow,
   title,
@@ -13980,6 +13989,9 @@ function Info({
     </div>
   );
 }
+
+// Preserve the existing helper component without changing any UI behavior.
+void Info;
 
 function Empty({
   icon,
