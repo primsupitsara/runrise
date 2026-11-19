@@ -45,6 +45,7 @@ type Page =
   | "runner-profile"
   | "notifications"
   | "founder-dashboard"
+  | "founder-runner-feedback"
   | "founder-club"
   | "founder-events"
   | "founder-event-management"
@@ -190,6 +191,8 @@ type ClubReview = {
   comment: string;
   createdAt: string;
   source?: "seed" | "user";
+  eventId?: number;
+  eventName?: string;
 };
 
 type Member = {
@@ -604,8 +607,12 @@ const RUNRISE_STORAGE_KEYS = [
   "runrise-clubs",
   "runrise-events",
   "runrise-saved",
+  "runrise-saved-events",
   "runrise-joined",
   "runrise-registrations",
+  "runrise-runner-onboarding-complete",
+  "runrise-founder-onboarding-complete",
+  "runrise-club-reviews",
 ];
 
 
@@ -735,73 +742,165 @@ const PARKS_BY_AREA: Record<string, string[]> = {
   "Khlong Toei": [
     "Benjakitti Park",
     "Benchasiri Park",
+    "Lumphini Park",
+    "Queen Sirikit National Convention Center Running Loop",
   ],
   Watthana: [
     "Benchasiri Park (Phrom Phong)",
     "Benjakitti Park",
+    "Lumphini Park (nearby)",
   ],
   "Pathum Wan": [
     "Lumphini Park",
+    "Chulalongkorn University Sports Area",
+    "CU Centenary Park",
   ],
   "Bang Rak": [
     "Lumphini Park (Silom side)",
     "Lumphini Park",
+    "Chao Phraya Riverside Running Route",
   ],
   Chatuchak: [
     "Chatuchak Park",
     "Wachirabenchathat Park (Rod Fai Park)",
     "Queen Sirikit Park",
+    "Kasetsart University Running Area",
   ],
   "Phra Nakhon": [
     "Saranrom Park",
     "Santichaiprakarn Park",
     "Sanam Luang",
+    "Nagaraphirom Park",
+    "Rama VIII Bridge Riverside Route",
   ],
   "Thon Buri": [
     "Thonburirom Park (nearby)",
+    "Wongwian Yai Running Route",
   ],
   Sathon: [
     "80th Birthday Anniversary Park (Sathon)",
     "Lumphini Park (nearby)",
+    "Chong Nonsi Canal Park",
   ],
   Prawet: [
     "Suan Luang Rama IX",
+    "Nong Bon Lake Park",
   ],
   "Phra Khanong": [
     "Wachiratham Sathit Park",
+    "Bang Chak Green Space",
   ],
   "Bang Kapi": [
     "Seri Thai Park",
+    "Nawamin Phirom Park",
   ],
   "Bang Khen": [
     "Bang Bua Canal Park",
+    "Kasetsart University Running Area",
   ],
   "Lak Si": [
     "Thung Si Kan Park",
+    "Government Complex Running Route",
   ],
   "Mueang Nonthaburi": [
     "Chaloem Kanchanaphisek Park",
+    "Makut Rommayasaran Park",
   ],
   "Pak Kret": [
     "Suan Somdet Phra Srinagarindra Nonthaburi",
+    "Impact Lakefront Running Route",
   ],
   "Khlong Luang": [
     "Thammasat University Rangsit Sports Area",
+    "AIT Campus Running Route",
   ],
   "Mueang Samut Prakan": [
     "Bang Pu Recreation Center",
+    "Samut Prakan City Observatory Park Area",
   ],
   "Phra Pradaeng": [
     "Sri Nakhon Khuean Khan Park",
+    "Bang Kachao Green Route",
   ],
   "Mueang Nakhon Pathom": [
     "Sanam Chan Palace Park",
+    "Nakhon Pathom Municipal Park",
   ],
-  "Phutthamonthon": [
+  Phutthamonthon: [
     "Phutthamonthon Park",
+    "Mahidol University Salaya Running Route",
   ],
   "Mueang Samut Sakhon": [
     "Saphan Daeng Recreation Area",
+    "Samut Sakhon Municipal Park",
+  ],
+  "Dusit": [
+    "Dusit Palace Garden Area",
+    "Suan Sunandha Running Route",
+  ],
+  "Huai Khwang": [
+    "Thailand Cultural Centre Running Area",
+    "Makkasan Green Route",
+  ],
+  "Din Daeng": [
+    "Thai-Japanese Bangkok Youth Center",
+    "Vibhavadi Running Route",
+  ],
+  "Ratchathewi": [
+    "Santiphap Park",
+    "Makkasan Park Area",
+  ],
+  "Bang Sue": [
+    "Bang Sue Central Park Area",
+    "Pracharat Sai 1 Running Route",
+  ],
+  "Bang Na": [
+    "Bang Na Sports Center",
+    "BITEC Running Route",
+  ],
+  "Suan Luang": [
+    "Suan Luang Rama IX",
+    "Phatthanakan Running Route",
+  ],
+  "Lat Phrao": [
+    "Lat Phrao 71 Park Area",
+    "Chalong Rat Running Route",
+  ],
+  "Bueng Kum": [
+    "Nawamin Phirom Park",
+    "Bueng Kum Community Park",
+  ],
+  "Khan Na Yao": [
+    "Seri Thai Park (nearby)",
+    "Khan Na Yao Sports Park",
+  ],
+  "Min Buri": [
+    "Min Buri Sports Park",
+    "Saen Saep Canal Running Route",
+  ],
+  "Lat Krabang": [
+    "King Mongkut's Institute Ladkrabang Running Area",
+    "Lat Krabang District Park",
+  ],
+  "Don Mueang": [
+    "Thung Si Kan Park (nearby)",
+    "Don Mueang Sports Center",
+  ],
+  "Sai Mai": [
+    "Sai Mai District Park",
+    "Wongsakorn Running Route",
+  ],
+  "Bang Khae": [
+    "Thawi Wanarom Park",
+    "Phutthamonthon Sai 2 Running Route",
+  ],
+  "Taling Chan": [
+    "Taling Chan Floating Market Riverside Route",
+    "Buddhamonthon Sai 1 Green Route",
+  ],
+  "Bangkok Noi": [
+    "Siriraj Riverside Running Route",
+    "Bang Khun Non Green Route",
   ],
 };
 
@@ -830,6 +929,20 @@ const COMMUNITY_STYLES = [
   "Networking",
 ];
 
+/**
+ * Runner onboarding Q08.
+ * Kept separate from COMMUNITY_STYLES so existing club/founder flows
+ * and recommendation data are not accidentally changed.
+ */
+const RUNNER_RUNNING_STYLE_OPTIONS = [
+  "Current Run Club Runner",
+  "Training for Races",
+  "Former Run Club Runner",
+  "Solo Runner",
+  "Beginner",
+  "Social Runner",
+];
+
 const RUNNING_TIMES = [
   "Morning",
   "Evening",
@@ -847,6 +960,9 @@ const FOUNDER_BASE_OPTIONS = [
   "Other Provinces",
   "Multiple Locations",
 ];
+
+// Retained for backward-compatible stored Founder profiles.
+void FOUNDER_BASE_OPTIONS;
 
 
 
@@ -1007,6 +1123,8 @@ function isFounderSetupComplete(profile: FounderSetupProfile) {
     Boolean(profile.province) &&
     Array.isArray(profile.locations) &&
     profile.locations.length > 0 &&
+    Array.isArray(profile.parks) &&
+    profile.parks.length > 0 &&
     Array.isArray(profile.days) &&
     profile.days.length > 0 &&
     Array.isArray(profile.times) &&
@@ -1015,6 +1133,9 @@ function isFounderSetupComplete(profile: FounderSetupProfile) {
     profile.vibe.length > 0
   );
 }
+
+// Preserve the existing completion helper without changing onboarding flow.
+void isFounderSetupComplete;
 
 const PROFILE_VALUE_TH: Record<string, string> = {
   // Running experience
@@ -1160,6 +1281,60 @@ const PROFILE_VALUE_TH: Record<string, string> = {
   "Phutthamonthon Park": "สวนพุทธมณฑล",
   "Saphan Daeng Recreation Area": "พื้นที่นันทนาการสะพานแดง",
 
+  "Queen Sirikit National Convention Center Running Loop": "เส้นทางวิ่งศูนย์การประชุมแห่งชาติสิริกิติ์",
+  "Chulalongkorn University Sports Area": "พื้นที่กีฬาจุฬาลงกรณ์มหาวิทยาลัย",
+  "CU Centenary Park": "อุทยาน 100 ปี จุฬาลงกรณ์มหาวิทยาลัย",
+  "Chao Phraya Riverside Running Route": "เส้นทางวิ่งริมแม่น้ำเจ้าพระยา",
+  "Kasetsart University Running Area": "พื้นที่วิ่งมหาวิทยาลัยเกษตรศาสตร์",
+  "Nagaraphirom Park": "สวนนาคราภิรมย์",
+  "Rama VIII Bridge Riverside Route": "เส้นทางวิ่งริมแม่น้ำสะพานพระราม 8",
+  "Wongwian Yai Running Route": "เส้นทางวิ่งวงเวียนใหญ่",
+  "Chong Nonsi Canal Park": "สวนคลองช่องนนทรี",
+  "Nong Bon Lake Park": "สวนสาธารณะบึงหนองบอน",
+  "Bang Chak Green Space": "พื้นที่สีเขียวบางจาก",
+  "Nawamin Phirom Park": "สวนนวมินทร์ภิรมย์",
+  "Government Complex Running Route": "เส้นทางวิ่งศูนย์ราชการแจ้งวัฒนะ",
+  "Makut Rommayasaran Park": "อุทยานมกุฏรมยสราญ",
+  "Impact Lakefront Running Route": "เส้นทางวิ่งริมทะเลสาบอิมแพ็ค",
+  "AIT Campus Running Route": "เส้นทางวิ่งภายในสถาบัน AIT",
+  "Samut Prakan City Observatory Park Area": "พื้นที่สวนหอชมเมืองสมุทรปราการ",
+  "Bang Kachao Green Route": "เส้นทางสีเขียวบางกะเจ้า",
+  "Nakhon Pathom Municipal Park": "สวนสาธารณะเทศบาลนครนครปฐม",
+  "Mahidol University Salaya Running Route": "เส้นทางวิ่งมหาวิทยาลัยมหิดล ศาลายา",
+  "Samut Sakhon Municipal Park": "สวนสาธารณะเทศบาลสมุทรสาคร",
+  "Dusit Palace Garden Area": "พื้นที่สวนเขตพระราชวังดุสิต",
+  "Suan Sunandha Running Route": "เส้นทางวิ่งสวนสุนันทา",
+  "Thailand Cultural Centre Running Area": "พื้นที่วิ่งศูนย์วัฒนธรรมแห่งประเทศไทย",
+  "Makkasan Green Route": "เส้นทางสีเขียวมักกะสัน",
+  "Thai-Japanese Bangkok Youth Center": "ศูนย์เยาวชนกรุงเทพมหานคร (ไทย-ญี่ปุ่น)",
+  "Vibhavadi Running Route": "เส้นทางวิ่งวิภาวดี",
+  "Santiphap Park": "สวนสันติภาพ",
+  "Makkasan Park Area": "พื้นที่สวนมักกะสัน",
+  "Bang Sue Central Park Area": "พื้นที่สวนบางซื่อ",
+  "Pracharat Sai 1 Running Route": "เส้นทางวิ่งประชาราษฎร์สาย 1",
+  "Bang Na Sports Center": "ศูนย์กีฬาบางนา",
+  "BITEC Running Route": "เส้นทางวิ่งไบเทคบางนา",
+  "Phatthanakan Running Route": "เส้นทางวิ่งพัฒนาการ",
+  "Lat Phrao 71 Park Area": "พื้นที่สวนลาดพร้าว 71",
+  "Chalong Rat Running Route": "เส้นทางวิ่งฉลองรัช",
+  "Bueng Kum Community Park": "สวนชุมชนบึงกุ่ม",
+  "Seri Thai Park (nearby)": "สวนเสรีไทย (บริเวณใกล้เคียง)",
+  "Khan Na Yao Sports Park": "สวนกีฬาเขตคันนายาว",
+  "Min Buri Sports Park": "สวนกีฬาเขตมีนบุรี",
+  "Saen Saep Canal Running Route": "เส้นทางวิ่งคลองแสนแสบ",
+  "King Mongkut's Institute Ladkrabang Running Area": "พื้นที่วิ่ง สจล.",
+  "Lat Krabang District Park": "สวนสาธารณะเขตลาดกระบัง",
+  "Thung Si Kan Park (nearby)": "สวนทุ่งสีกัน (บริเวณใกล้เคียง)",
+  "Don Mueang Sports Center": "ศูนย์กีฬาเขตดอนเมือง",
+  "Sai Mai District Park": "สวนสาธารณะเขตสายไหม",
+  "Wongsakorn Running Route": "เส้นทางวิ่งวงศกร",
+  "Thawi Wanarom Park": "สวนทวีวนารมย์",
+  "Phutthamonthon Sai 2 Running Route": "เส้นทางวิ่งพุทธมณฑลสาย 2",
+  "Taling Chan Floating Market Riverside Route": "เส้นทางวิ่งริมน้ำตลิ่งชัน",
+  "Buddhamonthon Sai 1 Green Route": "เส้นทางสีเขียวพุทธมณฑลสาย 1",
+  "Siriraj Riverside Running Route": "เส้นทางวิ่งริมน้ำศิริราช",
+  "Bang Khun Non Green Route": "เส้นทางสีเขียวบางขุนนนท์",
+
   // Running time
   "Morning": "ช่วงเช้า",
   "Evening": "ช่วงเย็น",
@@ -1179,6 +1354,13 @@ const PROFILE_VALUE_TH: Record<string, string> = {
   "Training Focused": "เน้นการฝึกซ้อม",
   "Relaxed": "สบาย ๆ",
   "Networking": "สร้างคอนเนกชัน",
+
+  // Runner running style (Onboarding Q08)
+  "Current Run Club Runner": "วิ่ง Runclub ปัจจุบัน",
+  "Training for Races": "วิ่งซ้อมลงแข่ง",
+  "Former Run Club Runner": "อดีต Runclub",
+  "Solo Runner": "วิ่งคนเดียว",
+  "Social Runner": "วิ่งเข้าสังคม",
 };
 
 const PROFILE_VALUE_EN: Record<string, string> = Object.fromEntries(
@@ -1459,6 +1641,7 @@ function isRunnerProfileComplete(profile: RunnerProfile) {
       profile.preferredDistance.trim() &&
       profile.province.trim() &&
       profile.location.length > 0 &&
+      profile.parks.length > 0 &&
       profile.time.trim() &&
       profile.goal.length > 0 &&
       profile.vibe.length > 0
@@ -2086,58 +2269,271 @@ function EventPaceRangePicker({
   onChange: (value: string) => void;
   language: AppLanguage;
 }) {
-  const matches = [...String(value || "").matchAll(/(\d{1,2}):(\d{2})/g)].map(
-    (match) => `${String(Number(match[1])).padStart(2, "0")}:${match[2]}`
+  const extractValues = (source: string) =>
+    [...String(source || "").matchAll(/(\d{1,2}):(\d{2})/g)].map(
+      (match) => ({
+        minute: String(Number(match[1])),
+        second: match[2],
+      })
+    );
+
+  const initialValues = extractValues(value);
+
+  const [startMinute, setStartMinute] = useState(
+    initialValues[0]?.minute || ""
   );
+  const [startSecond, setStartSecond] = useState(
+    initialValues[0]?.second || ""
+  );
+  const [endMinute, setEndMinute] = useState(
+    initialValues[1]?.minute || ""
+  );
+  const [endSecond, setEndSecond] = useState(
+    initialValues[1]?.second || ""
+  );
+  const [paceError, setPaceError] = useState("");
 
-  const start = normalizePace(matches[0] || "06:00");
-  const end = normalizePace(matches[1] || matches[0] || "07:00");
+  useEffect(() => {
+    const nextValues = extractValues(value);
 
-  const compact = (pace: string) => pace.replace(/^0(?=\d:)/, "");
-  const updateRange = (nextStart: string, nextEnd: string) => {
-    onChange(`${compact(nextStart)}–${compact(nextEnd)}`);
+    setStartMinute(nextValues[0]?.minute || "");
+    setStartSecond(nextValues[0]?.second || "");
+    setEndMinute(nextValues[1]?.minute || "");
+    setEndSecond(nextValues[1]?.second || "");
+  }, [value]);
+
+  const cleanDigits = (input: string) =>
+    input.replace(/\D/g, "").slice(0, 2);
+
+  const parsePaceParts = (minute: string, second: string) => {
+    if (!minute || second.length !== 2) return null;
+
+    const minutes = Number(minute);
+    const seconds = Number(second);
+
+    if (
+      !Number.isFinite(minutes) ||
+      !Number.isFinite(seconds) ||
+      minutes < 1 ||
+      minutes > 30 ||
+      seconds < 0 ||
+      seconds > 59
+    ) {
+      return null;
+    }
+
+    return {
+      label: `${minutes}:${String(seconds).padStart(2, "0")}`,
+      totalSeconds: minutes * 60 + seconds,
+    };
   };
 
+  const updateRange = (
+    nextStartMinute: string,
+    nextStartSecond: string,
+    nextEndMinute: string,
+    nextEndSecond: string
+  ) => {
+    const hasAnyValue =
+      nextStartMinute ||
+      nextStartSecond ||
+      nextEndMinute ||
+      nextEndSecond;
+
+    if (!hasAnyValue) {
+      setPaceError("");
+      onChange("");
+      return;
+    }
+
+    const parsedStart = parsePaceParts(
+      nextStartMinute,
+      nextStartSecond
+    );
+    const parsedEnd = parsePaceParts(
+      nextEndMinute,
+      nextEndSecond
+    );
+
+    if (!parsedStart || !parsedEnd) {
+      setPaceError(
+        language === "th"
+          ? "กรุณากรอกนาทีและวินาทีให้ครบ โดยวินาทีต้องอยู่ระหว่าง 00–59"
+          : "Enter both minutes and seconds. Seconds must be between 00–59."
+      );
+      onChange("");
+      return;
+    }
+
+    if (parsedStart.totalSeconds >= parsedEnd.totalSeconds) {
+      setPaceError(
+        language === "th"
+          ? "เพซเริ่มต้นต้องน้อยกว่าเพซสิ้นสุด"
+          : "Start pace must be lower than end pace."
+      );
+      onChange("");
+      return;
+    }
+
+    setPaceError("");
+    onChange(`${parsedStart.label}–${parsedEnd.label}`);
+  };
+
+  const handleStartMinute = (value: string) => {
+    const next = cleanDigits(value);
+    setStartMinute(next);
+    updateRange(next, startSecond, endMinute, endSecond);
+  };
+
+  const handleStartSecond = (value: string) => {
+    const next = cleanDigits(value);
+    setStartSecond(next);
+    updateRange(startMinute, next, endMinute, endSecond);
+  };
+
+  const handleEndMinute = (value: string) => {
+    const next = cleanDigits(value);
+    setEndMinute(next);
+    updateRange(startMinute, startSecond, next, endSecond);
+  };
+
+  const handleEndSecond = (value: string) => {
+    const next = cleanDigits(value);
+    setEndSecond(next);
+    updateRange(startMinute, startSecond, endMinute, next);
+  };
+
+  const startValid = Boolean(
+    parsePaceParts(startMinute, startSecond)
+  );
+  const endValid = Boolean(
+    parsePaceParts(endMinute, endSecond)
+  );
+
   return (
-    <div className="event-pace-range-picker">
-      <div className="event-pace-wheel-block">
-        <div className="event-pace-wheel-heading">
-          <span>{language === "th" ? "เพซเริ่มต้น" : "START PACE"}</span>
-          <strong>{compact(start)}</strong>
+    <div className="event-pace-range-picker event-pace-split">
+      <div className="event-pace-split-grid">
+        <label className="event-pace-split-field">
+          <span>
+            {language === "th" ? "เพซเริ่มต้น" : "START PACE"}
+          </span>
+
+          <div
+            className={`event-pace-split-input ${
+              startValid ? "is-complete" : ""
+            }`}
+          >
+            <input
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={2}
+              value={startMinute}
+              onChange={(event) =>
+                handleStartMinute(event.target.value)
+              }
+              placeholder="05"
+              aria-label={
+                language === "th"
+                  ? "นาทีของเพซเริ่มต้น"
+                  : "Start pace minutes"
+              }
+            />
+
+            <b className="event-pace-fixed-colon" aria-hidden="true">
+              :
+            </b>
+
+            <input
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={2}
+              value={startSecond}
+              onChange={(event) =>
+                handleStartSecond(event.target.value)
+              }
+              placeholder="30"
+              aria-label={
+                language === "th"
+                  ? "วินาทีของเพซเริ่มต้น"
+                  : "Start pace seconds"
+              }
+            />
+
+          </div>
+        </label>
+
+        <div className="event-pace-split-arrow" aria-hidden="true">
+          →
         </div>
-        <PaceWheelPicker
-          value={start}
-          compact
-          onChange={(nextStart) => updateRange(nextStart, end)}
-        />
+
+        <label className="event-pace-split-field">
+          <span>
+            {language === "th" ? "เพซสิ้นสุด" : "END PACE"}
+          </span>
+
+          <div
+            className={`event-pace-split-input ${
+              endValid ? "is-complete" : ""
+            }`}
+          >
+            <input
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={2}
+              value={endMinute}
+              onChange={(event) =>
+                handleEndMinute(event.target.value)
+              }
+              placeholder="07"
+              aria-label={
+                language === "th"
+                  ? "นาทีของเพซสิ้นสุด"
+                  : "End pace minutes"
+              }
+            />
+
+            <b className="event-pace-fixed-colon" aria-hidden="true">
+              :
+            </b>
+
+            <input
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={2}
+              value={endSecond}
+              onChange={(event) =>
+                handleEndSecond(event.target.value)
+              }
+              placeholder="00"
+              aria-label={
+                language === "th"
+                  ? "วินาทีของเพซสิ้นสุด"
+                  : "End pace seconds"
+              }
+            />
+
+          </div>
+        </label>
       </div>
 
-      <div className="event-pace-range-separator">
-        <span>{language === "th" ? "ถึง" : "TO"}</span>
-      </div>
+      <p className="event-pace-split-hint">
+        {language === "th"
+          ? "กรอกเป็น นาที:วินาที โดยเพซเริ่มต้นต้องน้อยกว่าเพซสิ้นสุด"
+          : "Enter pace as min:sec. Start pace must be lower than end pace."}
+      </p>
 
-      <div className="event-pace-wheel-block">
-        <div className="event-pace-wheel-heading">
-          <span>{language === "th" ? "เพซสิ้นสุด" : "END PACE"}</span>
-          <strong>{compact(end)}</strong>
-        </div>
-        <PaceWheelPicker
-          value={end}
-          compact
-          onChange={(nextEnd) => updateRange(start, nextEnd)}
-        />
-      </div>
-
-      <div className="event-pace-range-summary">
-        <span>{language === "th" ? "ช่วงเพซที่ตั้งไว้" : "PACE RANGE"}</span>
-        <strong>
-          {compact(start)}–{compact(end)} {language === "th" ? "/ กม." : "/ km"}
-        </strong>
-      </div>
+      {paceError && (
+        <p className="event-pace-split-error" role="alert">
+          {paceError}
+        </p>
+      )}
     </div>
   );
 }
-
 
 function ChipChoices({
   options,
@@ -2208,7 +2604,86 @@ function LocationParkSelector({
   onChange: (districts: string[], parks: string[]) => void;
   language?: AppLanguage;
 }) {
+  const [districtSearch, setDistrictSearch] = useState("");
   const availableParks = getAvailableParksForLocations(selectedDistricts);
+
+  const isBangkokProvince = province === "Bangkok";
+
+  const areaEyebrow =
+    language === "th"
+      ? isBangkokProvince
+        ? "เขต / แขวง"
+        : "อำเภอ / ตำบล"
+      : isBangkokProvince
+        ? "DISTRICT / SUBDISTRICT"
+        : "AMPHOE / TAMBON";
+
+  const areaTitle =
+    language === "th"
+      ? isBangkokProvince
+        ? "เลือกเขต / แขวงที่ต้องการวิ่ง"
+        : "เลือกอำเภอ / ตำบลที่ต้องการวิ่ง"
+      : isBangkokProvince
+        ? "Choose your district / subdistrict"
+        : "Choose your amphoe / tambon";
+
+  const areaSearchPlaceholder =
+    language === "th"
+      ? isBangkokProvince
+        ? "ค้นหาเขตหรือแขวง"
+        : "ค้นหาอำเภอหรือตำบล"
+      : isBangkokProvince
+        ? "Search district or subdistrict"
+        : "Search amphoe or tambon";
+
+  const normalizedSearch = districtSearch
+    .trim()
+    .toLocaleLowerCase();
+
+  const filteredDistrictOptions = districtOptions
+    .filter((district) => {
+      if (!normalizedSearch) return true;
+
+      // Search against BOTH languages at all times.
+      // This keeps Runner and Founder behavior identical and lets users
+      // type only part of either the Thai or English district name.
+      const canonicalEnglish =
+        PROFILE_VALUE_EN[district] || district;
+
+      const englishSearchText = [
+        canonicalEnglish,
+        profileValueForLanguage(canonicalEnglish, "en"),
+      ]
+        .join(" ")
+        .toLocaleLowerCase();
+
+      const thaiSearchText = [
+        PROFILE_VALUE_TH[canonicalEnglish] || "",
+        profileValueForLanguage(canonicalEnglish, "th"),
+      ]
+        .join(" ")
+        .toLocaleLowerCase();
+
+      return (
+        englishSearchText.includes(normalizedSearch) ||
+        thaiSearchText.includes(normalizedSearch)
+      );
+    })
+    .sort((a, b) =>
+      profileValueForLanguage(a, language).localeCompare(
+        profileValueForLanguage(b, language),
+        language === "th" ? "th" : "en",
+        { sensitivity: "base" }
+      )
+    );
+
+  const sortedAvailableParks = [...availableParks].sort((a, b) =>
+    profileValueForLanguage(a, language).localeCompare(
+      profileValueForLanguage(b, language),
+      language === "th" ? "th" : "en",
+      { sensitivity: "base" }
+    )
+  );
 
   const toggleDistrict = (district: string) => {
     const nextDistricts = selectedDistricts.includes(district)
@@ -2253,12 +2728,8 @@ function LocationParkSelector({
       <section className="ut-area-park-group">
         <div className="ut-subcategory-heading">
           <div>
-            <span>{language === "th" ? "พื้นที่" : "AREA"}</span>
-            <strong>
-              {language === "th"
-                ? "เลือกพื้นที่ที่ต้องการวิ่ง"
-                : "Choose your running areas"}
-            </strong>
+            <span>{areaEyebrow}</span>
+            <strong>{areaTitle}</strong>
           </div>
 
           <small>
@@ -2272,27 +2743,60 @@ function LocationParkSelector({
           </small>
         </div>
 
-        <div className="ut-choice-grid district-grid">
-          {districtOptions.map((district) => {
-            const selected = selectedDistricts.includes(district);
+        <label className="ut-district-search">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="10.8" cy="10.8" r="6.1" />
+            <path d="m15.4 15.4 4.2 4.2" />
+          </svg>
+          <input
+            value={districtSearch}
+            onChange={(event) => setDistrictSearch(event.target.value)}
+            placeholder={areaSearchPlaceholder}
+          />
+          {districtSearch && (
+            <button
+              type="button"
+              onClick={() => setDistrictSearch("")}
+              aria-label={language === "th" ? "ล้างการค้นหา" : "Clear search"}
+            >
+              ×
+            </button>
+          )}
+        </label>
 
-            return (
-              <button
-                type="button"
-                key={district}
-                className={
-                  selected
-                    ? "ut-choice-card selected"
-                    : "ut-choice-card"
-                }
-                onClick={() => toggleDistrict(district)}
-              >
-                <strong>{profileValueForLanguage(district, language)}</strong>
-                {selected && <span>✓</span>}
-              </button>
-            );
-          })}
-        </div>
+        {filteredDistrictOptions.length > 0 ? (
+          <div className="ut-choice-grid district-grid">
+            {filteredDistrictOptions.map((district) => {
+              const selected = selectedDistricts.includes(district);
+
+              return (
+                <button
+                  type="button"
+                  key={district}
+                  className={
+                    selected
+                      ? "ut-choice-card selected"
+                      : "ut-choice-card"
+                  }
+                  onClick={() => toggleDistrict(district)}
+                >
+                  <strong>{profileValueForLanguage(district, language)}</strong>
+                  {selected && <span>✓</span>}
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="ut-district-empty">
+            {language === "th"
+              ? `ไม่พบ${isBangkokProvince ? "เขตหรือแขวง" : "อำเภอหรือตำบล"}ที่ตรงกับ “${districtSearch}”`
+              : `No ${
+                  isBangkokProvince
+                    ? "district or subdistrict"
+                    : "amphoe or tambon"
+                } matches “${districtSearch}”`}
+          </div>
+        )}
       </section>
 
       {!clubsInSelectedArea && selectedDistricts.length > 0 && (
@@ -2306,7 +2810,7 @@ function LocationParkSelector({
       <section className="ut-area-park-group park-group">
         <div className="ut-subcategory-heading">
           <div>
-            <span>{language === "th" ? "สวน" : "PARK"}</span>
+            <span>{language === "th" ? "สวนสาธารณะ" : "PARK / RUNNING SPOT"}</span>
             <strong>
               {language === "th"
                 ? "เลือกสวนหรือจุดวิ่งที่ต้องการ"
@@ -2328,18 +2832,22 @@ function LocationParkSelector({
         {selectedDistricts.length === 0 ? (
           <div className="ut-park-empty">
             {language === "th"
-              ? "เลือกพื้นที่อย่างน้อย 1 แห่งก่อน เพื่อดูตัวเลือกสวนและจุดวิ่ง"
-              : "Select at least one Area first to see park choices."}
+              ? `เลือก${isBangkokProvince ? "เขตหรือแขวง" : "อำเภอหรือตำบล"}อย่างน้อย 1 แห่งก่อน เพื่อดูสวนและจุดวิ่งในพื้นที่นั้น`
+              : `Select at least one ${
+                  isBangkokProvince
+                    ? "district or subdistrict"
+                    : "amphoe or tambon"
+                } first to see nearby parks and running spots.`}
           </div>
-        ) : availableParks.length === 0 ? (
+        ) : sortedAvailableParks.length === 0 ? (
           <div className="ut-park-empty">
             {language === "th"
-              ? "ยังไม่มีคำแนะนำสวนสำหรับพื้นที่ที่เลือก แต่คุณสามารถดำเนินการต่อได้"
-              : "No park suggestions are available for the selected area yet, but you can still continue."}
+              ? "ยังไม่มีสวนหรือจุดวิ่งแนะนำสำหรับพื้นที่ที่เลือก"
+              : "No park or running-spot suggestions are available for the selected area yet."}
           </div>
         ) : (
           <div className="ut-choice-grid area-park park-choices">
-            {availableParks.map((park) => {
+            {sortedAvailableParks.map((park) => {
               const selected = selectedParks.includes(park);
 
               return (
@@ -2364,7 +2872,6 @@ function LocationParkSelector({
     </div>
   );
 }
-
 
 const RUNRISE_LANGUAGE_KEY = "runrise-language";
 
@@ -3319,6 +3826,9 @@ function LanguageSettings({
 }
 
 
+// Retained for backward-compatible profile surfaces.
+void LanguageSettings;
+
 const initialFriendThreads: FriendThread[] = [
   {
     id: 1,
@@ -3437,6 +3947,44 @@ function App() {
     };
   });
 
+  const [runnerOnboardingComplete, setRunnerOnboardingComplete] =
+    useState<boolean>(() =>
+      readStorage<boolean>(
+        "runrise-runner-onboarding-complete",
+        Boolean(
+          profile.runningExperience.trim() &&
+            profile.pace.trim() &&
+            profile.preferredDistance.trim() &&
+            profile.province.trim() &&
+            profile.location.length > 0 &&
+            profile.time.trim() &&
+            profile.goal.length > 0 &&
+            profile.vibe.length > 0
+        )
+      )
+    );
+
+  const [founderOnboardingComplete, setFounderOnboardingComplete] =
+    useState<boolean>(() =>
+      readStorage<boolean>(
+        "runrise-founder-onboarding-complete",
+        Boolean(
+          founderSetup.roleInClub &&
+            founderSetup.clubName.trim() &&
+            founderSetup.clubDescription.trim() &&
+            founderSetup.baseType &&
+            founderSetup.levels.length > 0 &&
+            founderSetup.paceRanges.length > 0 &&
+            founderSetup.distances.length > 0 &&
+            founderSetup.province &&
+            founderSetup.locations.length > 0 &&
+            founderSetup.days.length > 0 &&
+            founderSetup.times.length > 0 &&
+            founderSetup.vibe.length > 0
+        )
+      )
+    );
+
   const [founderClubId, setFounderClubId] = useState<number | null>(() => {
     const savedFounderClubId = readStorage<number | null>(
       "runrise-founder-club-id",
@@ -3517,6 +4065,10 @@ const [clubs, setClubs] = useState<Club[]>(() => {
     )
   );
 
+  const [savedEvents, setSavedEvents] = useState<number[]>(() =>
+    readStorage<number[]>("runrise-saved-events", [])
+  );
+
   const [joinedEvents, setJoinedEvents] = useState<number[]>(() =>
     readStorage<number[]>("runrise-joined", []).filter(
       (eventId) => eventId !== 601
@@ -3552,6 +4104,17 @@ const [clubs, setClubs] = useState<Club[]>(() => {
   const [clubBackPage, setClubBackPage] =
     useState<Page>("runner-home");
   const [selectedEventId, setSelectedEventId] = useState(101);
+
+  const [founderEventsFilter, setFounderEventsFilter] = useState<{
+    mode: "latest" | "month" | "year";
+    month: number;
+    year: number;
+  }>({
+    mode: "latest",
+    month: 0,
+    year: 2026,
+  });
+
   const [eventBackPage, setEventBackPage] = useState<Page>("club");
   const [joinSuccessEventId, setJoinSuccessEventId] =
     useState<number | null>(null);
@@ -3578,6 +4141,20 @@ const [clubs, setClubs] = useState<Club[]>(() => {
   }, [founderSetup]);
 
   useEffect(() => {
+    localStorage.setItem(
+      "runrise-runner-onboarding-complete",
+      JSON.stringify(runnerOnboardingComplete)
+    );
+  }, [runnerOnboardingComplete]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "runrise-founder-onboarding-complete",
+      JSON.stringify(founderOnboardingComplete)
+    );
+  }, [founderOnboardingComplete]);
+
+  useEffect(() => {
     if (founderClubId === null) {
       localStorage.removeItem("runrise-founder-club-id");
       return;
@@ -3600,6 +4177,13 @@ const [clubs, setClubs] = useState<Club[]>(() => {
   useEffect(() => {
     localStorage.setItem("runrise-saved", JSON.stringify(savedClubs));
   }, [savedClubs]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "runrise-saved-events",
+      JSON.stringify(savedEvents)
+    );
+  }, [savedEvents]);
 
   useEffect(() => {
     localStorage.setItem("runrise-joined", JSON.stringify(joinedEvents));
@@ -3625,6 +4209,13 @@ const [clubs, setClubs] = useState<Club[]>(() => {
     rating: number,
     comment: string
   ) => {
+    const reviewedEvent = [...events]
+      .filter(
+        (event) =>
+          event.clubId === clubId &&
+          joinedEvents.includes(event.id)
+      )
+      .sort((a, b) => b.id - a.id)[0];
     const author =
       user?.name?.trim() ||
       profile.name?.trim() ||
@@ -3641,6 +4232,8 @@ const [clubs, setClubs] = useState<Club[]>(() => {
           ? "เมื่อสักครู่"
           : "Just now",
       source: "user",
+      eventId: reviewedEvent?.id,
+      eventName: reviewedEvent?.name,
     };
 
     setClubReviews((previous) => [
@@ -3657,6 +4250,8 @@ const [clubs, setClubs] = useState<Club[]>(() => {
   };
 
   const completeFounderSetup = () => {
+    setFounderOnboardingComplete(true);
+
     const selectedLevel = founderSetup.levels.includes("All Levels")
       ? "All Levels"
       : founderSetup.levels.length > 1
@@ -3846,6 +4441,14 @@ const [clubs, setClubs] = useState<Club[]>(() => {
       previous.includes(clubId)
         ? previous.filter((id) => id !== clubId)
         : [...previous, clubId]
+    );
+  };
+
+  const toggleEventSave = (eventId: number) => {
+    setSavedEvents((previous) =>
+      previous.includes(eventId)
+        ? previous.filter((id) => id !== eventId)
+        : [eventId, ...previous]
     );
   };
 
@@ -4049,20 +4652,19 @@ const [clubs, setClubs] = useState<Club[]>(() => {
 
     if (nextRole === "runner") {
       setPage(
-        isRunnerProfileComplete(profile)
+        runnerOnboardingComplete
           ? "runner-home"
           : "runner-onboarding"
       );
       return;
     }
 
-    if (founderClub) {
-      setPage("founder-dashboard");
-      return;
-    }
-
-    if (isFounderSetupComplete(founderSetup)) {
-      completeFounderSetup();
+    if (founderOnboardingComplete) {
+      if (founderClub) {
+        setPage("founder-dashboard");
+      } else {
+        completeFounderSetup();
+      }
       return;
     }
 
@@ -4076,6 +4678,8 @@ const [clubs, setClubs] = useState<Club[]>(() => {
 
     setUser(null);
     setRole("runner");
+    setRunnerOnboardingComplete(false);
+    setFounderOnboardingComplete(false);
     setProfile({
       ...defaultProfile,
     });
@@ -4190,7 +4794,7 @@ const [clubs, setClubs] = useState<Club[]>(() => {
             onRunner={() => {
               setRole("runner");
               setPage(
-                isRunnerProfileComplete(profile)
+                runnerOnboardingComplete
                   ? "runner-home"
                   : "runner-onboarding"
               );
@@ -4198,18 +4802,12 @@ const [clubs, setClubs] = useState<Club[]>(() => {
             onFounder={() => {
               setRole("founder");
 
-              // If this user already owns a newly-created Founder club,
-              // open the dashboard normally.
-              if (founderClub) {
-                setPage("founder-dashboard");
-                return;
-              }
-
-              // Old sessions may already have complete Founder answers
-              // but no dedicated Founder club yet. Create one from those
-              // answers instead of opening an empty dashboard.
-              if (isFounderSetupComplete(founderSetup)) {
-                completeFounderSetup();
+              if (founderOnboardingComplete) {
+                if (founderClub) {
+                  setPage("founder-dashboard");
+                } else {
+                  completeFounderSetup();
+                }
                 return;
               }
 
@@ -4226,6 +4824,7 @@ const [clubs, setClubs] = useState<Club[]>(() => {
             setProfile={setProfile}
             onBack={() => setPage("role")}
             onFinish={() => {
+              setRunnerOnboardingComplete(true);
               setPage("runner-home");
             }}
           />
@@ -4382,6 +4981,7 @@ const [clubs, setClubs] = useState<Club[]>(() => {
               ) || null
             }
             joined={joinedEvents.includes(selectedEvent.id)}
+            saved={savedEvents.includes(selectedEvent.id)}
             joinSuccess={
               joinSuccessEventId === selectedEvent.id
             }
@@ -4390,6 +4990,7 @@ const [clubs, setClubs] = useState<Club[]>(() => {
               setPage(eventBackPage);
             }}
             onJoin={() => joinEvent(selectedEvent.id)}
+            onToggleSave={() => toggleEventSave(selectedEvent.id)}
             onCancel={() => {
               setJoinSuccessEventId(null);
               cancelJoinedEvent(selectedEvent.id);
@@ -4497,6 +5098,17 @@ const [clubs, setClubs] = useState<Club[]>(() => {
             events={events}
             clubs={clubs}
             joinedEvents={joinedEvents}
+            savedClubs={clubs.filter((club) =>
+              savedClubs.includes(club.id)
+            )}
+            savedEvents={events.filter((event) =>
+              savedEvents.includes(event.id)
+            )}
+            onSavedClub={(clubId: number) => {
+              setSelectedClubId(clubId);
+              setClubBackPage("runner-profile");
+              setPage("club");
+            }}
             onEvent={(event: RunEvent) => {
               setSelectedEventId(event.id);
               setSelectedClubId(event.clubId);
@@ -4527,11 +5139,11 @@ const [clubs, setClubs] = useState<Club[]>(() => {
         {page === "founder-dashboard" && founderClub && (
           <FounderDashboard
             language={language}
-            setLanguage={setLanguage}
             founderName={user?.name || "Founder"}
             club={founderClub}
             events={founderClubEvents}
             registrations={registrations}
+            reviews={clubReviews.filter((review) => review.clubId === founderClub.id)}
             onCreateEvent={() => setPage("founder-events")}
             onManageEvent={(event: RunEvent) => {
               setSelectedEventId(event.id);
@@ -4548,7 +5160,36 @@ const [clubs, setClubs] = useState<Club[]>(() => {
               setScanCandidateRegistrationId(null);
               setPage("founder-qr-scanner");
             }}
+            onViewEvents={(filter?: {
+              mode: "latest" | "month" | "year";
+              month: number;
+              year: number;
+            }) => {
+              if (filter) {
+                setFounderEventsFilter(filter);
+              } else {
+                setFounderEventsFilter((previous) => ({
+                  ...previous,
+                  mode: "latest",
+                }));
+              }
+              setPage("founder-events");
+            }}
+            onViewReviews={() =>
+              setPage("founder-runner-feedback")
+            }
             onNav={setPage}
+          />
+        )}
+
+        {page === "founder-runner-feedback" && founderClub && (
+          <FounderRunnerFeedback
+            language={language}
+            club={founderClub}
+            reviews={clubReviews.filter(
+              (review) => review.clubId === founderClub.id
+            )}
+            onBack={() => setPage("founder-dashboard")}
           />
         )}
 
@@ -4573,6 +5214,8 @@ const [clubs, setClubs] = useState<Club[]>(() => {
             clubId={founderClub.id}
             events={founderClubEvents}
             registrations={registrations}
+            eventFilter={founderEventsFilter}
+            setEventFilter={setFounderEventsFilter}
             setEvents={setEvents}
             onManageEvent={(event: RunEvent) => {
               setSelectedEventId(event.id);
@@ -4591,6 +5234,8 @@ const [clubs, setClubs] = useState<Club[]>(() => {
             registrations={registrations.filter(
               (registration) => registration.eventId === selectedEvent.id
             )}
+            runnerProfile={profile}
+            currentRunnerId={user?.email || "RUNNER-001"}
             onBack={() => setPage("founder-events")}
             onScan={() => startFounderScanner(selectedEvent.id)}
           />
@@ -5413,61 +6058,134 @@ function RunnerOnboarding({
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
 
-  const questions = [
-    {
-      title: "Running experience",
-      subtitle: "How long have you been running?",
-      helper:
-        "This helps us recommend Run Clubs that feel comfortable for your current experience.",
-    },
-    {
-      title: "Pace (min/km)",
-      subtitle: "What is your usual Easy Run pace?",
-      helper:
-        "Choose the pace you use for most comfortable training runs, not your race pace.",
-    },
-    {
-      title: "Favorite distance",
-      subtitle: "Which distance are you most interested in running?",
-      helper:
-        "Choose the distance you are most interested in joining. It does not have to be your everyday training distance.",
-    },
-    {
-      title: "Province",
-      subtitle: "Which province would you like to run in?",
-      helper:
-        "Choose your main area first. You can change this later.",
-    },
-    {
-      title: "District / Amphoe",
-      subtitle: "Which district or amphoe would you prefer?",
-      helper:
-        "Choose one or more areas. Recommendations will prioritize these locations.",
-    },
-    {
-      title: "Running Time",
-      subtitle: "When do you usually prefer to run?",
-      helper:
-        "This helps us prioritize events that fit your usual schedule.",
-    },
-    {
-      title: "Main goal",
-      subtitle: "What is your main goal for joining a Run Club?",
-      helper:
-        "Choose the goals that matter to you. You can select more than one.",
-    },
-    {
-      title: "Community preference",
-      subtitle: "What kind of Run Club atmosphere do you enjoy?",
-      helper:
-        "Choose all community styles that feel comfortable for you. You can select more than one.",
-    },
-  ];
+  const runnerAreaQuestion =
+    profile.province === "Bangkok"
+      ? language === "th"
+        ? {
+            title: "เขต / แขวง",
+            subtitle: "คุณอยากวิ่งในเขตหรือแขวงไหน?",
+            helper:
+              "เลือกได้มากกว่า 1 พื้นที่ และเลือกสวนหรือจุดวิ่งที่อยู่ในพื้นที่นั้นต่อได้",
+          }
+        : {
+            title: "District / Subdistrict",
+            subtitle: "Which district or subdistrict would you prefer?",
+            helper:
+              "Select one or more areas, then choose parks or running spots in those areas.",
+          }
+      : language === "th"
+        ? {
+            title: "อำเภอ / ตำบล",
+            subtitle: "คุณอยากวิ่งในอำเภอหรือตำบลไหน?",
+            helper:
+              "ระบบจะแสดงเฉพาะพื้นที่และสวนที่อยู่ในจังหวัดที่คุณเลือกจากข้อก่อนหน้า",
+          }
+        : {
+            title: "Amphoe / Tambon",
+            subtitle: "Which amphoe or tambon would you prefer?",
+            helper:
+              "Only areas and parks from the province selected in the previous step are shown.",
+          };
+
+  const questions =
+    language === "th"
+      ? [
+          {
+            title: "ประสบการณ์วิ่ง",
+            subtitle: "คุณวิ่งมาแล้วนานแค่ไหน?",
+            helper:
+              "ข้อมูลนี้ช่วยให้เราแนะนำ Run Club ที่เหมาะกับประสบการณ์ปัจจุบันของคุณ",
+          },
+          {
+            title: "เพซ (นาที/กม.)",
+            subtitle: "เพซ Easy Run ที่คุณใช้เป็นประจำคือเท่าไร?",
+            helper:
+              "เลือกเพซที่คุณใช้ตอนวิ่งสบาย ๆ เป็นหลัก ไม่จำเป็นต้องเป็นเพซแข่งขัน",
+          },
+          {
+            title: "ระยะที่สนใจ",
+            subtitle: "คุณสนใจวิ่งระยะไหนมากที่สุด?",
+            helper:
+              "เลือกระยะที่คุณอยากเข้าร่วมกับคลับหรือกิจกรรมมากที่สุด",
+          },
+          {
+            title: "จังหวัด",
+            subtitle: "คุณอยากวิ่งในจังหวัดไหน?",
+            helper:
+              "เลือกจังหวัดหลักก่อน แล้วระบบจะคัดพื้นที่และสวนของจังหวัดนั้นให้ในข้อถัดไป",
+          },
+          runnerAreaQuestion,
+          {
+            title: "ช่วงเวลาวิ่ง",
+            subtitle: "ปกติคุณสะดวกวิ่งช่วงไหน?",
+            helper:
+              "ข้อมูลนี้ช่วยจัดลำดับกิจกรรมที่ตรงกับช่วงเวลาที่คุณสะดวก",
+          },
+          {
+            title: "เป้าหมายหลัก",
+            subtitle: "คุณอยากเข้าร่วม Run Club เพื่ออะไร?",
+            helper:
+              "เลือกได้มากกว่า 1 เป้าหมายตามสิ่งที่สำคัญกับคุณ",
+          },
+          {
+            title: "สไตล์การวิ่งของคุณ",
+            subtitle: "รูปแบบการวิ่งแบบไหนตรงกับคุณมากที่สุด?",
+            helper:
+              "เลือกได้มากกว่า 1 ข้อ เพื่อให้ Runrise เข้าใจรูปแบบการวิ่งของคุณและแนะนำคลับได้เหมาะสมยิ่งขึ้น",
+          },
+        ]
+      : [
+          {
+            title: "Running experience",
+            subtitle: "How long have you been running?",
+            helper:
+              "This helps us recommend Run Clubs that feel comfortable for your current experience.",
+          },
+          {
+            title: "Pace (min/km)",
+            subtitle: "What is your usual Easy Run pace?",
+            helper:
+              "Choose the pace you use for most comfortable training runs, not your race pace.",
+          },
+          {
+            title: "Favorite distance",
+            subtitle: "Which distance are you most interested in running?",
+            helper:
+              "Choose the distance you are most interested in joining.",
+          },
+          {
+            title: "Province",
+            subtitle: "Which province would you like to run in?",
+            helper:
+              "Choose a province first. The next step will show only its relevant areas and parks.",
+          },
+          runnerAreaQuestion,
+          {
+            title: "Running time",
+            subtitle: "When do you usually prefer to run?",
+            helper:
+              "This helps us prioritize events that fit your usual schedule.",
+          },
+          {
+            title: "Main goal",
+            subtitle: "What is your main goal for joining a Run Club?",
+            helper:
+              "Choose the goals that matter to you. You can select more than one.",
+          },
+          {
+            title: "Your running style",
+            subtitle: "Which running styles describe you best?",
+            helper:
+              "Choose more than one if needed so Runrise can better understand your running style and recommend suitable clubs.",
+          },
+        ];
 
   const totalSteps = questions.length;
   const currentStepNumber = step + 1;
   const remainingSteps = Math.max(0, totalSteps - currentStepNumber);
   const progressPercent = (currentStepNumber / totalSteps) * 100;
+
+  const backLabel = language === "th" ? "ย้อนกลับ" : "Back";
 
   const stepRemainingLabel =
     remainingSteps === 0
@@ -5486,7 +6204,8 @@ function RunnerOnboarding({
     Boolean(profile.pace),
     Boolean(profile.preferredDistance),
     Boolean(profile.province),
-    profile.location.length > 0,
+    profile.location.length > 0 &&
+      profile.parks.length > 0,
     Boolean(profile.time),
     profile.goal.length > 0,
     profile.vibe.length > 0,
@@ -5558,7 +6277,7 @@ function RunnerOnboarding({
         <div className="ut-onboarding-scroll">
           <div className="ut-onboarding-top intro-top">
             <button type="button" className="ut-back" onClick={onBack}>
-              ← Back
+              ← {backLabel}
             </button>
 
             <LanguageQuickSwitch
@@ -5607,7 +6326,7 @@ function RunnerOnboarding({
       <div className="ut-onboarding-scroll">
         <div className="ut-onboarding-top">
           <button type="button" className="ut-back" onClick={goBack}>
-            ← Back
+            ← {backLabel}
           </button>
 
           <div className="ut-onboarding-top-actions">
@@ -5664,9 +6383,36 @@ function RunnerOnboarding({
           <p className="ut-question-prompt">{questions[step].subtitle}</p>
 
           <div className="ut-question-explainer">
-            <span>Why we ask</span>
+            <span>
+              {language === "th" ? "ทำไมเราถึงถาม" : "WHY WE ASK"}
+            </span>
             <p>{questions[step].helper}</p>
           </div>
+
+          {step === 1 && (
+            <div className="ut-question-explainer ut-pace-recommend">
+              <span>
+                {language === "th"
+                  ? "แนะนำสำหรับมือใหม่"
+                  : "Recommend"}
+              </span>
+              <p>
+                {language === "th" ? (
+                  <>
+                    Pace คือ เวลาที่ใช้วิ่ง 1 กิโลเมตร
+                    <br />
+                    เลขยิ่งน้อย = วิ่งเร็ว
+                  </>
+                ) : (
+                  <>
+                    Pace is the time used to run 1 kilometer.
+                    <br />
+                    Lower number = faster running.
+                  </>
+                )}
+              </p>
+            </div>
+          )}
 
           <div
             key={`onboarding-answer-${step}-${language}`}
@@ -5700,10 +6446,7 @@ function RunnerOnboarding({
                     updateProfile("pace", value)
                   }
                 />
-                <p className="ut-helper pace-selected-helper">
-                  Selected Easy Run pace:{" "}
-                  <strong>{profile.pace} / km</strong>
-                </p>
+
               </>
             )}
 
@@ -5740,7 +6483,9 @@ function RunnerOnboarding({
                     }
                     onClick={() => setProvince(province)}
                   >
-                    <strong>{province}</strong>
+                    <strong>
+                      {profileValueForLanguage(province, language)}
+                    </strong>
                     {profile.province === province && <span>✓</span>}
                   </button>
                 ))}
@@ -5749,6 +6494,7 @@ function RunnerOnboarding({
 
             {step === 4 && (
               <LocationParkSelector
+                language={language}
                 province={profile.province}
                 districtOptions={districtOptions}
                 selectedDistricts={profile.location}
@@ -5795,19 +6541,46 @@ function RunnerOnboarding({
 
             {step === 7 && (
               <>
-                <ChipChoices
-                  options={COMMUNITY_STYLES}
-                  value={profile.vibe}
-                  multi
-                  onChange={(value) =>
-                    updateProfile("vibe", value as string[])
-                  }
-                />
+                <div className="ut-chip-wrap">
+                  {RUNNER_RUNNING_STYLE_OPTIONS.map((option) => {
+                    const selected = profile.vibe.includes(option);
+
+                    return (
+                      <button
+                        type="button"
+                        key={option}
+                        className={
+                          selected
+                            ? "ut-chip selected"
+                            : "ut-chip"
+                        }
+                        onClick={() =>
+                          updateProfile(
+                            "vibe",
+                            selected
+                              ? profile.vibe.filter(
+                                  (item) => item !== option
+                                )
+                              : [...profile.vibe, option]
+                          )
+                        }
+                      >
+                        {profileValueForLanguage(option, language)}
+                        {selected && (
+                          <span className="ut-chip-check">✓</span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+
                 <p
                   className="ut-helper"
                   style={{ marginTop: 12, textAlign: "right" }}
                 >
-                  You can select more than one community style.
+                  {language === "th"
+                    ? "เลือกได้มากกว่า 1 ข้อ"
+                    : "You can select more than one option."}
                 </p>
               </>
             )}
@@ -5822,8 +6595,12 @@ function RunnerOnboarding({
           onClick={goNext}
         >
           {step === totalSteps - 1
-            ? "Complete Your Profile"
-            : "Continue"}
+            ? language === "th"
+              ? "สร้างโปรไฟล์ให้เสร็จ"
+              : "Complete Your Profile"
+            : language === "th"
+              ? "ดำเนินการต่อ"
+              : "Continue"}
         </button>
       </div>
     </main>
@@ -5848,6 +6625,35 @@ function FounderOnboarding({
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
 
+  const founderAreaQuestion =
+    profile.province === "Bangkok"
+      ? language === "th"
+        ? {
+            title: "เขต / แขวงและจุดวิ่ง",
+            subtitle: "คลับของคุณมักจัดวิ่งในเขต แขวง หรือสวนใด?",
+            helper:
+              "ระบบจะแสดงเฉพาะเขต แขวง และสวนในกรุงเทพมหานครตามจังหวัดที่เลือกไว้",
+          }
+        : {
+            title: "Districts, subdistricts & running spots",
+            subtitle: "Which Bangkok districts, subdistricts, or parks do you usually run in?",
+            helper:
+              "Only Bangkok areas and their relevant parks are shown from your province selection.",
+          }
+      : language === "th"
+        ? {
+            title: "อำเภอ / ตำบลและจุดวิ่ง",
+            subtitle: "คลับของคุณมักจัดวิ่งในอำเภอ ตำบล หรือสวนใด?",
+            helper:
+              "ระบบจะแสดงเฉพาะอำเภอ ตำบล และสวนที่อยู่ในจังหวัดที่คุณเลือกไว้",
+          }
+        : {
+            title: "Amphoe, tambon & running spots",
+            subtitle: "Which amphoes, tambons, or parks do you usually run in?",
+            helper:
+              "Only areas and parks from the province selected in question 03 are shown.",
+          };
+
   const questions =
     language === "th"
       ? [
@@ -5864,10 +6670,10 @@ function FounderOnboarding({
               "ชื่อ คำอธิบาย และรูปคลับจะเป็นข้อมูลหลักที่นักวิ่งเห็นเมื่อเปิดดูโปรไฟล์คลับของคุณ",
           },
           {
-            title: "คลับวิ่งของคุณอยู่ที่ไหน?",
-            subtitle: "คลับวิ่งของคุณจัดกิจกรรมในพื้นที่ใดเป็นหลัก?",
+            title: "จังหวัด",
+            subtitle: "คลับวิ่งของคุณจัดกิจกรรมในจังหวัดใดเป็นหลัก?",
             helper:
-              "ข้อมูลนี้ช่วยให้ Runrise แนะนำคลับให้กับนักวิ่งที่อยู่ในพื้นที่ใกล้เคียง",
+              "เลือกจังหวัดหลักก่อน แล้วในข้อ 07 ระบบจะคัดเฉพาะพื้นที่และสวนของจังหวัดนั้นให้",
           },
           {
             title: "ระดับนักวิ่งที่รองรับ",
@@ -5887,12 +6693,7 @@ function FounderOnboarding({
             helper:
               "ข้อมูลนี้ช่วยจับคู่กิจกรรมของคลับกับระยะทางที่นักวิ่งสนใจ",
           },
-          {
-            title: "พื้นที่และจุดวิ่ง",
-            subtitle: "คลับของคุณมักจัดวิ่งในเขต อำเภอ หรือสวนใด?",
-            helper:
-              "ระบุพื้นที่จริงที่คลับใช้วิ่ง เพื่อให้การค้นหาและการจับคู่แม่นยำขึ้น",
-          },
+          founderAreaQuestion,
           {
             title: "ตารางวิ่งประจำ",
             subtitle: "คลับของคุณมักจัด Community Run เมื่อไร?",
@@ -5920,10 +6721,10 @@ function FounderOnboarding({
               "Your club name, description, and image are the first things runners will see on your club profile.",
           },
           {
-            title: "Where is your Run Club based?",
-            subtitle: "Where does your Run Club mainly organize activities?",
+            title: "Province",
+            subtitle: "Which province is your Run Club mainly based in?",
             helper:
-              "This helps Runrise recommend your club to runners in relevant areas.",
+              "Choose the main province first. Question 07 will show only its relevant areas and parks.",
           },
           {
             title: "Runner levels",
@@ -5943,12 +6744,7 @@ function FounderOnboarding({
             helper:
               "This helps match your runs with the distances runners are interested in.",
           },
-          {
-            title: "Areas & running spots",
-            subtitle: "Which districts, amphoes, or parks do you usually run in?",
-            helper:
-              "Use your actual running areas so search and matching can work more accurately.",
-          },
+          founderAreaQuestion,
           {
             title: "Regular run schedule",
             subtitle: "When does your club usually organize Community Runs?",
@@ -5991,7 +6787,7 @@ function FounderOnboarding({
     Boolean((profile.clubName || "").trim()) &&
       Boolean((profile.clubDescription || "").trim()) &&
       Boolean(profile.clubImageMock),
-    Boolean(profile.baseType),
+    Boolean(profile.province),
     Array.isArray(profile.levels) &&
       profile.levels.length > 0,
     Array.isArray(profile.paceRanges) &&
@@ -6000,7 +6796,9 @@ function FounderOnboarding({
       profile.distances.length > 0,
     Boolean(profile.province) &&
       Array.isArray(profile.locations) &&
-      profile.locations.length > 0,
+      profile.locations.length > 0 &&
+      Array.isArray(profile.parks) &&
+      profile.parks.length > 0,
     Array.isArray(profile.days) &&
       profile.days.length > 0 &&
       Array.isArray(profile.times) &&
@@ -6057,6 +6855,10 @@ function FounderOnboarding({
     setProfile({
       ...profile,
       province,
+      baseType:
+        province === "Bangkok"
+          ? "Bangkok"
+          : "Other Provinces",
       locations: [],
       parks: [],
     });
@@ -6430,12 +7232,31 @@ function FounderOnboarding({
               </div>
             )}
 
-            {step === 2 &&
-              renderSingleChoices(
-                FOUNDER_BASE_OPTIONS,
-                profile.baseType,
-                "baseType"
-              )}
+            {step === 2 && (
+              <div className="ut-choice-grid province-grid founder-choice-grid founder-province-choice-grid">
+                {PROVINCES.map((province) => {
+                  const active = profile.province === province;
+
+                  return (
+                    <button
+                      type="button"
+                      key={province}
+                      className={
+                        active
+                          ? "ut-choice-card selected"
+                          : "ut-choice-card"
+                      }
+                      onClick={() => setProvince(province)}
+                    >
+                      <strong>
+                        {profileValueForLanguage(province, language)}
+                      </strong>
+                      {active && <span>✓</span>}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
 
             {step === 3 &&
               renderMultiChoices(
@@ -6460,50 +7281,6 @@ function FounderOnboarding({
 
             {step === 6 && (
               <div className="founder-location-setup">
-                {profile.baseType !== "Bangkok" && (
-                  <div className="founder-province-step">
-                    <div className="founder-schedule-heading">
-                      <strong>
-                        {language === "th"
-                          ? "จังหวัดหลัก"
-                          : "Main province"}
-                      </strong>
-
-                      <span>
-                        {language === "th"
-                          ? "เลือกจังหวัดก่อน"
-                          : "Choose a province first"}
-                      </span>
-                    </div>
-
-                    <div className="ut-choice-grid province-grid founder-choice-grid">
-                      {PROVINCES.map((province) => (
-                        <button
-                          type="button"
-                          key={province}
-                          className={
-                            profile.province === province
-                              ? "ut-choice-card selected"
-                              : "ut-choice-card"
-                          }
-                          onClick={() => setProvince(province)}
-                        >
-                          <strong>
-                            {profileValueForLanguage(
-                              province,
-                              language
-                            )}
-                          </strong>
-
-                          {profile.province === province && (
-                            <span>✓</span>
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
                 {profile.province ? (
                   <LocationParkSelector
                     language={language}
@@ -6511,16 +7288,7 @@ function FounderOnboarding({
                     districtOptions={districtOptions}
                     selectedDistricts={profile.locations}
                     selectedParks={profile.parks}
-                    onChangeProvince={() => {
-                      if (profile.baseType !== "Bangkok") {
-                        setProfile({
-                          ...profile,
-                          province: "",
-                          locations: [],
-                          parks: [],
-                        });
-                      }
-                    }}
+                    onChangeProvince={() => setStep(2)}
                     onChange={(locations, parks) =>
                       setProfile({
                         ...profile,
@@ -6532,8 +7300,8 @@ function FounderOnboarding({
                 ) : (
                   <div className="founder-location-empty">
                     {language === "th"
-                      ? "เลือกจังหวัดเพื่อดูเขต อำเภอ และจุดวิ่ง"
-                      : "Choose a province to see districts and running spots."}
+                      ? "กรุณากลับไปเลือกจังหวัดในข้อ 03 ก่อน"
+                      : "Please choose a province in question 03 first."}
                   </div>
                 )}
               </div>
@@ -7620,16 +8388,19 @@ function RunnerEventsPage({
     useState<EventFilter>("all");
   const [showFilters, setShowFilters] = useState(false);
 
-  // Advanced Event filters reuse the same canonical values already used
-  // across onboarding / profile setup in this prototype.
-  const [selectedPaces, setSelectedPaces] = useState<string[]>([]);
+  // Runner Event filters intentionally reuse the exact same canonical
+  // values as Runner onboarding so both surfaces stay in sync.
+  const [selectedPace, setSelectedPace] = useState<string | null>(null);
+  const [selectedProvince, setSelectedProvince] = useState("");
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
+  const [locationDropdownValue, setLocationDropdownValue] = useState("");
+  const [locationDropdownOpen, setLocationDropdownOpen] = useState(false);
+  const [parkDropdownOpen, setParkDropdownOpen] = useState(false);
   const [selectedDistances, setSelectedDistances] = useState<string[]>([]);
-  const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
 
-  const EVENT_PACE_FILTER_OPTIONS = FOUNDER_PACE_OPTIONS;
   const EVENT_DISTANCE_FILTER_OPTIONS = PREFERRED_DISTANCE_OPTIONS;
-  const EVENT_DAY_FILTER_OPTIONS = FOUNDER_DAY_OPTIONS;
+  const EVENT_TIME_FILTER_OPTIONS = RUNNING_TIMES;
 
   const toggleEventFilterValue = (
     value: string,
@@ -7644,10 +8415,14 @@ function RunnerEventsPage({
   };
 
   const clearAdvancedFilters = () => {
-    setSelectedPaces([]);
+    setSelectedPace(null);
+    setSelectedProvince("");
     setSelectedLocations([]);
+    setLocationDropdownValue("");
+    setLocationDropdownOpen(false);
+    setParkDropdownOpen(false);
     setSelectedDistances([]);
-    setSelectedDays([]);
+    setSelectedTimes([]);
   };
 
   const eventDate = (event: RunEvent) => {
@@ -7751,19 +8526,39 @@ function RunnerEventsPage({
   const eventTitle = (event: RunEvent) => event.name;
 
 
-  const eventLocationFilterOptions = useMemo(() => {
-    return Array.from(
-      new Set(
-        events
-          .map((event) => event.location)
-          .filter(Boolean)
-      )
-    ).sort();
-  }, [events]);
+  const eventDistrictFilterOptions = useMemo(
+    () =>
+      selectedProvince
+        ? DISTRICTS_BY_PROVINCE[selectedProvince] || []
+        : [],
+    [selectedProvince]
+  );
 
-  const eventDayKey = (event: RunEvent) => {
-    const keys = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    return keys[eventDate(event).getDay()];
+  const selectedDistrictLocations = useMemo(
+    () =>
+      selectedLocations.filter((location) =>
+        eventDistrictFilterOptions.includes(location)
+      ),
+    [selectedLocations, eventDistrictFilterOptions]
+  );
+
+  const eventParkFilterOptions = useMemo(
+    () => getAvailableParksForLocations(selectedDistrictLocations),
+    [selectedDistrictLocations]
+  );
+
+  const selectedParkLocations = useMemo(
+    () =>
+      selectedLocations.filter((location) =>
+        eventParkFilterOptions.includes(location)
+      ),
+    [selectedLocations, eventParkFilterOptions]
+  );
+
+  const eventTimePreference = (event: RunEvent) => {
+    const hour = Number(String(event.time || "0:00").split(":")[0]);
+    if (!Number.isFinite(hour)) return "Flexible";
+    return hour < 12 ? "Morning" : "Evening";
   };
 
   const eventDistanceMatches = (event: RunEvent) => {
@@ -7782,54 +8577,49 @@ function RunnerEventsPage({
   };
 
   const eventPaceMatches = (event: RunEvent) => {
-    if (selectedPaces.length === 0) return true;
+    if (!selectedPace) return true;
+    return paceMatches(selectedPace, event.pace);
+  };
 
-    const normalized = event.pace.toLowerCase();
-    const flexible =
-      normalized.includes("flexible") ||
-      normalized.includes("social") ||
-      normalized.includes("easy") ||
-      normalized.includes("no pressure");
+  const eventLocationMatches = (event: RunEvent) => {
+    if (!selectedProvince && selectedLocations.length === 0) return true;
 
-    if (
-      flexible &&
-      selectedPaces.includes("Flexible Pace")
-    ) {
+    const eventProvince = inferProvinceFromDistricts([
+      normalizeDistrict(event.location),
+    ]);
+
+    if (selectedProvince && eventProvince !== selectedProvince) {
+      return false;
+    }
+
+    if (selectedLocations.length === 0) return true;
+
+    const searchableLocation = [
+      normalizeDistrict(event.location),
+      event.meetingPoint || "",
+    ]
+      .join(" ")
+      .toLocaleLowerCase();
+
+    return selectedLocations.some((location) =>
+      searchableLocation.includes(location.toLocaleLowerCase())
+    );
+  };
+
+  const eventTimeMatches = (event: RunEvent) => {
+    if (selectedTimes.length === 0 || selectedTimes.includes("Flexible")) {
       return true;
     }
 
-    const times = [
-      ...event.pace.matchAll(/(\d{1,2}):(\d{2})/g),
-    ].map((match) =>
-      Number(match[1]) * 60 + Number(match[2])
-    );
-
-    if (times.length === 0) return false;
-
-    const eventMin = Math.min(...times);
-    const eventMax = Math.max(...times);
-
-    const paceBounds: Record<string, [number, number]> = {
-      "Under 5:00 min/km": [0, 299],
-      "5:00–5:59 min/km": [300, 359],
-      "6:00–6:59 min/km": [360, 419],
-      "7:00–7:59 min/km": [420, 479],
-      "8:00+ min/km": [480, Infinity],
-    };
-
-    return selectedPaces.some((option) => {
-      const bounds = paceBounds[option];
-      if (!bounds) return false;
-
-      return eventMax >= bounds[0] && eventMin <= bounds[1];
-    });
+    return selectedTimes.includes(eventTimePreference(event));
   };
 
   const advancedFilterCount =
-    selectedPaces.length +
+    (selectedPace ? 1 : 0) +
+    (selectedProvince ? 1 : 0) +
     selectedLocations.length +
     selectedDistances.length +
-    selectedDays.length;
+    selectedTimes.length;
 
   const sortedEvents = useMemo(() => {
     return [...events].sort(
@@ -7863,8 +8653,7 @@ function RunnerEventsPage({
         searchable.includes(keyword);
 
       const matchesLocation =
-        selectedLocations.length === 0 ||
-        selectedLocations.includes(event.location);
+        eventLocationMatches(event);
 
       const matchesDistance =
         eventDistanceMatches(event);
@@ -7872,16 +8661,15 @@ function RunnerEventsPage({
       const matchesPace =
         eventPaceMatches(event);
 
-      const matchesDay =
-        selectedDays.length === 0 ||
-        selectedDays.includes(eventDayKey(event));
+      const matchesTime =
+        eventTimeMatches(event);
 
       return (
         matchesSearch &&
         matchesLocation &&
         matchesDistance &&
         matchesPace &&
-        matchesDay
+        matchesTime
       );
     });
 
@@ -7895,10 +8683,11 @@ function RunnerEventsPage({
     clubs,
     search,
     sortedEvents,
-    selectedPaces,
+    selectedPace,
+    selectedProvince,
     selectedLocations,
     selectedDistances,
-    selectedDays,
+    selectedTimes,
   ]);
 
   return (
@@ -8069,48 +8858,64 @@ function RunnerEventsPage({
             )}
           </div>
 
-          <div className="event-filter-group">
-            <h3>{language === "th" ? "เพซ" : "Pace"}</h3>
-            <div className="event-filter-chip-row">
-              {EVENT_PACE_FILTER_OPTIONS.map((option) => {
-                const selected = selectedPaces.includes(option);
-                return (
-                  <button
-                    type="button"
-                    key={option}
-                    className={selected ? "selected" : ""}
-                    onClick={() =>
-                      toggleEventFilterValue(
-                        option,
-                        selectedPaces,
-                        setSelectedPaces
-                      )
-                    }
-                  >
-                    {founderLabel(option, language)}
-                  </button>
-                );
-              })}
+          <div className="event-filter-group event-filter-group-pace">
+            <div className="event-filter-group-title-row">
+              <div>
+                <h3>{language === "th" ? "เพซ" : "Pace"}</h3>
+                <p>
+                  {language === "th"
+                    ? "เลือกเพซแบบเดียวกับตอนตั้งค่าโปรไฟล์"
+                    : "Choose pace the same way as profile setup"}
+                </p>
+              </div>
+
+              {selectedPace && (
+                <button
+                  type="button"
+                  className="event-filter-mini-clear"
+                  onClick={() => setSelectedPace(null)}
+                >
+                  {language === "th" ? "ไม่จำกัด" : "Any pace"}
+                </button>
+              )}
             </div>
+
+            <div className="event-filter-pace-picker-wrap">
+              <PaceWheelPicker
+                value={selectedPace || "06:30"}
+                compact
+                onChange={(value) => setSelectedPace(value)}
+              />
+            </div>
+
+            <p className="event-filter-current-value">
+              {selectedPace
+                ? language === "th"
+                  ? `เพซที่เลือก ${selectedPace} นาที/กม.`
+                  : `Selected pace ${selectedPace} min/km`
+                : language === "th"
+                  ? "ยังไม่จำกัดเพซ"
+                  : "Any pace"}
+            </p>
           </div>
 
           <div className="event-filter-group">
-            <h3>{language === "th" ? "พื้นที่" : "Area"}</h3>
+            <h3>{language === "th" ? "จังหวัด" : "Province"}</h3>
             <div className="event-filter-chip-row">
-              {eventLocationFilterOptions.map((option) => {
-                const selected = selectedLocations.includes(option);
+              {PROVINCES.map((option) => {
+                const selected = selectedProvince === option;
                 return (
                   <button
                     type="button"
                     key={option}
                     className={selected ? "selected" : ""}
-                    onClick={() =>
-                      toggleEventFilterValue(
-                        option,
-                        selectedLocations,
-                        setSelectedLocations
-                      )
-                    }
+                    onClick={() => {
+                      setSelectedProvince(selected ? "" : option);
+                      setSelectedLocations([]);
+                      setLocationDropdownValue("");
+                      setLocationDropdownOpen(false);
+                      setParkDropdownOpen(false);
+                    }}
                   >
                     {profileValueForLanguage(option, language)}
                   </button>
@@ -8119,8 +8924,353 @@ function RunnerEventsPage({
             </div>
           </div>
 
+          <div className="event-filter-group event-location-filter-stack">
+            <div className="event-location-filter-section">
+              <h3>
+                {selectedProvince === "Bangkok"
+                  ? language === "th"
+                    ? "เขต / แขวง"
+                    : "District / Subdistrict"
+                  : language === "th"
+                    ? "อำเภอ / ตำบล"
+                    : "Amphoe / Tambon"}
+              </h3>
+
+              <div
+                className={
+                  selectedProvince
+                    ? "event-location-dropdown-wrap"
+                    : "event-location-dropdown-wrap disabled"
+                }
+              >
+                <button
+                  type="button"
+                  className={
+                    locationDropdownOpen
+                      ? "event-location-dropdown-trigger open"
+                      : "event-location-dropdown-trigger"
+                  }
+                  disabled={!selectedProvince}
+                  onClick={() => {
+                    if (!selectedProvince) return;
+                    setLocationDropdownOpen((previous) => !previous);
+                    setParkDropdownOpen(false);
+                  }}
+                >
+                  <span>
+                    {!selectedProvince
+                      ? language === "th"
+                        ? "เลือกจังหวัดก่อน"
+                        : "Choose a province first"
+                      : selectedDistrictLocations.length > 0
+                        ? selectedDistrictLocations.length === 1
+                          ? profileValueForLanguage(
+                              selectedDistrictLocations[0],
+                              language
+                            )
+                          : language === "th"
+                            ? `${profileValueForLanguage(
+                                selectedDistrictLocations[0],
+                                language
+                              )} และอีก ${
+                                selectedDistrictLocations.length - 1
+                              } พื้นที่`
+                            : `${profileValueForLanguage(
+                                selectedDistrictLocations[0],
+                                language
+                              )} +${
+                                selectedDistrictLocations.length - 1
+                              } more`
+                        : selectedProvince === "Bangkok"
+                          ? language === "th"
+                            ? "เลือกเขต / แขวง"
+                            : "Choose district / subdistrict"
+                          : language === "th"
+                            ? "เลือกอำเภอ / ตำบล"
+                            : "Choose amphoe / tambon"}
+                  </span>
+
+                  <span
+                    className="event-location-dropdown-chevron"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </span>
+                </button>
+
+                {selectedProvince && locationDropdownOpen && (
+                  <div className="event-location-dropdown-menu">
+                    <div className="event-location-dropdown-menu-section">
+                      {eventDistrictFilterOptions.map((option) => {
+                        const selected =
+                          selectedDistrictLocations.includes(option);
+
+                        return (
+                          <button
+                            type="button"
+                            key={`area-${option}`}
+                            className={
+                              selected
+                                ? "event-location-dropdown-option selected"
+                                : "event-location-dropdown-option"
+                            }
+                            onClick={() => {
+                              const nextAreas = selected
+                                ? selectedDistrictLocations.filter(
+                                    (item) => item !== option
+                                  )
+                                : [...selectedDistrictLocations, option];
+
+                              const allowedParks =
+                                getAvailableParksForLocations(nextAreas);
+
+                              const stillValidParks =
+                                selectedParkLocations.filter((park) =>
+                                  allowedParks.includes(park)
+                                );
+
+                              setSelectedLocations([
+                                ...nextAreas,
+                                ...stillValidParks,
+                              ]);
+                            }}
+                          >
+                            <span>
+                              {profileValueForLanguage(option, language)}
+                            </span>
+
+                            {selected && (
+                              <span
+                                className="event-location-dropdown-check"
+                                aria-hidden="true"
+                              >
+                                ✓
+                              </span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {selectedDistrictLocations.length > 0 && (
+                <div className="event-location-selected-list">
+                  {selectedDistrictLocations.map((option) => (
+                    <button
+                      type="button"
+                      key={`selected-area-${option}`}
+                      className="event-location-selected-chip"
+                      onClick={() => {
+                        const nextAreas =
+                          selectedDistrictLocations.filter(
+                            (item) => item !== option
+                          );
+
+                        const allowedParks =
+                          getAvailableParksForLocations(nextAreas);
+
+                        const stillValidParks =
+                          selectedParkLocations.filter((park) =>
+                            allowedParks.includes(park)
+                          );
+
+                        setSelectedLocations([
+                          ...nextAreas,
+                          ...stillValidParks,
+                        ]);
+                      }}
+                    >
+                      <span>
+                        {profileValueForLanguage(option, language)}
+                      </span>
+                      <strong aria-hidden="true">×</strong>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="event-location-filter-divider" />
+
+            <div className="event-location-filter-section">
+              <h3>
+                {language === "th"
+                  ? "สวน / จุดวิ่ง"
+                  : "Parks / Running spots"}
+              </h3>
+
+              <div
+                className={
+                  selectedDistrictLocations.length > 0
+                    ? "event-location-dropdown-wrap"
+                    : "event-location-dropdown-wrap disabled"
+                }
+              >
+                <button
+                  type="button"
+                  className={
+                    parkDropdownOpen
+                      ? "event-location-dropdown-trigger open"
+                      : "event-location-dropdown-trigger"
+                  }
+                  disabled={selectedDistrictLocations.length === 0}
+                  onClick={() => {
+                    if (selectedDistrictLocations.length === 0) return;
+                    setParkDropdownOpen((previous) => !previous);
+                    setLocationDropdownOpen(false);
+                  }}
+                >
+                  <span>
+                    {selectedDistrictLocations.length === 0
+                      ? language === "th"
+                        ? selectedProvince
+                          ? "เลือกพื้นที่ก่อน เพื่อดูสวนในบริเวณนั้น"
+                          : "เลือกจังหวัดและพื้นที่ก่อน"
+                        : selectedProvince
+                          ? "Choose an area first to see nearby parks"
+                          : "Choose province and area first"
+                      : selectedParkLocations.length > 0
+                        ? selectedParkLocations.length === 1
+                          ? profileValueForLanguage(
+                              selectedParkLocations[0],
+                              language
+                            )
+                          : language === "th"
+                            ? `${profileValueForLanguage(
+                                selectedParkLocations[0],
+                                language
+                              )} และอีก ${
+                                selectedParkLocations.length - 1
+                              } แห่ง`
+                            : `${profileValueForLanguage(
+                                selectedParkLocations[0],
+                                language
+                              )} +${
+                                selectedParkLocations.length - 1
+                              } more`
+                        : language === "th"
+                          ? "เลือกสวน / จุดวิ่ง"
+                          : "Choose park / running spot"}
+                  </span>
+
+                  <span
+                    className="event-location-dropdown-chevron"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </span>
+                </button>
+
+                {selectedDistrictLocations.length > 0 &&
+                  parkDropdownOpen && (
+                    <div className="event-location-dropdown-menu event-park-dropdown-menu">
+                      <div className="event-location-dropdown-menu-section">
+                        {eventParkFilterOptions.length > 0 ? (
+                          eventParkFilterOptions.map((option) => {
+                            const selected =
+                              selectedParkLocations.includes(option);
+
+                            return (
+                              <button
+                                type="button"
+                                key={`park-${option}`}
+                                className={
+                                  selected
+                                    ? "event-location-dropdown-option selected"
+                                    : "event-location-dropdown-option"
+                                }
+                                onClick={() => {
+                                  const nextParks = selected
+                                    ? selectedParkLocations.filter(
+                                        (item) => item !== option
+                                      )
+                                    : [...selectedParkLocations, option];
+
+                                  setSelectedLocations([
+                                    ...selectedDistrictLocations,
+                                    ...nextParks,
+                                  ]);
+                                }}
+                              >
+                                <span>
+                                  {profileValueForLanguage(
+                                    option,
+                                    language
+                                  )}
+                                </span>
+
+                                {selected && (
+                                  <span
+                                    className="event-location-dropdown-check"
+                                    aria-hidden="true"
+                                  >
+                                    ✓
+                                  </span>
+                                )}
+                              </button>
+                            );
+                          })
+                        ) : (
+                          <div className="event-location-dropdown-empty">
+                            {language === "th"
+                              ? "ยังไม่มีสวนในพื้นที่ที่เลือก"
+                              : "No parks available for the selected area"}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+              </div>
+
+              {selectedParkLocations.length > 0 && (
+                <div className="event-location-selected-list">
+                  {selectedParkLocations.map((option) => (
+                    <button
+                      type="button"
+                      key={`selected-park-${option}`}
+                      className="event-location-selected-chip park"
+                      onClick={() =>
+                        setSelectedLocations([
+                          ...selectedDistrictLocations,
+                          ...selectedParkLocations.filter(
+                            (item) => item !== option
+                          ),
+                        ])
+                      }
+                    >
+                      <span>
+                        {profileValueForLanguage(option, language)}
+                      </span>
+                      <strong aria-hidden="true">×</strong>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
           <div className="event-filter-group">
-            <h3>{language === "th" ? "ระยะทาง" : "Distance"}</h3>
+            <h3>{language === "th" ? "ระยะที่สนใจ" : "Favorite distance"}</h3>
             <div className="event-filter-chip-row">
               {EVENT_DISTANCE_FILTER_OPTIONS.map((option) => {
                 const selected = selectedDistances.includes(option);
@@ -8145,10 +9295,10 @@ function RunnerEventsPage({
           </div>
 
           <div className="event-filter-group">
-            <h3>{language === "th" ? "วัน" : "Day"}</h3>
-            <div className="event-filter-chip-row event-day-filter-row">
-              {EVENT_DAY_FILTER_OPTIONS.map((option) => {
-                const selected = selectedDays.includes(option);
+            <h3>{language === "th" ? "ช่วงเวลาวิ่ง" : "Running time"}</h3>
+            <div className="event-filter-chip-row">
+              {EVENT_TIME_FILTER_OPTIONS.map((option) => {
+                const selected = selectedTimes.includes(option);
                 return (
                   <button
                     type="button"
@@ -8157,12 +9307,12 @@ function RunnerEventsPage({
                     onClick={() =>
                       toggleEventFilterValue(
                         option,
-                        selectedDays,
-                        setSelectedDays
+                        selectedTimes,
+                        setSelectedTimes
                       )
                     }
                   >
-                    {founderLabel(option, language)}
+                    {profileValueForLanguage(option, language)}
                   </button>
                 );
               })}
@@ -8392,6 +9542,7 @@ function RunnerEventsPage({
               onClick={() => {
                 setSearch("");
                 setActiveFilter("all");
+                clearAdvancedFilters();
               }}
             >
               {language === "th"
@@ -9000,7 +10151,11 @@ function Compare({
     {
       label: "COMMUNITY",
       subtitle: "Community style",
-      values: clubs.map((club) => club.vibe.join(" · ")),
+      values: clubs.map((club) =>
+        club.vibe
+          .map((vibe) => profileValueForLanguage(vibe, language))
+          .join(" · ")
+      ),
       matches: clubs.map(communityMatches),
     },
   ];
@@ -9021,8 +10176,36 @@ function Compare({
       />
 
       <section className="compare-winner">
-        <div className="compare-winner-label">
-          BEST FIT
+        <div
+          className="compare-winner-label compare-recommendation-badge"
+          aria-label={
+            language === "th"
+              ? "คลับแนะนำที่เหมาะกับคุณที่สุด"
+              : "Top recommended club for you"
+          }
+        >
+          <span className="compare-recommendation-icon" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 2.8 14.6 8l5.7.8-4.1 4 1 5.7L12 15.8 6.8 18.5l1-5.7-4.1-4 5.7-.8L12 2.8Z" />
+              <path d="M18.5 3.8v3.4M20.2 5.5h-3.4" />
+            </svg>
+          </span>
+
+          <span className="compare-recommendation-copy">
+            <small>
+              {language === "th" ? "แนะนำสำหรับคุณ" : "RECOMMENDED"}
+            </small>
+            <strong>
+              {language === "th" ? "เหมาะกับคุณที่สุด" : "BEST FIT"}
+            </strong>
+          </span>
         </div>
 
         <div>
@@ -9170,11 +10353,13 @@ function EventDetail({
   registration,
   joined,
   joinSuccess,
+  saved,
   onBack,
   onJoin,
   onCancel,
   onCloseSuccess,
   onViewQr,
+  onToggleSave,
 }: {
   language: AppLanguage;
   event: RunEvent;
@@ -9182,15 +10367,16 @@ function EventDetail({
   registration: EventRegistration | null;
   joined: boolean;
   joinSuccess: boolean;
+  saved: boolean;
   onBack: () => void;
   onJoin: () => void;
   onCancel: () => void;
   onCloseSuccess: () => void;
   onViewQr: () => void;
+  onToggleSave: () => void;
 }) {
   const full = event.participants >= event.capacity;
   const coverImage = getClubImage(club.id);
-  const [eventSaved, setEventSaved] = useState(false);
 
   return (
     <main className="screen event-screen rr-event-detail">
@@ -9207,10 +10393,16 @@ function EventDetail({
         <button
           type="button"
           className="pill-button"
-          onClick={() => setEventSaved((previous) => !previous)}
-          aria-pressed={eventSaved}
+          onClick={onToggleSave}
+          aria-pressed={saved}
         >
-          {eventSaved ? "★ Saved" : "☆ Save"}
+          {saved
+            ? language === "th"
+              ? "★ บันทึกแล้ว"
+              : "★ Saved"
+            : language === "th"
+              ? "☆ บันทึก"
+              : "☆ Save"}
         </button>
       </div>
 
@@ -10436,6 +11628,9 @@ function RunnerProfile({
   events,
   clubs,
   joinedEvents,
+  savedClubs,
+  savedEvents,
+  onSavedClub,
   onEvent,
   onViewAll,
   onSwitchRole,
@@ -10449,6 +11644,9 @@ function RunnerProfile({
   events: RunEvent[];
   clubs: Club[];
   joinedEvents: number[];
+  savedClubs: Club[];
+  savedEvents: RunEvent[];
+  onSavedClub: (clubId: number) => void;
   onEvent: (event: RunEvent) => void;
   onViewAll: () => void;
   onSwitchRole: () => void;
@@ -10808,6 +12006,7 @@ function RunnerProfile({
             </h3>
 
             <LocationParkSelector
+              language={language}
               province={draft.province}
               districtOptions={DISTRICTS_BY_PROVINCE[draft.province] || []}
               selectedDistricts={draft.location}
@@ -10862,9 +12061,9 @@ function RunnerProfile({
           </div>
 
           <div className="ut-edit-block">
-            <h3>{language === "th" ? "สไตล์คอมมูนิตี้" : "Community Style"}</h3>
+            <h3>{language === "th" ? "สไตล์การวิ่งของคุณ" : "Your Running Style"}</h3>
             <ChipChoices
-              options={COMMUNITY_STYLES}
+              options={RUNNER_RUNNING_STYLE_OPTIONS}
               value={draft.vibe}
               multi
               onChange={(vibe) =>
@@ -11178,22 +12377,178 @@ function RunnerProfile({
               )}
             </div>
           </section>
+
+          <section className="rp-card rp-saved-clubs-card">
+            <div className="rp-card-heading">
+              <div>
+                <p className="rp-eyebrow">
+                  {language === "th" ? "คลับที่สนใจ" : "SAVED CLUBS"}
+                </p>
+                <h2>
+                  {language === "th"
+                    ? `คลับที่บันทึกไว้${
+                        savedClubs.length > 0
+                          ? ` (${savedClubs.length})`
+                          : ""
+                      }`
+                    : `Saved Clubs${
+                        savedClubs.length > 0
+                          ? ` (${savedClubs.length})`
+                          : ""
+                      }`}
+                </h2>
+              </div>
+            </div>
+
+            {savedClubs.length > 0 ? (
+              <div className="rp-saved-clubs-list">
+                {savedClubs.map((club) => (
+                  <button
+                    type="button"
+                    className="rp-saved-club-row"
+                    key={club.id}
+                    onClick={() => onSavedClub(club.id)}
+                  >
+                    <div className="rp-saved-club-image">
+                      {getClubImage(club.id) ? (
+                        <img
+                          src={getClubImage(club.id)}
+                          alt={club.name}
+                        />
+                      ) : (
+                        <span>{club.name[0] || "R"}</span>
+                      )}
+                    </div>
+
+                    <div className="rp-saved-club-copy">
+                      <strong>{club.name}</strong>
+                      <span>
+                        {profileValueForLanguage(
+                          club.location,
+                          language
+                        )}
+                      </span>
+                    </div>
+
+                    <span className="rp-saved-club-chevron">›</span>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="rp-saved-clubs-empty">
+                <span aria-hidden="true">☆</span>
+                <p>
+                  {language === "th"
+                    ? "ยังไม่มีคลับที่บันทึกไว้"
+                    : "No saved clubs yet"}
+                </p>
+              </div>
+            )}
+          </section>
+
+          <section className="rp-card rp-saved-events-card">
+            <div className="rp-card-heading">
+              <div>
+                <p className="rp-eyebrow">
+                  {language === "th" ? "อีเวนต์ที่สนใจ" : "SAVED EVENTS"}
+                </p>
+                <h2>
+                  {language === "th"
+                    ? `อีเวนต์ที่บันทึกไว้${
+                        savedEvents.length > 0
+                          ? ` (${savedEvents.length})`
+                          : ""
+                      }`
+                    : `Saved Events${
+                        savedEvents.length > 0
+                          ? ` (${savedEvents.length})`
+                          : ""
+                      }`}
+                </h2>
+              </div>
+            </div>
+
+            {savedEvents.length > 0 ? (
+              <div className="rp-saved-events-list">
+                {savedEvents.map((event) => {
+                  const club = clubs.find(
+                    (item) => item.id === event.clubId
+                  );
+                  const eventImage = getClubImage(event.clubId);
+
+                  return (
+                    <button
+                      type="button"
+                      className="rp-saved-event-row"
+                      key={event.id}
+                      onClick={() => onEvent(event)}
+                    >
+                      <div className="rp-saved-event-image">
+                        {eventImage ? (
+                          <img
+                            src={eventImage}
+                            alt={event.name}
+                          />
+                        ) : (
+                          <span>{event.name[0] || "R"}</span>
+                        )}
+                      </div>
+
+                      <div className="rp-saved-event-copy">
+                        <strong>{event.name}</strong>
+                        <span>
+                          {event.date} · {event.time}
+                        </span>
+                        <small>
+                          {club?.name || "Runrise Run Club"}
+                        </small>
+                      </div>
+
+                      <span
+                        className="rp-saved-event-chevron"
+                        aria-hidden="true"
+                      >
+                        ›
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="rp-saved-events-empty">
+                <span aria-hidden="true">☆</span>
+                <p>
+                  {language === "th"
+                    ? "ยังไม่มีอีเวนต์ที่บันทึกไว้"
+                    : "No saved events yet"}
+                </p>
+              </div>
+            )}
+          </section>
         </>
       )}
 
       {!editing && (
         <>
-          <section className="rp-card rp-language-card">
-            <div>
-              <p className="rp-eyebrow">{language === "th" ? "ภาษา" : "LANGUAGE"}</p>
-              <h2>{language === "th" ? "ภาษาของแอป" : "App Language"}</h2>
-            </div>
+          <section
+            className="rp-card rp-language-card rp-language-card-simple"
+            data-no-translate="true"
+          >
+            <p className="rp-language-simple-label">
+              {language === "th" ? "ภาษา" : "LANGUAGE"}
+            </p>
 
-            <LanguageQuickSwitch
-              language={language}
-              onChange={setLanguage}
-              compact
-            />
+            <div className="rp-language-simple-row">
+              <h2>
+                {language === "th" ? "ภาษาของแอป" : "App Language"}
+              </h2>
+
+              <LanguageQuickSwitch
+                language={language}
+                onChange={setLanguage}
+                compact
+              />
+            </div>
           </section>
 
           <section className="rp-card rp-settings-card">
@@ -11369,14 +12724,16 @@ function Notifications({
 
 function FounderDashboard({
   language,
-  setLanguage,
   founderName,
   club,
   events,
   registrations,
+  reviews,
   onCreateEvent,
   onManageEvent,
   onScanNextEvent,
+  onViewEvents,
+  onViewReviews,
   onNav,
 }: any) {
   const upcomingEvents = [...events];
@@ -11535,12 +12892,7 @@ function FounderDashboard({
             {language === "th" ? "แดชบอร์ดผู้จัดกิจกรรม" : "FOUNDER DASHBOARD"}
           </p>
 
-          <div className="founder-top-actions">
-            <LanguageQuickSwitch
-              language={language}
-              onChange={setLanguage}
-              compact
-            />
+          <div className="founder-top-actions founder-top-actions-profile-only">
             <div className="founder-avatar">{(founderName || "Founder").trim().charAt(0).toUpperCase()}</div>
           </div>
         </div>
@@ -11617,7 +12969,16 @@ function FounderDashboard({
             </p>
             <h2>{language === "th" ? "กิจกรรมถัดไปของคุณ" : "Your next run"}</h2>
           </div>
-          <button className="link" onClick={() => onNav("founder-events")}>
+          <button
+            className="link"
+            onClick={() =>
+              onViewEvents({
+                mode: "latest",
+                month: calendarMonth,
+                year: calendarYear,
+              })
+            }
+          >
             {language === "th" ? "ทั้งหมด" : "All"}
           </button>
         </div>
@@ -11668,7 +13029,16 @@ function FounderDashboard({
             <h2>{language === "th" ? "วันจัดกิจกรรม" : "Activity schedule"}</h2>
           </div>
 
-          <button className="link" onClick={() => onNav("founder-events")}>
+          <button
+            className="link"
+            onClick={() =>
+              onViewEvents({
+                mode: "month",
+                month: calendarMonth,
+                year: calendarYear,
+              })
+            }
+          >
             {language === "th" ? "ดูกิจกรรม" : "View activities"}
           </button>
         </div>
@@ -11774,15 +13144,20 @@ function FounderDashboard({
 
           <div className="founder-calendar-legend">
             <span><i /> {language === "th" ? "วันที่มีกิจกรรม" : "Activity day"}</span>
-            <small>
-              {calendarEventsByDay.size > 0
-                ? language === "th"
-                  ? `${calendarEventsByDay.size} วันที่มีกิจกรรมในเดือนนี้`
-                  : `${calendarEventsByDay.size} activity dates this month`
-                : language === "th"
-                  ? "ยังไม่มีกิจกรรมในเดือนนี้"
-                  : "No activities scheduled this month"}
-            </small>
+            <button
+              type="button"
+              className="founder-calendar-all-events"
+              onClick={() =>
+                onViewEvents({
+                  mode: "month",
+                  month: calendarMonth,
+                  year: calendarYear,
+                })
+              }
+            >
+              {language === "th" ? "กิจกรรมทั้งหมด" : "All activities"}
+              <span aria-hidden="true">›</span>
+            </button>
           </div>
 
           {Array.from(calendarEventsByDay.entries()).length > 0 && (
@@ -11937,7 +13312,96 @@ function FounderDashboard({
         </div>
       </section>
 
-      {upcomingEvents.length > 0 && (
+
+            <section className="founder-section founder-runner-experience-section">
+        <div className="founder-feedback-overview-card">
+          <div className="founder-feedback-overview-main">
+            <div className="founder-feedback-title-wrap founder-feedback-title-wrap--swapped">
+              <div className="founder-section-title compact">
+                <div>
+                  <p className="eyebrow">
+                    {language === "th" ? "เสียงจากนักวิ่ง" : "RUNNER FEEDBACK"}
+                  </p>
+
+                  <h2>
+                    {language === "th"
+                      ? "ประสบการณ์ของ Runner"
+                      : "Runner experience"}
+                  </h2>
+
+                  <div className="founder-feedback-meta">
+                    <span>
+                      {language === "th"
+                        ? `${reviews?.length || 0} รีวิว`
+                        : `${reviews?.length || 0} reviews`}
+                    </span>
+
+                    <span aria-hidden="true">•</span>
+
+                    <span>
+                      {language === "th"
+                        ? "ความคิดเห็นจากผู้เข้าร่วมจริง"
+                        : "Feedback from real participants"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="founder-feedback-comment-icon" aria-hidden="true">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" />
+                  <path d="M8 9h8" />
+                  <path d="M8 13h5" />
+                </svg>
+              </div>
+            </div>
+
+            <span
+              className="founder-feedback-quote-decoration"
+              aria-hidden="true"
+            >
+              “
+            </span>
+          </div>
+
+          <button
+            type="button"
+            className="founder-feedback-open-all-button"
+            onClick={onViewReviews}
+          >
+            <span>
+              {language === "th"
+                ? `ดูรีวิวทั้งหมด (${reviews?.length || 0})`
+                : `View all reviews (${reviews?.length || 0})`}
+            </span>
+
+            <span
+              className="founder-feedback-open-all-arrow"
+              aria-hidden="true"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </section>
+
+{upcomingEvents.length > 0 && (
         <section className="founder-section">
           <div className="founder-section-title compact">
             <div>
@@ -11990,6 +13454,197 @@ function FounderDashboard({
       )}
 
       <FounderNav language={language} active="dashboard" onNav={onNav} />
+    </main>
+  );
+}
+
+
+function FounderRunnerFeedback({
+  language,
+  club,
+  reviews,
+  onBack,
+}: {
+  language: AppLanguage;
+  club: Club;
+  reviews: ClubReview[];
+  onBack: () => void;
+}) {
+  const sortedReviews = [...reviews].sort(
+    (a, b) => b.id - a.id
+  );
+
+  const averageRating =
+    sortedReviews.length > 0
+      ? sortedReviews.reduce(
+          (sum, review) => sum + review.rating,
+          0
+        ) / sortedReviews.length
+      : 0;
+
+  const ratingCounts = [5, 4, 3, 2, 1].map((rating) => ({
+    rating,
+    count: sortedReviews.filter(
+      (review) => review.rating === rating
+    ).length,
+  }));
+
+  return (
+    <main className="screen founder-feedback-page">
+      <div className="founder-feedback-page-toolbar">
+        <button
+          type="button"
+          className="circle-button"
+          onClick={onBack}
+          aria-label={language === "th" ? "ย้อนกลับ" : "Back"}
+        >
+          ←
+        </button>
+      </div>
+
+      <header className="founder-feedback-page-header">
+        <p className="eyebrow">
+          {language === "th" ? "เสียงจากนักวิ่ง" : "RUNNER FEEDBACK"}
+        </p>
+        <h1>
+          {language === "th"
+            ? "ประสบการณ์ของ Runner"
+            : "Runner experience"}
+        </h1>
+        <p>
+          {language === "th"
+            ? `ความคิดเห็นจริงจาก Runner ที่รีวิว ${club.name}`
+            : `Real feedback from runners who reviewed ${club.name}`}
+        </p>
+      </header>
+
+      {sortedReviews.length > 0 ? (
+        <>
+          <section className="founder-feedback-summary-card">
+            <div className="founder-feedback-score">
+              <strong>{averageRating.toFixed(1)}</strong>
+              <div>
+                <div className="founder-feedback-summary-stars">
+                  {"★".repeat(Math.round(averageRating))}
+                  {"☆".repeat(
+                    Math.max(0, 5 - Math.round(averageRating))
+                  )}
+                </div>
+                <span>
+                  {language === "th"
+                    ? `${sortedReviews.length} รีวิว`
+                    : `${sortedReviews.length} reviews`}
+                </span>
+              </div>
+            </div>
+
+            <div className="founder-feedback-rating-bars">
+              {ratingCounts.map(({ rating, count }) => {
+                const width =
+                  sortedReviews.length > 0
+                    ? (count / sortedReviews.length) * 100
+                    : 0;
+
+                return (
+                  <div
+                    className="founder-feedback-rating-row"
+                    key={rating}
+                  >
+                    <span>{rating}</span>
+                    <span aria-hidden="true">★</span>
+                    <div>
+                      <i style={{ width: `${width}%` }} />
+                    </div>
+                    <b>{count}</b>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          <section className="founder-feedback-all-section">
+            <div className="founder-feedback-all-heading">
+              <h2>
+                {language === "th"
+                  ? "ความคิดเห็นทั้งหมด"
+                  : "All feedback"}
+              </h2>
+              <span>
+                {language === "th"
+                  ? `${sortedReviews.length} รายการ`
+                  : `${sortedReviews.length} reviews`}
+              </span>
+            </div>
+
+            <div className="founder-feedback-all-list">
+              {sortedReviews.map((review) => (
+                <article
+                  className="founder-feedback-full-card"
+                  key={review.id}
+                >
+                  <div className="founder-feedback-full-head">
+                    <div className="founder-feedback-avatar">
+                      {review.author.charAt(0).toUpperCase()}
+                    </div>
+
+                    <div className="founder-feedback-person">
+                      <strong>{review.author}</strong>
+                      <span>{review.createdAt}</span>
+                    </div>
+
+                    <div
+                      className="founder-feedback-rating"
+                      aria-label={`${review.rating} stars`}
+                    >
+                      {"★".repeat(review.rating)}
+                      {"☆".repeat(Math.max(0, 5 - review.rating))}
+                    </div>
+                  </div>
+
+                  <div className="founder-feedback-context">
+                    <span>
+                      {language === "th" ? "รีวิวจาก" : "Reviewed"}
+                    </span>
+                    <strong>
+                      {review.eventName ||
+                        (language === "th"
+                          ? club.name
+                          : club.name)}
+                    </strong>
+                  </div>
+
+                  <p>{review.comment}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        </>
+      ) : (
+        <section className="founder-feedback-page-empty">
+          <span aria-hidden="true">☆</span>
+          <h2>
+            {language === "th"
+              ? "ยังไม่มีความคิดเห็น"
+              : "No feedback yet"}
+          </h2>
+          <p>
+            {language === "th"
+              ? "เมื่อ Runner ส่งคะแนนดาวและความคิดเห็นจากหน้าคลับ รีวิวจะมาแสดงที่นี่ทันที"
+              : "When runners post a star rating and comment from the club page, it will appear here immediately."}
+          </p>
+        </section>
+      )}
+
+      <FounderNav
+        language={language}
+        active="dashboard"
+        onNav={(nextPage) => {
+          if (nextPage === "founder-dashboard") {
+            onBack();
+            return;
+          }
+        }}
+      />
     </main>
   );
 }
@@ -12354,12 +14009,96 @@ function FounderEvents({
   clubId,
   events,
   registrations,
+  eventFilter,
+  setEventFilter,
   setEvents,
   onManageEvent,
   onNav,
 }: any) {
   const [creating, setCreating] =
     useState(false);
+
+  const [showEventFilters, setShowEventFilters] =
+    useState(false);
+
+  const founderFilterMonthTh = [
+    "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน",
+    "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม",
+    "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม",
+  ];
+
+  const founderFilterMonthEn = [
+    "January", "February", "March", "April",
+    "May", "June", "July", "August",
+    "September", "October", "November", "December",
+  ];
+
+  const founderFilterYearOptions = Array.from(
+    { length: 11 },
+    (_, index) => 2023 + index
+  );
+
+  const getFounderEventDateObject = (event: RunEvent) => {
+    const parsed = parseEventDateParts(event.date);
+    if (!parsed) return null;
+
+    const date = new Date(
+      parsed.year,
+      parsed.monthIndex,
+      parsed.day
+    );
+
+    return Number.isNaN(date.getTime()) ? null : date;
+  };
+
+  const filteredAndSortedEvents = [...events]
+    .map((event: RunEvent) => ({
+      event,
+      dateObject: getFounderEventDateObject(event),
+    }))
+    .filter(({ dateObject }: any) => {
+      if (!dateObject) {
+        return eventFilter.mode === "latest";
+      }
+
+      if (eventFilter.mode === "month") {
+        return (
+          dateObject.getFullYear() === eventFilter.year &&
+          dateObject.getMonth() === eventFilter.month
+        );
+      }
+
+      if (eventFilter.mode === "year") {
+        return dateObject.getFullYear() === eventFilter.year;
+      }
+
+      return true;
+    })
+    .sort((a: any, b: any) => {
+      const aTime = a.dateObject?.getTime() ?? 0;
+      const bTime = b.dateObject?.getTime() ?? 0;
+      return bTime - aTime;
+    })
+    .map(({ event }: any) => event as RunEvent);
+
+  const founderFilterSummary =
+    eventFilter.mode === "latest"
+      ? language === "th"
+        ? "ล่าสุด"
+        : "Latest"
+      : eventFilter.mode === "month"
+        ? `${
+            language === "th"
+              ? founderFilterMonthTh[eventFilter.month]
+              : founderFilterMonthEn[eventFilter.month]
+          } ${
+            language === "th"
+              ? eventFilter.year + 543
+              : eventFilter.year
+          }`
+        : language === "th"
+          ? `ปี ${eventFilter.year + 543}`
+          : `Year ${eventFilter.year}`;
 
   const [editingId, setEditingId] =
     useState<number | null>(null);
@@ -12385,7 +14124,7 @@ function FounderEvents({
     time: "06:00",
     location: "",
     distance: "5K",
-    pace: "6:00–7:00",
+    pace: "",
     capacity: 0,
     meetingPoint: "",
     route: "",
@@ -12412,6 +14151,24 @@ function FounderEvents({
     return hasValidCapacity;
   };
 
+  const hasValidPaceRange = (() => {
+    const values = [...String(draft.pace || "").matchAll(/(\d{1,2}):(\d{2})/g)].map(
+      (match) => Number(match[1]) * 60 + Number(match[2])
+    );
+    return values.length >= 2 && values[0] < values[1];
+  })();
+
+  const validatePaceRange = () => {
+    if (hasValidPaceRange) return true;
+
+    alert(
+      language === "th"
+        ? "กรุณาเลือกเพซเริ่มต้นและเพซสิ้นสุด โดยเพซเริ่มต้นต้องน้อยกว่าเพซสิ้นสุด"
+        : "Please select a start and end pace. Start pace must be lower than end pace."
+    );
+    return false;
+  };
+
   const createEvent = () => {
     if (!draft.name.trim()) {
       alert(
@@ -12422,7 +14179,7 @@ function FounderEvents({
       return;
     }
 
-    if (!validateCapacity()) {
+    if (!validateCapacity() || !validatePaceRange()) {
       return;
     }
 
@@ -12491,7 +14248,7 @@ function FounderEvents({
   };
 
   const saveEdit = () => {
-    if (!validateCapacity()) {
+    if (!validateCapacity() || !validatePaceRange()) {
       return;
     }
 
@@ -12544,7 +14301,7 @@ function FounderEvents({
         }
       }}
     >
-      <div className="founder-page-top founder-page-top-single">
+      <div className="founder-page-top founder-page-top-single founder-events-page-head">
         <div>
           <p className="eyebrow">
             {language === "th" ? "จัดการกิจกรรม" : "EVENT MANAGEMENT"}
@@ -12558,7 +14315,139 @@ function FounderEvents({
               : "Create, review and manage your community runs."}
           </p>
         </div>
+
+        <button
+          type="button"
+          className={
+            showEventFilters
+              ? "event-filter-button founder-events-filter-button active"
+              : "event-filter-button founder-events-filter-button"
+          }
+          onClick={() =>
+            setShowEventFilters((previous) => !previous)
+          }
+          aria-label={
+            language === "th" ? "ตัวกรองกิจกรรม" : "Activity filters"
+          }
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 7h9M17 7h3" />
+            <circle cx="15" cy="7" r="2" />
+            <path d="M4 17h3M11 17h9" />
+            <circle cx="9" cy="17" r="2" />
+          </svg>
+        </button>
       </div>
+
+      <div className="founder-events-filter-summary">
+        <span>
+          {language === "th" ? "กำลังแสดง" : "Showing"}
+        </span>
+        <strong>{founderFilterSummary}</strong>
+        <b>
+          {filteredAndSortedEvents.length}{" "}
+          {language === "th" ? "กิจกรรม" : "activities"}
+        </b>
+      </div>
+
+      {showEventFilters && (
+        <section className="founder-events-filter-panel">
+          <div className="founder-events-filter-panel-head">
+            <div>
+              <p className="eyebrow">
+                {language === "th" ? "ตัวกรอง" : "FILTER"}
+              </p>
+              <h2>
+                {language === "th"
+                  ? "เลือกกิจกรรมที่ต้องการดู"
+                  : "Choose what to view"}
+              </h2>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setEventFilter((previous: any) => ({
+                  ...previous,
+                  mode: "latest",
+                }));
+              }}
+            >
+              {language === "th" ? "รีเซ็ต" : "Reset"}
+            </button>
+          </div>
+
+          <div className="founder-events-filter-grid">
+            <RunriseSelect
+              className="founder-events-filter-select"
+              label={language === "th" ? "เรียงตาม" : "VIEW"}
+              value={eventFilter.mode}
+              options={[
+                {
+                  value: "latest",
+                  label: language === "th" ? "ล่าสุด" : "Latest",
+                },
+                {
+                  value: "month",
+                  label: language === "th" ? "เดือน" : "Month",
+                },
+                {
+                  value: "year",
+                  label: language === "th" ? "ปี" : "Year",
+                },
+              ]}
+              onChange={(mode) =>
+                setEventFilter((previous: any) => ({
+                  ...previous,
+                  mode: mode as "latest" | "month" | "year",
+                }))
+              }
+            />
+
+            {eventFilter.mode === "month" && (
+              <RunriseSelect
+                className="founder-events-filter-select"
+                label={language === "th" ? "เดือน" : "MONTH"}
+                value={String(eventFilter.month)}
+                options={(language === "th"
+                  ? founderFilterMonthTh
+                  : founderFilterMonthEn
+                ).map((monthLabel, index) => ({
+                  value: String(index),
+                  label: monthLabel,
+                }))}
+                onChange={(month) =>
+                  setEventFilter((previous: any) => ({
+                    ...previous,
+                    month: Number(month),
+                  }))
+                }
+              />
+            )}
+
+            {(eventFilter.mode === "month" ||
+              eventFilter.mode === "year") && (
+              <RunriseSelect
+                className="founder-events-filter-select"
+                label={language === "th" ? "ปี" : "YEAR"}
+                value={String(eventFilter.year)}
+                options={founderFilterYearOptions.map((year) => ({
+                  value: String(year),
+                  label: String(
+                    language === "th" ? year + 543 : year
+                  ),
+                }))}
+                onChange={(year) =>
+                  setEventFilter((previous: any) => ({
+                    ...previous,
+                    year: Number(year),
+                  }))
+                }
+              />
+            )}
+          </div>
+        </section>
+      )}
 
       <button
         type="button"
@@ -12606,7 +14495,9 @@ function FounderEvents({
           </div>
 
           <label>
-            {language === "th" ? "ชื่อกิจกรรม" : "EVENT NAME"}
+            <span className="event-field-label">
+              {language === "th" ? "ชื่อกิจกรรม" : "EVENT NAME"}
+            </span>
 
             <input
               placeholder={language === "th" ? "เช่น Sunday Easy 5K" : "e.g. Sunday Easy 5K"}
@@ -12820,7 +14711,9 @@ function FounderEvents({
           </div>
 
           <label>
-            {language === "th" ? "พื้นที่" : "LOCATION"}
+            <span className="event-field-label">
+              {language === "th" ? "พื้นที่" : "LOCATION"}
+            </span>
 
             <input
               placeholder={language === "th" ? "เช่น ปทุมวัน" : "e.g. Pathum Wan"}
@@ -12838,7 +14731,9 @@ function FounderEvents({
           </label>
 
           <label>
-            {language === "th" ? "จุดนัดพบ" : "MEETING POINT"}
+            <span className="event-field-label">
+              {language === "th" ? "จุดนัดพบ" : "MEETING POINT"}
+            </span>
 
             <input
               placeholder={
@@ -12860,7 +14755,9 @@ function FounderEvents({
           </label>
 
           <label>
-            {language === "th" ? "เส้นทาง" : "ROUTE"}
+            <span className="event-field-label">
+              {language === "th" ? "เส้นทาง" : "ROUTE"}
+            </span>
 
             <textarea
               rows={3}
@@ -12881,7 +14778,9 @@ function FounderEvents({
           </label>
 
           <label>
-            {language === "th" ? "สิ่งที่ควรเตรียม" : "WHAT TO BRING"}
+            <span className="event-field-label">
+              {language === "th" ? "สิ่งที่ควรเตรียม" : "WHAT TO BRING"}
+            </span>
 
             <textarea
               rows={2}
@@ -12919,7 +14818,8 @@ function FounderEvents({
       )}
 
       <div className="event-management-list">
-        {events.map(
+        {filteredAndSortedEvents.length > 0 ? (
+          filteredAndSortedEvents.map(
           (event: RunEvent) => {
             const participantCount = getEventParticipantCount(
               event,
@@ -13058,6 +14958,21 @@ function FounderEvents({
               </article>
             );
           }
+        )
+        ) : (
+          <div className="founder-events-filter-empty">
+            <span aria-hidden="true">○</span>
+            <strong>
+              {language === "th"
+                ? "ไม่มีกิจกรรมในช่วงที่เลือก"
+                : "No activities in this selection"}
+            </strong>
+            <p>
+              {language === "th"
+                ? "ลองเปลี่ยนเดือน ปี หรือเลือก “ล่าสุด” เพื่อดูกิจกรรมทั้งหมด"
+                : "Try another month or year, or choose “Latest” to see all activities."}
+            </p>
+          </div>
         )}
       </div>
 
@@ -13076,6 +14991,8 @@ function FounderEventManagement({
   event,
   club,
   registrations,
+  runnerProfile,
+  currentRunnerId,
   onBack,
   onScan,
 }: {
@@ -13083,6 +15000,8 @@ function FounderEventManagement({
   event: RunEvent;
   club: Club;
   registrations: EventRegistration[];
+  runnerProfile: RunnerProfile;
+  currentRunnerId: string;
   onBack: () => void;
   onScan: () => void;
 }) {
@@ -13090,21 +15009,15 @@ function FounderEventManagement({
   const [selectedParticipant, setSelectedParticipant] = useState<any>(null);
   const [search, setSearch] = useState("");
 
-  const realRegistrations = registrations.filter(
-    (registration) => !isPrototypeRegistration(registration)
-  );
-  const realCheckedInCount = realRegistrations.filter(
-    (registration) => registration.status === "checked-in"
-  ).length;
-
-  const hasRealRegistrations = realRegistrations.length > 0;
-  const registeredCount = hasRealRegistrations
-    ? realRegistrations.length
+  // The event-level registrations array is the live source of truth after a scan.
+  // This makes all three KPI cards update immediately when a runner checks in.
+  const registeredCount = registrations.length > 0
+    ? registrations.length
     : Math.max(event.participants, 0);
 
-  const checkedInCount = hasRealRegistrations
-    ? realCheckedInCount
-    : 0;
+  const checkedInCount = registrations.filter(
+    (registration) => registration.status === "checked-in"
+  ).length;
   const notArrivedCount = Math.max(
     registeredCount - checkedInCount,
     0
@@ -13124,10 +15037,7 @@ function FounderEventManagement({
     Praew: { pace: "6:30–7:00", distance: "10K", area: "Khlong Toei" },
   };
 
-  const participantSource =
-    realRegistrations.length > 0
-      ? realRegistrations
-      : registrations;
+  const participantSource = registrations;
 
   const actualNames = new Set(
     participantSource.map(
@@ -13138,17 +15048,44 @@ function FounderEventManagement({
   // Preserve this derived value for compatibility without affecting the flow.
   void actualNames;
 
+  const getLiveRunnerProfile = (registration: EventRegistration) => {
+    const belongsToCurrentRunner =
+      registration.runnerId === currentRunnerId ||
+      registration.runnerName.trim().toLowerCase() ===
+        runnerProfile.name.trim().toLowerCase();
+
+    if (!belongsToCurrentRunner) {
+      return participantProfileMap[registration.runnerName] || {
+        pace: "—",
+        distance: "—",
+        area: "—",
+      };
+    }
+
+    const runningAreas =
+      runnerProfile.location.length > 0
+        ? runnerProfile.location
+            .map((area) => profileValueForLanguage(area, language))
+            .join(", ")
+        : "—";
+
+    return {
+      pace: runnerProfile.pace || "—",
+      distance:
+        runnerProfile.preferredDistance ||
+        runnerProfile.distance ||
+        "—",
+      area: runningAreas,
+    };
+  };
+
   const rows = [
     ...participantSource.map((registration) => ({
       name: registration.runnerName,
       status: registration.status,
       registrationId: registration.id,
       runnerId: registration.runnerId,
-      ...(participantProfileMap[registration.runnerName] || {
-        pace: "—",
-        distance: "—",
-        area: "—",
-      }),
+      ...getLiveRunnerProfile(registration),
     })),
     ...(participantSource.length === 0
       ? demoParticipants.map((participant, index) => ({
@@ -13266,14 +15203,18 @@ function FounderEventManagement({
 
           <div className="rr-status-legend" aria-label={language === "th" ? "คำอธิบายสถานะ" : "Status legend"}>
             <div>
-              <span className="rr-status-dot checked">✓</span>
+              <span className="rr-status-label checked">
+                {language === "th" ? "เช็กอินแล้ว" : "Checked in"}
+              </span>
               <span>
                 <strong>{language === "th" ? "เช็กอินแล้ว" : "Checked in"}</strong>
                 <small>{language === "th" ? "มาถึงกิจกรรมและยืนยันตัวตนแล้ว" : "Arrived and confirmed at the activity"}</small>
               </span>
             </div>
             <div>
-              <span className="rr-status-dot registered">•</span>
+              <span className="rr-status-label registered">
+                {language === "th" ? "รอเช็กอิน" : "Waiting"}
+              </span>
               <span>
                 <strong>{language === "th" ? "รอเช็กอิน" : "Waiting to check in"}</strong>
                 <small>{language === "th" ? "ลงทะเบียนแล้ว แต่ยังไม่ได้เช็กอินหน้างาน" : "Registered, but not yet checked in"}</small>
@@ -13322,7 +15263,13 @@ function FounderEventManagement({
                       : "rr-participant-status registered"
                   }
                 >
-                  {participant.status === "checked-in" ? "✓" : "•"}
+                  {participant.status === "checked-in"
+                    ? language === "th"
+                      ? "เช็กอินแล้ว"
+                      : "Checked in"
+                    : language === "th"
+                      ? "รอเช็กอิน"
+                      : "Waiting"}
                 </span>
 
                 <span className="rr-participant-chevron">›</span>
@@ -13813,7 +15760,23 @@ function FounderProfile({
         </div>
       </section>
 
-      <LanguageSettings language={language} onChange={setLanguage} />
+      <section className="founder-language-section" data-no-translate="true">
+        <p className="founder-language-section-label">
+          {language === "th" ? "ภาษา" : "LANGUAGE"}
+        </p>
+
+        <div className="founder-language-single-card">
+          <span className="founder-language-card-title">
+            {language === "th" ? "ภาษาของแอป" : "App Language"}
+          </span>
+
+          <LanguageQuickSwitch
+            language={language}
+            onChange={setLanguage}
+            compact
+          />
+        </div>
+      </section>
       <FounderNav language={language} active="profile" onNav={onNav} />
     </main>
   );
@@ -14165,25 +16128,59 @@ function FounderNav({
     <nav className="bottom-nav founder-nav founder-nav-simplified" data-no-translate="true">
       <NavButton
         label={language === "th" ? "แดชบอร์ด" : "Dashboard"}
-        icon="▦"
+        icon={<FounderNavIcon name="dashboard" />}
         active={active === "dashboard"}
         onClick={() => onNav("founder-dashboard")}
       />
 
       <NavButton
         label={language === "th" ? "กิจกรรม" : "Activities"}
-        icon="◇"
+        icon={<FounderNavIcon name="events" />}
         active={active === "events"}
         onClick={() => onNav("founder-events")}
       />
 
       <NavButton
         label={language === "th" ? "โปรไฟล์" : "Profile"}
-        icon="○"
+        icon={<FounderNavIcon name="profile" />}
         active={active === "profile" || active === "club"}
         onClick={() => onNav("founder-profile")}
       />
     </nav>
+  );
+}
+
+function FounderNavIcon({
+  name,
+}: {
+  name: "dashboard" | "events" | "profile";
+}) {
+  if (name === "dashboard") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <rect x="3.5" y="3.5" width="7" height="7" rx="1.8" />
+        <rect x="13.5" y="3.5" width="7" height="4.7" rx="1.8" />
+        <rect x="3.5" y="13.5" width="7" height="7" rx="1.8" />
+        <rect x="13.5" y="10.8" width="7" height="9.7" rx="1.8" />
+      </svg>
+    );
+  }
+
+  if (name === "events") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <rect x="3.5" y="5.5" width="17" height="15" rx="2.3" />
+        <path d="M7.5 3.5v4M16.5 3.5v4M3.5 9.5h17" />
+        <path d="m8 14 2.2 2.2L16.5 12" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="8" r="3.5" />
+      <path d="M5.3 20.2v-1.3c0-3.6 2.7-6.1 6.7-6.1s6.7 2.5 6.7 6.1v1.3" />
+    </svg>
   );
 }
 
