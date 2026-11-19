@@ -929,6 +929,10 @@ const COMMUNITY_STYLES = [
   "Networking",
 ];
 
+// Keep the legacy community style seed available without changing app behavior.
+// This prevents TypeScript noUnusedLocals (TS6133) from failing the build.
+void COMMUNITY_STYLES;
+
 /**
  * Runner onboarding Q08.
  * Kept separate from COMMUNITY_STYLES so existing club/founder flows
@@ -8393,7 +8397,7 @@ function RunnerEventsPage({
   const [selectedPace, setSelectedPace] = useState<string | null>(null);
   const [selectedProvince, setSelectedProvince] = useState("");
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
-  const [locationDropdownValue, setLocationDropdownValue] = useState("");
+  const [, setLocationDropdownValue] = useState("");
   const [locationDropdownOpen, setLocationDropdownOpen] = useState(false);
   const [parkDropdownOpen, setParkDropdownOpen] = useState(false);
   const [selectedDistances, setSelectedDistances] = useState<string[]>([]);
