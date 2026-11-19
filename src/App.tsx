@@ -6480,12 +6480,18 @@ function RunnerOnboarding({
                     Pace คือ เวลาที่ใช้วิ่ง 1 กิโลเมตร
                     <br />
                     เลขยิ่งน้อย = วิ่งเร็ว
+                    <br />
+                    <br />
+                    สำหรับนักวิ่งมือใหม่ที่ยังไม่ทราบเพซ แนะนำให้ใส่ 12:00/กม.
                   </>
                 ) : (
                   <>
                     Pace is the time used to run 1 kilometer.
                     <br />
                     Lower number = faster running.
+                    <br />
+                    <br />
+                    For beginner runners who do not know their pace yet, we recommend entering 12:00/km.
                   </>
                 )}
               </p>
