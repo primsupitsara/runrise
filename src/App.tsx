@@ -43,6 +43,7 @@ type Page =
   | "friends-chat"
   | "friend-qr"
   | "runner-profile"
+  | "runner-first-run-guide"
   | "notifications"
   | "founder-dashboard"
   | "founder-runner-feedback"
@@ -3888,6 +3889,12 @@ function App() {
   });
 
   const [page, setPage] = useState<Page>("welcome");
+  const [firstRunGuideBackPage, setFirstRunGuideBackPage] =
+    useState<Page>("runner-home");
+  const [showFirstRunGuideWelcome, setShowFirstRunGuideWelcome] =
+    useState(false);
+  const [firstRunGuideWelcomeHandled, setFirstRunGuideWelcomeHandled] =
+    useState(false);
   const [role, setRole] = useState<Role>("runner");
 
   const [user, setUser] = useState<UserAccount | null>(() =>
@@ -4103,6 +4110,29 @@ const [clubs, setClubs] = useState<Club[]>(() => {
       read: false,
     },
   ]);
+
+  const FIRST_RUN_GUIDE_DISMISSED_KEY =
+    "runrise-first-run-guide-welcome-dismissed";
+
+  useEffect(() => {
+    if (role !== "runner") {
+      setShowFirstRunGuideWelcome(false);
+      return;
+    }
+
+    if (page !== "runner-home" || firstRunGuideWelcomeHandled) {
+      return;
+    }
+
+    const dismissed =
+      localStorage.getItem(FIRST_RUN_GUIDE_DISMISSED_KEY) === "true";
+
+    if (!dismissed) {
+      setShowFirstRunGuideWelcome(true);
+    } else {
+      setFirstRunGuideWelcomeHandled(true);
+    }
+  }, [page, role, firstRunGuideWelcomeHandled]);
 
   const [selectedClubId, setSelectedClubId] = useState(1);
   const [clubBackPage, setClubBackPage] =
@@ -4707,6 +4737,9 @@ const [clubs, setClubs] = useState<Club[]>(() => {
         read: false,
       },
     ]);
+    localStorage.removeItem(FIRST_RUN_GUIDE_DISMISSED_KEY);
+    setShowFirstRunGuideWelcome(false);
+    setFirstRunGuideWelcomeHandled(false);
     setSelectedClubId(1);
     setSelectedEventId(101);
     setPage("welcome");
@@ -4863,6 +4896,10 @@ const [clubs, setClubs] = useState<Club[]>(() => {
               setPage("club");
             }}
             onNotifications={() => setPage("notifications")}
+            onFirstRunGuide={() => {
+              setFirstRunGuideBackPage("runner-home");
+              setPage("runner-first-run-guide");
+            }}
             onViewAllClubs={() => setPage("all-clubs")}
             onCompare={() => setPage("compare-select")}
             onNav={setPage}
@@ -5120,9 +5157,46 @@ const [clubs, setClubs] = useState<Club[]>(() => {
               setPage("event");
             }}
             onViewAll={() => setPage("myruns")}
+            onFirstRunGuide={() => {
+              setFirstRunGuideBackPage("runner-profile");
+              setPage("runner-first-run-guide");
+            }}
             onSwitchRole={switchRole}
             onReset={resetPrototype}
             onNav={setPage}
+          />
+        )}
+
+
+        {page === "runner-first-run-guide" && (
+          <RunnerFirstRunGuide
+            language={language}
+            setLanguage={setLanguage}
+            onBack={() => setPage(firstRunGuideBackPage)}
+          />
+        )}
+
+        {showFirstRunGuideWelcome && role === "runner" && (
+          <FirstRunGuideWelcomeModal
+            language={language}
+            onClose={() => {
+              setShowFirstRunGuideWelcome(false);
+              setFirstRunGuideWelcomeHandled(true);
+            }}
+            onDontShowAgain={() => {
+              localStorage.setItem(
+                FIRST_RUN_GUIDE_DISMISSED_KEY,
+                "true"
+              );
+              setShowFirstRunGuideWelcome(false);
+              setFirstRunGuideWelcomeHandled(true);
+            }}
+            onViewGuide={() => {
+              setShowFirstRunGuideWelcome(false);
+              setFirstRunGuideWelcomeHandled(true);
+              setFirstRunGuideBackPage(page);
+              setPage("runner-first-run-guide");
+            }}
           />
         )}
 
@@ -7406,6 +7480,7 @@ function RunnerHome({
   unread,
   onClub,
   onNotifications,
+  onFirstRunGuide,
   onViewAllClubs,
   onCompare,
   onNav,
@@ -7500,6 +7575,37 @@ function RunnerHome({
               onChange={setLanguage}
               compact
             />
+
+            <button
+              type="button"
+              className="ut-first-run-shortcut"
+              onClick={onFirstRunGuide}
+              aria-label={
+                language === "th"
+                  ? "คู่มือก่อนเข้าร่วมคลับ"
+                  : "First Run Guide"
+              }
+              title={
+                language === "th"
+                  ? "คู่มือก่อนเข้าร่วมคลับ"
+                  : "First Run Guide"
+              }
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 4.8A2.8 2.8 0 0 1 7.8 2H19v16.8H7.8A2.8 2.8 0 0 0 5 21.6V4.8Z" />
+                <path d="M5 4.8V21.6" />
+                <path d="M9 7h6" />
+                <path d="M9 10.5h5" />
+              </svg>
+            </button>
 
           <button
             className="ut-notification"
@@ -11624,6 +11730,347 @@ function FriendQr({
   );
 }
 
+
+
+function FirstRunGuideWelcomeModal({
+  language,
+  onClose,
+  onDontShowAgain,
+  onViewGuide,
+}: {
+  language: AppLanguage;
+  onClose: () => void;
+  onDontShowAgain: () => void;
+  onViewGuide: () => void;
+}) {
+  return (
+    <div
+      className="first-run-welcome-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="first-run-welcome-title"
+    >
+      <div className="first-run-welcome-modal">
+        <button
+          type="button"
+          className="first-run-welcome-close"
+          onClick={onClose}
+          aria-label={language === "th" ? "ปิด" : "Close"}
+        >
+          ×
+        </button>
+
+        <div className="first-run-welcome-icon" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M5 4.8A2.8 2.8 0 0 1 7.8 2H19v16.8H7.8A2.8 2.8 0 0 0 5 21.6V4.8Z" />
+            <path d="M5 4.8V21.6" />
+            <path d="M9 7h6" />
+            <path d="M9 10.5h5" />
+          </svg>
+        </div>
+
+        <p className="first-run-welcome-eyebrow">
+          {language === "th" ? "FIRST RUN GUIDE" : "FIRST RUN GUIDE"}
+        </p>
+
+        <h2 id="first-run-welcome-title">
+          {language === "th"
+            ? "ครั้งแรกกับ Run Club?"
+            : "Your first Run Club?"}
+        </h2>
+
+        <p className="first-run-welcome-copy">
+          {language === "th"
+            ? "ดูคู่มือสั้น ๆ ก่อนเข้าร่วมกิจกรรม เพื่อรู้ว่าควรเตรียมอะไร ไปถึงกี่โมง จุดนัดพบอยู่ตรงไหน และถ้าวิ่งไม่ไหวควรทำอย่างไร"
+            : "Read a quick guide before your first group run — what to bring, when to arrive, where to meet, and what to do if you need a break."}
+        </p>
+
+        <div className="first-run-welcome-preview">
+          <div>
+            <span>01</span>
+            <p>
+              {language === "th"
+                ? "ต้องเตรียมอะไร?"
+                : "What should I bring?"}
+            </p>
+          </div>
+          <div>
+            <span>02</span>
+            <p>
+              {language === "th"
+                ? "ควรไปถึงก่อนกี่นาที?"
+                : "How early should I arrive?"}
+            </p>
+          </div>
+          <div>
+            <span>03</span>
+            <p>
+              {language === "th"
+                ? "จุดนัดพบอยู่ตรงไหน?"
+                : "Where is the meeting point?"}
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          className="first-run-welcome-primary"
+          onClick={onViewGuide}
+        >
+          {language === "th" ? "ดูคู่มือเพิ่มเติม" : "View First Run Guide"}
+          <span aria-hidden="true">›</span>
+        </button>
+
+        <button
+          type="button"
+          className="first-run-welcome-dismiss"
+          onClick={onDontShowAgain}
+        >
+          {language === "th"
+            ? "ไม่ต้องแสดงหน้านี้ซ้ำอีก"
+            : "Don't show this again"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function RunnerFirstRunGuide({
+  language,
+  setLanguage,
+  onBack,
+}: {
+  language: AppLanguage;
+  setLanguage: (language: AppLanguage) => void;
+  onBack: () => void;
+}) {
+  const guideItems = language === "th"
+    ? [
+        {
+          number: "01",
+          title: "ต้องเตรียมอะไรไปบ้าง?",
+          summary: "เตรียมของให้น้อย แต่พร้อมใช้งานจริง",
+          items: [
+            "รองเท้าและชุดวิ่งที่ใส่สบาย",
+            "น้ำดื่มหรือขวดน้ำ ถ้ากิจกรรมไม่ได้แจ้งว่ามีจุดบริการ",
+            "โทรศัพท์ที่มี QR / ข้อมูลการจองกิจกรรม",
+            "ของใช้ส่วนตัวที่จำเป็น เช่น ผ้าเช็ดหน้า ยาประจำตัว หรือเสื้อสำรอง",
+          ],
+        },
+        {
+          number: "02",
+          title: "ต้องไปถึงก่อนกี่นาที?",
+          summary: "แนะนำให้ถึงก่อนเวลานัดประมาณ 15–20 นาที",
+          items: [
+            "มีเวลาหาจุดนัดพบและเช็กอิน",
+            "ได้วอร์มอัพและฟังคำแนะนำจากผู้จัด",
+            "ถ้ากิจกรรมมีรายละเอียดเวลาพิเศษ ให้ยึดเวลาที่ระบุในหน้าอีเวนต์เป็นหลัก",
+          ],
+        },
+        {
+          number: "03",
+          title: "จุดนัดพบอยู่ตรงไหน?",
+          summary: "ดูชื่อสถานที่และจุดนัดพบจากรายละเอียดอีเวนต์ก่อนออกเดินทาง",
+          items: [
+            "เช็กชื่อสวน พื้นที่ หรือแลนด์มาร์กที่ระบุในหน้าอีเวนต์",
+            "เมื่อถึงพื้นที่ ให้มองหาผู้จัด กลุ่ม Run Club หรือจุดเช็กอิน",
+            "เผื่อเวลาเดินจากทางเข้าไปยังจุดรวมตัว โดยเฉพาะสวนขนาดใหญ่",
+          ],
+        },
+        {
+          number: "04",
+          title: "ถ้าวิ่งไม่ไหว สามารถหยุดได้ไหม?",
+          summary: "ได้ ความปลอดภัยและความสบายของคุณสำคัญกว่าเพซ",
+          items: [
+            "ลดความเร็ว เดิน หรือหยุดพักได้ตามความเหมาะสม",
+            "ถ้าต้องออกจากกลุ่มกลางทาง ควรแจ้งผู้จัดหรือ pacer",
+            "ถ้ามีอาการผิดปกติ ให้หยุดทันทีและขอความช่วยเหลือ",
+          ],
+        },
+        {
+          number: "05",
+          title: "ต้องแต่งตัวอย่างไร?",
+          summary: "ใส่ชุดที่เคลื่อนไหวง่าย ระบายอากาศดี และเหมาะกับเวลาออกวิ่ง",
+          items: [
+            "เลือกรองเท้าที่เคยใส่แล้วและไม่กัดเท้า",
+            "หลีกเลี่ยงเสื้อผ้าหรืออุปกรณ์ใหม่ที่ยังไม่เคยทดลอง",
+            "ถ้าวิ่งช่วงมืด ควรมีสีหรืออุปกรณ์ที่มองเห็นได้ชัด",
+          ],
+        },
+      ]
+    : [
+        {
+          number: "01",
+          title: "What should I bring?",
+          summary: "Keep it simple, but bring the essentials.",
+          items: [
+            "Comfortable running shoes and running clothes",
+            "Water if the event does not provide hydration",
+            "Your phone with your booking / check-in QR",
+            "Personal essentials such as medication, a small towel, or a spare shirt",
+          ],
+        },
+        {
+          number: "02",
+          title: "How early should I arrive?",
+          summary: "Aim to arrive about 15–20 minutes before the meeting time.",
+          items: [
+            "You will have time to find the meeting point and check in",
+            "You can warm up and listen to the organizer's briefing",
+            "Always follow any special timing shown on the event page",
+          ],
+        },
+        {
+          number: "03",
+          title: "Where is the meeting point?",
+          summary: "Check the event details before leaving home.",
+          items: [
+            "Look for the exact park, area, or landmark shown on the event page",
+            "Once there, look for the Run Club organizer or check-in point",
+            "Allow extra walking time in large parks or venues",
+          ],
+        },
+        {
+          number: "04",
+          title: "Can I stop if I cannot keep running?",
+          summary: "Yes. Your safety and comfort matter more than pace.",
+          items: [
+            "Slow down, walk, or take a break whenever you need to",
+            "Tell the organizer or pacer if you leave the group early",
+            "Stop immediately and ask for help if you feel unwell",
+          ],
+        },
+        {
+          number: "05",
+          title: "What should I wear?",
+          summary: "Choose breathable, comfortable clothing that suits the time of day.",
+          items: [
+            "Wear running shoes you have already tested",
+            "Avoid brand-new clothes or gear on your first group run",
+            "For low-light runs, wear something easy to see",
+          ],
+        },
+      ];
+
+  return (
+    <main className="screen first-run-guide-page" data-no-translate="true">
+      <div className="first-run-guide-topbar">
+        <button
+          type="button"
+          className="first-run-guide-back"
+          onClick={onBack}
+        >
+          <span aria-hidden="true">←</span>
+          {language === "th" ? "ย้อนกลับ" : "Back"}
+        </button>
+
+        <LanguageQuickSwitch
+          language={language}
+          onChange={setLanguage}
+          compact
+        />
+      </div>
+
+      <header className="first-run-guide-hero">
+        <div className="first-run-guide-book-icon" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M5 4.8A2.8 2.8 0 0 1 7.8 2H19v16.8H7.8A2.8 2.8 0 0 0 5 21.6V4.8Z" />
+            <path d="M5 4.8V21.6" />
+            <path d="M9 7h6" />
+            <path d="M9 10.5h5" />
+          </svg>
+        </div>
+
+        <p className="first-run-guide-eyebrow">
+          {language === "th" ? "FIRST RUN GUIDE" : "FIRST RUN GUIDE"}
+        </p>
+        <h1>
+          {language === "th"
+            ? "คู่มือก่อนเข้าร่วมคลับ"
+            : "Your first Run Club guide"}
+        </h1>
+        <p className="first-run-guide-subtitle">
+          {language === "th"
+            ? "ข้อมูลสั้น ๆ ที่ช่วยให้คุณรู้ว่าต้องเตรียมอะไร ไปเมื่อไร และทำอย่างไรในวันวิ่งจริง"
+            : "A quick guide to help you know what to bring, when to arrive, and what to expect on your first group run."}
+        </p>
+      </header>
+
+      <section className="first-run-guide-ready-card">
+        <div className="first-run-guide-ready-icon" aria-hidden="true">✓</div>
+        <div>
+          <strong>
+            {language === "th"
+              ? "ไม่ต้องเก่งก่อน ถึงจะเริ่มวิ่งกับคลับได้"
+              : "You do not need to be fast to join."}
+          </strong>
+          <p>
+            {language === "th"
+              ? "เลือกกิจกรรมที่เหมาะกับเพซของคุณ แล้วไปสนุกกับการวิ่งแบบที่สบายใจได้เลย"
+              : "Choose a run that fits your pace and focus on enjoying the experience."}
+          </p>
+        </div>
+      </section>
+
+      <section className="first-run-guide-list">
+        {guideItems.map((item, index) => (
+          <details
+            className="first-run-guide-item"
+            key={item.number}
+            open={index === 0}
+          >
+            <summary>
+              <span className="first-run-guide-number">{item.number}</span>
+              <span className="first-run-guide-summary-copy">
+                <strong>{item.title}</strong>
+                <small>{item.summary}</small>
+              </span>
+              <span className="first-run-guide-chevron" aria-hidden="true">⌄</span>
+            </summary>
+
+            <div className="first-run-guide-detail">
+              {item.items.map((text) => (
+                <div className="first-run-guide-tip" key={text}>
+                  <span aria-hidden="true">✓</span>
+                  <p>{text}</p>
+                </div>
+              ))}
+            </div>
+          </details>
+        ))}
+      </section>
+
+      <section className="first-run-guide-footer-card">
+        <span aria-hidden="true">R</span>
+        <div>
+          <strong>
+            {language === "th" ? "พร้อมแล้วก็ออกไปวิ่งกัน" : "Ready for your first run?"}
+          </strong>
+          <p>
+            {language === "th"
+              ? "รายละเอียดเวลา จุดนัดพบ และสิ่งที่ควรเตรียมของแต่ละกิจกรรม อาจแตกต่างกัน อย่าลืมตรวจหน้าอีเวนต์ก่อนออกเดินทาง"
+              : "Time, meeting point, and what to bring may vary by event. Check the event details before you leave."}
+          </p>
+        </div>
+      </section>
+    </main>
+  );
+}
+
 function RunnerProfile({
   profile,
   setProfile,
@@ -11637,6 +12084,7 @@ function RunnerProfile({
   onSavedClub,
   onEvent,
   onViewAll,
+  onFirstRunGuide,
   onSwitchRole,
   onReset,
   onNav,
@@ -11653,6 +12101,7 @@ function RunnerProfile({
   onSavedClub: (clubId: number) => void;
   onEvent: (event: RunEvent) => void;
   onViewAll: () => void;
+  onFirstRunGuide: () => void;
   onSwitchRole: () => void;
   onReset: () => void;
   onNav: (page: Page) => void;
@@ -12568,6 +13017,35 @@ function RunnerProfile({
             </div>
 
             <div className="settings-card rp-settings-list">
+
+              <button
+                type="button"
+                className="settings-row rp-first-run-guide-row"
+                onClick={onFirstRunGuide}
+              >
+                <span className="rp-first-run-guide-label">
+                  <span className="rp-first-run-guide-icon" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 4.8A2.8 2.8 0 0 1 7.8 2H19v16.8H7.8A2.8 2.8 0 0 0 5 21.6V4.8Z" />
+                      <path d="M5 4.8V21.6" />
+                      <path d="M9 7h6" />
+                      <path d="M9 10.5h5" />
+                    </svg>
+                  </span>
+                  {language === "th"
+                    ? "คู่มือก่อนเข้าร่วมคลับ"
+                    : "First Run Guide"}
+                </span>
+                <span>›</span>
+              </button>
+
               <button className="settings-row" onClick={onSwitchRole}>
                 {language === "th" ? "สลับเป็นผู้จัดคลับ" : "Switch to Founder"}
                 <span>›</span>
